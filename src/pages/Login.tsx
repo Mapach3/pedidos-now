@@ -1,7 +1,7 @@
 import React from "react";
 
-const Home: React.FC<{}> = () => {
+const Login: React.FC<{}> = () => {
   return <>I am Login Page!</>;
 };
 
-export default Home;
+export default Login;
