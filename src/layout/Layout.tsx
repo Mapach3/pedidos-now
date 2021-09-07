@@ -16,6 +16,7 @@ import useStyles from "../styles/styles";
 
 const Layout: React.FC = ({ children }) => {
   const classes = useStyles();
+  const history = useHistory();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -26,8 +27,6 @@ const Layout: React.FC = ({ children }) => {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-
-  const history = useHistory();
 
   const menuId = "primary-search-account-menu";
   const isMenuOpen = Boolean(anchorEl);
@@ -43,7 +42,7 @@ const Layout: React.FC = ({ children }) => {
       onClose={handleMenuClose}
     >
       {getMenu().map((item) => (
-        <MenuItem onClick={() => history.push(`${item.url}`)}>
+        <MenuItem key={item.text} onClick={() => history.push(`${item.url}`)}>
           {item.text}
         </MenuItem>
       ))}
@@ -75,9 +74,9 @@ const Layout: React.FC = ({ children }) => {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         {children}
-        <div className={classes.footer}>
+        {/* <div className={classes.footer}>
           <Footer />
-        </div>
+        </div> */}
       </main>
     </div>
   );

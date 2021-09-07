@@ -6,7 +6,6 @@ const useStyles = makeStyles((theme) => ({
   },
 
   appBar: {
-    position: "fixed",
     zIndex: theme.zIndex.drawer + 1,
     backgroundColor: "#E63939",
   },
@@ -16,15 +15,14 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "flex-end",
     padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
     ...theme.mixins.toolbar,
   },
 
   content: {
     flexGrow: 1,
     padding: theme.spacing(0),
-    backgroundColor: "#ffff",
-    minHeight: "100vh",
+    backgroundColor: "#F9F6F4",
+    minHeight: "98.2vh",
   },
 
   homeContainer: {
