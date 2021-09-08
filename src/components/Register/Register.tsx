@@ -1,8 +1,6 @@
 import {
-  Avatar,
   Button,
   Container,
-  FormControl,
   Link,
   MenuItem,
   Select,
@@ -12,6 +10,8 @@ import {
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import React, { useState } from "react";
+import { useHistory } from "react-router";
+import { auth } from "../../config";
 import { ClientRoutes } from "../../config/enums";
 import { UserTypes, UserTypesEnumLabels } from "../../enums/UserTypes";
 import { UsersService } from "../../fetch/UsersService";
@@ -23,16 +23,32 @@ const Register: React.FC = () => {
   const [contraseña, setContraseña] = useState("");
   const [tipoUsuario, setTipoUsuario] = useState(UserTypes.CLIENTE);
   const [cuit, setCuit] = useState("");
+  const [open, setOpen] = useState(false);
+
+  const history = useHistory();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     console.log({ nombre, apellido, email, contraseña, tipoUsuario, cuit });
-    const userExists = await UsersService.emailAlreadyExists(email);
+    try {
+      const userCredential = await auth.createUserWithEmailAndPassword(
+        email,
+        contraseña
+      );
+      await UsersService.postUserToCollection({
+        nombre,
+        apellido,
+        email,
+        tipo: tipoUsuario,
+        cuit,
+      });
 
-    if (userExists) {
-      alert("User already exists");
-    } else {
-      alert("User registered succesfully");
+      setOpen(true);
+      setTimeout(() => {
+        history.push(ClientRoutes.HOME);
+      }, 3000);
+    } catch (error: any) {
+      alert("Error: " + error.code + ": " + error.message);
     }
   };
 
@@ -122,6 +138,16 @@ const Register: React.FC = () => {
           Ya tenes una cuenta? <Link href={ClientRoutes.LOGIN}>Ingresar</Link>
         </Typography>
       </form>
+      <Snackbar
+        anchorOrigin={{ horizontal: "center", vertical: "top" }}
+        open={open}
+        autoHideDuration={3000}
+        onClose={() => setOpen(false)}
+      >
+        <Alert color="success" severity="success" variant="filled">
+          ¡Te registraste correctamente!
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

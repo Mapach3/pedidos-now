@@ -42,9 +42,9 @@ const Footer: React.FC<FooterProps> = () => {
               <a
                 target="_blank"
                 rel="noreferrer"
-                href="https://github.com/javierrodriguezfiori/MetodologiasAgiles"
+                href="https://github.com/Mapach3/pedidos-now"
               >
-                Pedidos Unla
+                Pedidos Now
               </a>
               . All Rights Reserved.
             </Typography>

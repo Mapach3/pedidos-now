@@ -1,4 +1,5 @@
 import { firestore as db } from "../config";
+import { User } from "../models/User";
 
 const users = db.collection("users");
 
@@ -15,5 +16,9 @@ export class UsersService {
   static async emailAlreadyExists(email: string) {
     const result = await UsersService.fetchUserByEmail(email);
     return result !== undefined;
+  }
+
+  static async postUserToCollection(user: User) {
+    await users.doc().set(user);
   }
 }
