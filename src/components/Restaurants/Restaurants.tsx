@@ -1,35 +1,24 @@
 import {
-  Box,
-  Card,
-  CardActions,
-  CardContent,
   CircularProgress,
-  Container,
   Grid,
   TextField,
-  Typography,
-  Button,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import useStyles from "../../styles/styles";
 import FetchService from "../../functions/fetch/FetchService";
 import { useEffect } from "react";
 import CardList from "../../components/List/list";
-import { firestore } from "../../config";
 import { Restaurante } from "../../models/models";
-import { withRouter } from "react-router";
+import { useParams } from "react-router";
 
 const Restaurants: React.FC = () => {
   const [isLoadingRestaurantes, setIsLoadingRestaurantes] = useState(false);
-
-  const classes = useStyles();
-
   const [restaurantes, setRestaurantes] = useState<Restaurante[]>([]);
-
+  const params:any = useParams();
   useEffect(() => {
+    console.log('---'+params.location);
     const fetchRestaurants = async () => {
       setIsLoadingRestaurantes(true);
-      let localidad = 'BANFIELD';
+      let localidad = params.location;
       const response = await FetchService.fetchRestaurantsByLocalidad(
         localidad as string
       );
@@ -60,4 +49,4 @@ const Restaurants: React.FC = () => {
   );
 };
 
-export default withRouter(Restaurants);
+export default Restaurants;
