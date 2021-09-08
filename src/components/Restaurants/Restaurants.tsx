@@ -1,20 +1,32 @@
 import {
-  Card,
-  CardActions,
-  CardContent,
   CircularProgress,
   Grid,
   TextField,
-  Typography,
-  Button,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import useStyles from "../../styles/styles";
+import FetchService from "../../functions/fetch/FetchService";
+import { useEffect } from "react";
+import CardList from "../../components/List/list";
+import { Restaurante } from "../../models/models";
+import { useParams } from "react-router";
 
 const Restaurants: React.FC = () => {
   const [isLoadingRestaurantes, setIsLoadingRestaurantes] = useState(false);
-
-  const classes = useStyles();
+  const [restaurantes, setRestaurantes] = useState<Restaurante[]>([]);
+  const params:any = useParams();
+  useEffect(() => {
+    console.log('---'+params.location);
+    const fetchRestaurants = async () => {
+      setIsLoadingRestaurantes(true);
+      let localidad = params.location;
+      const response = await FetchService.fetchRestaurantsByLocalidad(
+        localidad as string
+      );
+      setRestaurantes(response);
+      setIsLoadingRestaurantes(false);
+    };
+    fetchRestaurants();
+  }, []);
 
   return (
     <Grid container style={{ padding: "1rem 0 10rem 0" }}>
@@ -29,213 +41,7 @@ const Restaurants: React.FC = () => {
         {isLoadingRestaurantes ? (
           <CircularProgress />
         ) : (
-          // <CardList comercios={restaurantes} />
-          <>
-            <Card className={classes.root}>
-              <CardContent>
-                <Typography color="textSecondary" gutterBottom>
-                  Word of the Day
-                </Typography>
-                <Typography variant="h5" component="h2"></Typography>
-                <Typography color="textSecondary">adjective</Typography>
-                <Typography variant="body2" component="p">
-                  well meaning and kindly.
-                  <br />
-                  {'"a benevolent smile"'}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Learn More</Button>
-              </CardActions>
-            </Card>
-            <Card className={classes.root}>
-              <CardContent>
-                <Typography color="textSecondary" gutterBottom>
-                  Word of the Day
-                </Typography>
-                <Typography variant="h5" component="h2"></Typography>
-                <Typography color="textSecondary">adjective</Typography>
-                <Typography variant="body2" component="p">
-                  well meaning and kindly.
-                  <br />
-                  {'"a benevolent smile"'}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Learn More</Button>
-              </CardActions>
-            </Card>
-            <Card className={classes.root}>
-              <CardContent>
-                <Typography color="textSecondary" gutterBottom>
-                  Word of the Day
-                </Typography>
-                <Typography variant="h5" component="h2"></Typography>
-                <Typography color="textSecondary">adjective</Typography>
-                <Typography variant="body2" component="p">
-                  well meaning and kindly.
-                  <br />
-                  {'"a benevolent smile"'}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Learn More</Button>
-              </CardActions>
-            </Card>
-            <Card className={classes.root}>
-              <CardContent>
-                <Typography color="textSecondary" gutterBottom>
-                  Word of the Day
-                </Typography>
-                <Typography variant="h5" component="h2"></Typography>
-                <Typography color="textSecondary">adjective</Typography>
-                <Typography variant="body2" component="p">
-                  well meaning and kindly.
-                  <br />
-                  {'"a benevolent smile"'}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Learn More</Button>
-              </CardActions>
-            </Card>
-            <Card className={classes.root}>
-              <CardContent>
-                <Typography color="textSecondary" gutterBottom>
-                  Word of the Day
-                </Typography>
-                <Typography variant="h5" component="h2"></Typography>
-                <Typography color="textSecondary">adjective</Typography>
-                <Typography variant="body2" component="p">
-                  well meaning and kindly.
-                  <br />
-                  {'"a benevolent smile"'}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Learn More</Button>
-              </CardActions>
-            </Card>
-            <Card className={classes.root}>
-              <CardContent>
-                <Typography color="textSecondary" gutterBottom>
-                  Word of the Day
-                </Typography>
-                <Typography variant="h5" component="h2"></Typography>
-                <Typography color="textSecondary">adjective</Typography>
-                <Typography variant="body2" component="p">
-                  well meaning and kindly.
-                  <br />
-                  {'"a benevolent smile"'}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Learn More</Button>
-              </CardActions>
-            </Card>
-            <Card className={classes.root}>
-              <CardContent>
-                <Typography color="textSecondary" gutterBottom>
-                  Word of the Day
-                </Typography>
-                <Typography variant="h5" component="h2"></Typography>
-                <Typography color="textSecondary">adjective</Typography>
-                <Typography variant="body2" component="p">
-                  well meaning and kindly.
-                  <br />
-                  {'"a benevolent smile"'}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Learn More</Button>
-              </CardActions>
-            </Card>
-            <Card className={classes.root}>
-              <CardContent>
-                <Typography color="textSecondary" gutterBottom>
-                  Word of the Day
-                </Typography>
-                <Typography variant="h5" component="h2"></Typography>
-                <Typography color="textSecondary">adjective</Typography>
-                <Typography variant="body2" component="p">
-                  well meaning and kindly.
-                  <br />
-                  {'"a benevolent smile"'}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Learn More</Button>
-              </CardActions>
-            </Card>
-            <Card className={classes.root}>
-              <CardContent>
-                <Typography color="textSecondary" gutterBottom>
-                  Word of the Day
-                </Typography>
-                <Typography variant="h5" component="h2"></Typography>
-                <Typography color="textSecondary">adjective</Typography>
-                <Typography variant="body2" component="p">
-                  well meaning and kindly.
-                  <br />
-                  {'"a benevolent smile"'}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Learn More</Button>
-              </CardActions>
-            </Card>
-            <Card className={classes.root}>
-              <CardContent>
-                <Typography color="textSecondary" gutterBottom>
-                  Word of the Day
-                </Typography>
-                <Typography variant="h5" component="h2"></Typography>
-                <Typography color="textSecondary">adjective</Typography>
-                <Typography variant="body2" component="p">
-                  well meaning and kindly.
-                  <br />
-                  {'"a benevolent smile"'}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Learn More</Button>
-              </CardActions>
-            </Card>
-            <Card className={classes.root}>
-              <CardContent>
-                <Typography color="textSecondary" gutterBottom>
-                  Word of the Day
-                </Typography>
-                <Typography variant="h5" component="h2"></Typography>
-                <Typography color="textSecondary">adjective</Typography>
-                <Typography variant="body2" component="p">
-                  well meaning and kindly.
-                  <br />
-                  {'"a benevolent smile"'}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Learn More</Button>
-              </CardActions>
-            </Card>
-            <Card className={classes.root}>
-              <CardContent>
-                <Typography color="textSecondary" gutterBottom>
-                  Word of the Day
-                </Typography>
-                <Typography variant="h5" component="h2"></Typography>
-                <Typography color="textSecondary">adjective</Typography>
-                <Typography variant="body2" component="p">
-                  well meaning and kindly.
-                  <br />
-                  {'"a benevolent smile"'}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Learn More</Button>
-              </CardActions>
-            </Card>
-          </>
+          <CardList comercios={restaurantes} />
         )}
       </Grid>
       <Grid item xs={3}></Grid>

@@ -21,7 +21,7 @@ const Home: React.FC<HomeProps> = () => {
 
   const submitSearch = (e: any) => {
     e.preventDefault();
-    history.push(`${ClientRoutes.RESTAURANTS}?localidad=${search}`);
+    history.push(`/restaurants/${search}`);
   };
 
   return (

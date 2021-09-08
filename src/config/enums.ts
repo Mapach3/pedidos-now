@@ -1,8 +1,7 @@
 export enum ClientRoutes {
   HOME = "/",
   LOGIN = "/login",
+  RESTAURANTS = "/restaurants/:location",
   REGISTER = "/register",
-
-  RESTAURANTS = "/restaurants",
   PROFILE = "/profile",
 }
