@@ -1,10 +1,8 @@
 import {
-  Box,
   Card,
   CardActions,
   CardContent,
   CircularProgress,
-  Container,
   Grid,
   TextField,
   Typography,
@@ -19,7 +17,7 @@ const Restaurants: React.FC = () => {
   const classes = useStyles();
 
   return (
-    <Grid container>
+    <Grid container style={{ padding: "1rem 0 10rem 0" }}>
       <Grid item xs={3}></Grid>
       <Grid item style={{ textAlign: "center" }} xs={6}>
         <TextField

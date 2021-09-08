@@ -6,6 +6,7 @@ import { ClientRoutes } from "../config/enums";
 import HomePage from "../pages/HomePage";
 import Login from "../pages/Login";
 import ProfilePage from "../pages/ProfilePage";
+import RegisterPage from "../pages/RegisterPage";
 import RestaurantsPage from "../pages/RestaurantsPage";
 
 const Routes: React.FC = () => {
@@ -23,6 +24,10 @@ const Routes: React.FC = () => {
 
         <Route exact path={ClientRoutes.RESTAURANTS}>
           <RestaurantsPage />
+        </Route>
+
+        <Route exact path={ClientRoutes.REGISTER}>
+          <RegisterPage />
         </Route>
 
         {/* LoggedInRoute requiring route, otherwise Redirects to Login */}
