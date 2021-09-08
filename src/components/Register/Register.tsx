@@ -14,6 +14,7 @@ import { Alert } from "@material-ui/lab";
 import React, { useState } from "react";
 import { ClientRoutes } from "../../config/enums";
 import { UserTypes, UserTypesEnumLabels } from "../../enums/UserTypes";
+import { UsersService } from "../../fetch/UsersService";
 
 const Register: React.FC = () => {
   const [nombre, setNombre] = useState("");
@@ -23,9 +24,16 @@ const Register: React.FC = () => {
   const [tipoUsuario, setTipoUsuario] = useState(UserTypes.CLIENTE);
   const [cuit, setCuit] = useState("");
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     console.log({ nombre, apellido, email, contraseña, tipoUsuario, cuit });
+    const userExists = await UsersService.emailAlreadyExists(email);
+
+    if (userExists) {
+      alert("User already exists");
+    } else {
+      alert("User registered succesfully");
+    }
   };
 
   return (
