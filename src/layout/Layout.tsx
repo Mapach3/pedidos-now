@@ -13,6 +13,7 @@ import { useHistory } from "react-router";
 import Footer from "../components/Footer/Footer";
 import { getMenu } from "../helpers/menu-helper";
 import useStyles from "../styles/styles";
+import { Link } from "react-router-dom";
 
 const Layout: React.FC = ({ children }) => {
   const classes = useStyles();
@@ -54,9 +55,11 @@ const Layout: React.FC = ({ children }) => {
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <Typography variant="h5" noWrap>
-            PedidosNow
-          </Typography>
+          <Link to="/" style={{ textDecoration: 'none' , color:'white' }}>
+            <Typography variant="h5" noWrap>
+              PedidosNow
+            </Typography>
+          </Link>
           <div className={classes.loginButton}>
             <IconButton
               aria-label="account of current user"

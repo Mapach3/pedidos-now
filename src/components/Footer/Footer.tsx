@@ -39,7 +39,8 @@ const Footer: React.FC<FooterProps> = () => {
               }}
             >
               Copyright © 2021{" "}
-              <a
+              <a 
+                style={{color:'white'}}
                 target="_blank"
                 rel="noreferrer"
                 href="https://github.com/Mapach3/pedidos-now"

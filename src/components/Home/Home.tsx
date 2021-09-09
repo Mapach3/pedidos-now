@@ -4,7 +4,6 @@ import { MenuItem, Select, Typography } from "@material-ui/core";
 import useStyles from "../../styles/styles";
 import { Locations, LocationsEnumLabels } from "../../enums/Locations";
 import { useHistory } from "react-router";
-import { ClientRoutes } from "../../config/enums";
 
 interface HomeProps {}
 
