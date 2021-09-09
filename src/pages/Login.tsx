@@ -3,9 +3,11 @@ import {
   CircularProgress,
   Container,
   Link,
+  Snackbar,
   TextField,
   Typography,
 } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import React, { useState } from "react";
 import { useHistory } from "react-router";
 import { auth } from "../config";
@@ -19,6 +21,8 @@ const Login: React.FC<{}> = () => {
   const [contraseña, setContraseña] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const history = useHistory();
+
+  const [open, setOpen] = useState(false);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -44,7 +48,10 @@ const Login: React.FC<{}> = () => {
       localStorage.setItem("PedidosNow.Apellido", user.apellido);
       localStorage.setItem("PedidosNow.UserId", auth.currentUser?.uid || "");
 
-      history.push("/");
+      setOpen(true);
+      setTimeout(() => {
+        history.push(ClientRoutes.HOME);
+      }, 3000);
     } catch (error: any) {
       alert("Error: " + error.code + ": " + error.message);
     } finally {
@@ -106,6 +113,16 @@ const Login: React.FC<{}> = () => {
         <Typography style={{ textAlign: "center", paddingTop: "15px" }}>
           <Link href={ClientRoutes.REGISTER}>No tengo una cuenta</Link>
         </Typography>
+        <Snackbar
+          anchorOrigin={{ horizontal: "center", vertical: "top" }}
+          open={open}
+          autoHideDuration={3000}
+          onClose={() => setOpen(false)}
+        >
+          <Alert color="success" severity="success" variant="filled">
+            ¡Ingresaste correctamente! Serás redirigido a la pantalla principal
+          </Alert>
+        </Snackbar>
       </Container>
     </Layout>
   );
