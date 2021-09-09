@@ -1,21 +1,55 @@
 import {
   Button,
+  CircularProgress,
   Container,
   Link,
   TextField,
   Typography,
 } from "@material-ui/core";
 import React, { useState } from "react";
+import { useHistory } from "react-router";
+import { auth } from "../config";
 import { ClientRoutes } from "../config/enums";
+import { UsersService } from "../fetch/UsersService";
 import Layout from "../layout/Layout";
+import { User } from "../models/User";
 
 const Login: React.FC<{}> = () => {
   const [email, setEmail] = useState("");
   const [contraseña, setContraseña] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const history = useHistory();
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    console.log({ email, contraseña });
+
+    try {
+      setIsSubmitting(true);
+      const userCredential = await auth.signInWithEmailAndPassword(
+        email,
+        contraseña
+      );
+      const loggedInUser = userCredential.user;
+
+      const user = (
+        await UsersService.fetchUserByEmail(loggedInUser?.email!)
+      )?.data() as User;
+
+      localStorage.setItem(
+        "PedidosNow.JWT",
+        (await loggedInUser?.getIdToken()) || ""
+      );
+      localStorage.setItem("PedidosNow.UserType", user.tipo);
+      localStorage.setItem("PedidosNow.Nombre", user.nombre);
+      localStorage.setItem("PedidosNow.Apellido", user.apellido);
+      localStorage.setItem("PedidosNow.UserId", auth.currentUser?.uid || "");
+
+      history.push("/");
+    } catch (error: any) {
+      alert("Error: " + error.code + ": " + error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -53,12 +87,19 @@ const Login: React.FC<{}> = () => {
           />
           <div style={{ textAlign: "center" }}>
             <Button
+              disabled={isSubmitting}
               variant="contained"
               color="secondary"
               type="submit"
               style={{ width: "40%" }}
             >
               Ingresar
+              {isSubmitting && (
+                <CircularProgress
+                  size="1.2rem"
+                  style={{ marginLeft: "1.1rem" }}
+                />
+              )}
             </Button>
           </div>
         </form>

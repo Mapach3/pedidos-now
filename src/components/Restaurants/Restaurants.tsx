@@ -1,8 +1,4 @@
-import {
-  CircularProgress,
-  Grid,
-  TextField,
-} from "@material-ui/core";
+import { CircularProgress, Grid, TextField } from "@material-ui/core";
 import React, { useState } from "react";
 import FetchService from "../../functions/fetch/FetchService";
 import { useEffect } from "react";
@@ -13,9 +9,9 @@ import { useParams } from "react-router";
 const Restaurants: React.FC = () => {
   const [isLoadingRestaurantes, setIsLoadingRestaurantes] = useState(false);
   const [restaurantes, setRestaurantes] = useState<Restaurante[]>([]);
-  const params:any = useParams();
+  const params: any = useParams();
   useEffect(() => {
-    console.log('---'+params.location);
+    console.log("---" + params.location);
     const fetchRestaurants = async () => {
       setIsLoadingRestaurantes(true);
       let localidad = params.location;
@@ -26,7 +22,7 @@ const Restaurants: React.FC = () => {
       setIsLoadingRestaurantes(false);
     };
     fetchRestaurants();
-  }, []);
+  }, [params.location]);
 
   return (
     <Grid container style={{ padding: "1rem 0 10rem 0" }}>

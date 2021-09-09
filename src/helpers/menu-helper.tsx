@@ -1,5 +1,3 @@
-import { AccountCircleRounded } from "@material-ui/icons";
-
 export const getMenu = () => {
   const notLoggedMenu = [
     {
@@ -15,20 +13,19 @@ export const getMenu = () => {
   const loggedInMenu = [
     {
       text: "Perfil",
-      icon: <AccountCircleRounded />,
-      url: "/",
+      url: "/profile",
     },
   ];
 
-  // if (typeof window !== "undefined") {
-  //   const userTypeAux = sessionStorage.getItem("userType");
+  if (typeof window !== "undefined") {
+    const userTypeAux = localStorage.getItem("PedidosNow.UserType");
 
-  //   return userTypeAux
-  //     ? userTypeAux === "docente"
-  //       ? loggedInMenu
-  //       : studentMenu
-  //     : notLoggedMenu;
-  // }
+    return userTypeAux
+      ? userTypeAux === "CLIENTE"
+        ? loggedInMenu
+        : notLoggedMenu
+      : notLoggedMenu;
+  }
 
   return notLoggedMenu;
 };
