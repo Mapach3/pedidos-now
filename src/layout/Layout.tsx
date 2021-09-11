@@ -14,7 +14,7 @@ import Footer from "../components/Footer/Footer";
 import { getMenu } from "../helpers/menu-helper";
 import useStyles from "../styles/styles";
 import { Link } from "react-router-dom";
-import { UsersService } from "../fetch/UsersService";
+import { ClientRoutes } from "../config/enums";
 
 const Layout: React.FC = ({ children }) => {
   const classes = useStyles();
@@ -48,10 +48,10 @@ const Layout: React.FC = ({ children }) => {
           {item.text}
         </MenuItem>
       ))}
-      {localStorage.getItem("PedidosNow.UserType") && (
+      {localStorage.getItem("PedidosNow.JWT") && (
         <MenuItem
           key="Cerrar Sesión"
-          onClick={() => UsersService.signOutUser()}
+          onClick={() => history.push(ClientRoutes.LOGOUT)}
         >
           Cerrar Sesión
         </MenuItem>

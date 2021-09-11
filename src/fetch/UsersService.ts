@@ -23,14 +23,10 @@ export class UsersService {
   }
 
   static async signOutUser() {
-    try {
-      await app.auth().signOut();
-      localStorage.removeItem("PedidosNow.JWT");
-      localStorage.removeItem("PedidosNow.UserType");
-      localStorage.removeItem("PedidosNow.Nombre");
-      localStorage.removeItem("PedidosNow.Apellido");
-    } catch (error) {
-      alert("Error signing out: " + error);
-    }
+    await app.auth().signOut();
+    localStorage.removeItem("PedidosNow.JWT");
+    localStorage.removeItem("PedidosNow.UserType");
+    localStorage.removeItem("PedidosNow.Nombre");
+    localStorage.removeItem("PedidosNow.Apellido");
   }
 }
