@@ -12,7 +12,7 @@ const LoggedInRoute: React.FC<LoggedInRouteProps> = ({
   exact = false,
   children,
 }) => {
-  const isLoggedIn = false; //TODO: Build helper to fetch if user is LoggedIn.
+  const isLoggedIn = !!localStorage.getItem("PedidosNow.JWT");
 
   if (!isLoggedIn) {
     return <Redirect to={ClientRoutes.LOGIN} />;

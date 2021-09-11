@@ -14,6 +14,7 @@ import Footer from "../components/Footer/Footer";
 import { getMenu } from "../helpers/menu-helper";
 import useStyles from "../styles/styles";
 import { Link } from "react-router-dom";
+import { ClientRoutes } from "../config/enums";
 
 const Layout: React.FC = ({ children }) => {
   const classes = useStyles();
@@ -47,6 +48,14 @@ const Layout: React.FC = ({ children }) => {
           {item.text}
         </MenuItem>
       ))}
+      {localStorage.getItem("PedidosNow.JWT") && (
+        <MenuItem
+          key="Cerrar Sesión"
+          onClick={() => history.push(ClientRoutes.LOGOUT)}
+        >
+          Cerrar Sesión
+        </MenuItem>
+      )}
     </Menu>
   );
 
@@ -55,12 +64,15 @@ const Layout: React.FC = ({ children }) => {
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <Link to="/" style={{ textDecoration: 'none' , color:'white' }}>
+          <Link to="/" style={{ textDecoration: "none", color: "white" }}>
             <Typography variant="h5" noWrap>
               PedidosNow
             </Typography>
           </Link>
           <div className={classes.loginButton}>
+            {`${localStorage.getItem("PedidosNow.Nombre") || ""} ${
+              localStorage.getItem("PedidosNow.Apellido") || ""
+            }`}
             <IconButton
               aria-label="account of current user"
               aria-controls="primary-search-account-menu"

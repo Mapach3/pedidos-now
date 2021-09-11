@@ -5,6 +5,7 @@ import NotFoundPage from "../components/NotFound/NotFoundPage";
 import { ClientRoutes } from "../config/enums";
 import HomePage from "../pages/HomePage";
 import Login from "../pages/Login";
+import Logout from "../pages/Logout";
 import ProfilePage from "../pages/ProfilePage";
 import RegisterPage from "../pages/RegisterPage";
 import RestaurantsPage from "../pages/RestaurantsPage";
@@ -20,6 +21,10 @@ const Routes: React.FC = () => {
 
         <Route exact path={ClientRoutes.LOGIN}>
           <Login />
+        </Route>
+
+        <Route exact path={ClientRoutes.LOGOUT}>
+          <Logout />
         </Route>
 
         <Route exact path={ClientRoutes.RESTAURANTS}>

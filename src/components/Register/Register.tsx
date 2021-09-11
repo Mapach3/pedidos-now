@@ -1,5 +1,6 @@
 import {
   Button,
+  CircularProgress,
   Container,
   Link,
   MenuItem,
@@ -24,6 +25,7 @@ const Register: React.FC = () => {
   const [tipoUsuario, setTipoUsuario] = useState(UserTypes.CLIENTE);
   const [cuit, setCuit] = useState("");
   const [open, setOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const history = useHistory();
 
@@ -31,10 +33,10 @@ const Register: React.FC = () => {
     e.preventDefault();
     console.log({ nombre, apellido, email, contraseña, tipoUsuario, cuit });
     try {
-      const userCredential = await auth.createUserWithEmailAndPassword(
-        email,
-        contraseña
-      );
+      setIsSubmitting(true);
+
+      await auth.createUserWithEmailAndPassword(email, contraseña);
+
       await UsersService.postUserToCollection({
         nombre,
         apellido,
@@ -43,12 +45,24 @@ const Register: React.FC = () => {
         cuit,
       });
 
+      const currentUser = auth.currentUser;
+      localStorage.setItem(
+        "PedidosNow.JWT",
+        (await currentUser?.getIdToken()) || ""
+      );
+      localStorage.setItem("PedidosNow.UserType", tipoUsuario);
+      localStorage.setItem("PedidosNow.Nombre", nombre);
+      localStorage.setItem("PedidosNow.Apellido", apellido);
+      localStorage.setItem("PedidosNow.UserId", auth.currentUser?.uid || "");
+
       setOpen(true);
       setTimeout(() => {
         history.push(ClientRoutes.HOME);
       }, 3000);
     } catch (error: any) {
       alert("Error: " + error.code + ": " + error.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -126,12 +140,19 @@ const Register: React.FC = () => {
         )}
         <div style={{ textAlign: "center", marginTop: "1rem" }}>
           <Button
+            disabled={isSubmitting}
             variant="contained"
             color="secondary"
             type="submit"
             style={{ width: "40%" }}
           >
             Enviar
+            {isSubmitting && (
+              <CircularProgress
+                size="1.2rem"
+                style={{ marginLeft: "1.1rem" }}
+              />
+            )}
           </Button>
         </div>
         <Typography style={{ textAlign: "center", paddingTop: "15px" }}>

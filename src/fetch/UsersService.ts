@@ -1,4 +1,4 @@
-import { firestore as db } from "../config";
+import app, { firestore as db } from "../config";
 import { User } from "../models/User";
 
 const users = db.collection("users");
@@ -20,5 +20,13 @@ export class UsersService {
 
   static async postUserToCollection(user: User) {
     await users.doc().set(user);
+  }
+
+  static async signOutUser() {
+    await app.auth().signOut();
+    localStorage.removeItem("PedidosNow.JWT");
+    localStorage.removeItem("PedidosNow.UserType");
+    localStorage.removeItem("PedidosNow.Nombre");
+    localStorage.removeItem("PedidosNow.Apellido");
   }
 }

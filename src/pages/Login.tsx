@@ -1,21 +1,62 @@
 import {
   Button,
+  CircularProgress,
   Container,
   Link,
+  Snackbar,
   TextField,
   Typography,
 } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import React, { useState } from "react";
+import { useHistory } from "react-router";
+import { auth } from "../config";
 import { ClientRoutes } from "../config/enums";
+import { UsersService } from "../fetch/UsersService";
 import Layout from "../layout/Layout";
+import { User } from "../models/User";
 
 const Login: React.FC<{}> = () => {
   const [email, setEmail] = useState("");
   const [contraseña, setContraseña] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const history = useHistory();
 
-  const handleSubmit = (e: any) => {
+  const [open, setOpen] = useState(false);
+
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    console.log({ email, contraseña });
+
+    try {
+      setIsSubmitting(true);
+      const userCredential = await auth.signInWithEmailAndPassword(
+        email,
+        contraseña
+      );
+      const loggedInUser = userCredential.user;
+
+      const user = (
+        await UsersService.fetchUserByEmail(loggedInUser?.email!)
+      )?.data() as User;
+
+      localStorage.setItem(
+        "PedidosNow.JWT",
+        (await loggedInUser?.getIdToken()) || ""
+      );
+      localStorage.setItem("PedidosNow.UserType", user.tipo);
+      localStorage.setItem("PedidosNow.Nombre", user.nombre);
+      localStorage.setItem("PedidosNow.Apellido", user.apellido);
+      localStorage.setItem("PedidosNow.UserId", auth.currentUser?.uid || "");
+
+      setOpen(true);
+      setTimeout(() => {
+        history.push(ClientRoutes.HOME);
+      }, 3000);
+    } catch (error: any) {
+      alert("Error: " + error.code + ": " + error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -53,18 +94,35 @@ const Login: React.FC<{}> = () => {
           />
           <div style={{ textAlign: "center" }}>
             <Button
+              disabled={isSubmitting}
               variant="contained"
               color="secondary"
               type="submit"
               style={{ width: "40%" }}
             >
               Ingresar
+              {isSubmitting && (
+                <CircularProgress
+                  size="1.2rem"
+                  style={{ marginLeft: "1.1rem" }}
+                />
+              )}
             </Button>
           </div>
         </form>
         <Typography style={{ textAlign: "center", paddingTop: "15px" }}>
           <Link href={ClientRoutes.REGISTER}>No tengo una cuenta</Link>
         </Typography>
+        <Snackbar
+          anchorOrigin={{ horizontal: "center", vertical: "top" }}
+          open={open}
+          autoHideDuration={3000}
+          onClose={() => setOpen(false)}
+        >
+          <Alert color="success" severity="success" variant="filled">
+            ¡Ingresaste correctamente! Serás redirigido a la pantalla principal
+          </Alert>
+        </Snackbar>
       </Container>
     </Layout>
   );
