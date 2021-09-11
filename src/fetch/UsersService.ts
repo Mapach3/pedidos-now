@@ -28,5 +28,6 @@ export class UsersService {
     localStorage.removeItem("PedidosNow.UserType");
     localStorage.removeItem("PedidosNow.Nombre");
     localStorage.removeItem("PedidosNow.Apellido");
+    localStorage.removeItem("PedidosNow.UserId");
   }
 }
