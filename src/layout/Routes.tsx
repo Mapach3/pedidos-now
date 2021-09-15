@@ -8,6 +8,7 @@ import Login from "../pages/Login";
 import Logout from "../pages/Logout";
 import ProfilePage from "../pages/ProfilePage";
 import RegisterPage from "../pages/RegisterPage";
+import RestaurantMenuPage from "../pages/RestaurantMenuPage";
 import RestaurantsPage from "../pages/RestaurantsPage";
 
 const Routes: React.FC = () => {
@@ -33,6 +34,10 @@ const Routes: React.FC = () => {
 
         <Route exact path={ClientRoutes.REGISTER}>
           <RegisterPage />
+        </Route>
+
+        <Route exact path={ClientRoutes.RESTAURANT_MENU}>
+          <RestaurantMenuPage />
         </Route>
 
         {/* LoggedInRoute requiring route, otherwise Redirects to Login */}

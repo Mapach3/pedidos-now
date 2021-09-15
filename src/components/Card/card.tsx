@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -11,12 +11,14 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     margin: 20,
     padding: 15,
+    cursor: "pointer",
+    justifyContent: "center"
   },
   media: {
     borderRadius: "10%",
     border: "0.5px solid",
-    width: "100%",
-    height: "80%",
+    width: "10rem",
+    height: "10rem",
   },
   contend: {
     width: "100%",
@@ -41,33 +43,27 @@ interface props {
   url: string;
   titulo: string;
   descripcion: string;
+  verMenu?: any;
 }
 
-export default function ItemCard({ url, titulo, descripcion }: props) {
+export default function ItemCard({ url, titulo, descripcion, verMenu }: props) {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
 
   return (
-    <Grid container justify="center">
-      <Card className={classes.root} variant="outlined">
-        <Grid container direction="row" alignItems="center">
-
-        <Grid  container item xs={2} justify="flex-start">
-          <img className={classes.media} src={url} />
+    <Card onClick={verMenu?(e)=>{verMenu(e, titulo)}:()=>{}} className={classes.root} variant="outlined">
+      <Grid container direction="row" alignItems="center">
+        <Grid container item xs={4} justify="flex-start">
+          <img className={classes.media} src={url} alt="No hay foto"/>
         </Grid>
-        <Grid  container item xs={3} justify="flex-end" >
+
+        <Grid container item xs={6} justify="center" >
           <CardContent className={classes.contend}>
-          <Typography style={{fontWeight: 'bold'}}>{titulo}</Typography>
-          <Typography>{descripcion}</Typography>
+            <Typography style={{fontWeight: 'bold'}}>{titulo}</Typography>
+            <Typography>{descripcion}</Typography>
           </CardContent>
         </Grid>
 
-        </Grid>
-      </Card>
-    </Grid>
+      </Grid>
+    </Card>
   );
 }
