@@ -1,24 +1,40 @@
-import {Typography } from "@material-ui/core";
+import {makeStyles, Typography } from "@material-ui/core";
 import Card from "../../components/Card/card";
-import { Restaurante } from "../../models/models";
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    margin: 50,
+  },
+}));
 
-interface CardListProps{
-  comercios: Restaurante[];
+interface props {
+  url: string;
+  titulo: string;
+  descripcion: string;
+  verMenu?: any;
+  precio?: number;
 }
 
-const CardList: React.FC<CardListProps> = ({comercios}) => {
+interface CardListProps{
+  lista: any[];
+  verMenu?: any;
+}
+
+const CardList: React.FC<CardListProps> = ({lista, verMenu}) => {
+  const classes = useStyles();
 
   return (
     <>
-      {comercios.length ? comercios.map((rest) => (
+      {lista?.length ? lista?.map((rest) => (
             <Card 
+              verMenu={verMenu}
               key={rest.id}
               url={rest.url}
               titulo={rest.titulo}
               descripcion={rest.descripcion}
+              precio={rest.precio}
             />
-      )): <Typography variant="h5">No encontramos restaurantes en esa localidad</Typography>}
+      )): <Typography className={classes.root} variant="h5">No se encontraron resultados</Typography>}
     </>
   );
 }
