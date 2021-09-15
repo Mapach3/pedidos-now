@@ -12,4 +12,5 @@ export interface Producto {
     descripcion: string;
     url: string;
     titulo: string;
+    precio: number;
 }

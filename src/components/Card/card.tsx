@@ -44,9 +44,10 @@ interface props {
   titulo: string;
   descripcion: string;
   verMenu?: any;
+  precio: number;
 }
 
-export default function ItemCard({ url, titulo, descripcion, verMenu }: props) {
+export default function ItemCard({ url, titulo, descripcion, verMenu, precio }: props) {
   const classes = useStyles();
 
   return (
@@ -60,6 +61,7 @@ export default function ItemCard({ url, titulo, descripcion, verMenu }: props) {
           <CardContent className={classes.contend}>
             <Typography style={{fontWeight: 'bold'}}>{titulo}</Typography>
             <Typography>{descripcion}</Typography>
+            {precio&&<Typography>Precio: ${precio}</Typography>}
           </CardContent>
         </Grid>
 

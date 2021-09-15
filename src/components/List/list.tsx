@@ -12,6 +12,7 @@ interface props {
   titulo: string;
   descripcion: string;
   verMenu?: any;
+  precio?: number;
 }
 
 interface CardListProps{
@@ -31,6 +32,7 @@ const CardList: React.FC<CardListProps> = ({lista, verMenu}) => {
               url={rest.url}
               titulo={rest.titulo}
               descripcion={rest.descripcion}
+              precio={rest.precio}
             />
       )): <Typography className={classes.root} variant="h5">No se encontraron resultados</Typography>}
     </>
