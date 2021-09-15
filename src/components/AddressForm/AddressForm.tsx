@@ -103,24 +103,7 @@ const AddressForm: React.FC = () => {
             </MenuItem>
           ))}
         </Select>
-        <Select
-          label="Barrio"
-          onChange={(event: React.ChangeEvent<any>) =>
-            setBarrio(event.target.value)
-          }
-          required
-          variant="outlined"
-          style={{ width: "100%" }}
-          labelId="barrio"
-          value={barrio}
-          defaultValue={barrio}
-        >
-          {Object.values(Locations).map((item) => (
-            <MenuItem key={item} value={Locations[item]}>
-              {LocationsEnumLabels[item]}
-            </MenuItem>
-          ))}
-        </Select>
+
         <TextField
           onChange={(event: React.ChangeEvent<any>) =>
             setTelefono(event.target.value)
@@ -129,7 +112,7 @@ const AddressForm: React.FC = () => {
           type="telefono"
           variant="outlined"
           required
-          style={{ width: "100%", paddingBottom: "1rem" }}
+          style={{ width: "100%", paddingBottom: "1rem", marginTop: "1rem" }}
         />
         <div style={{ textAlign: "center", marginTop: "1rem" }}>
           <Button

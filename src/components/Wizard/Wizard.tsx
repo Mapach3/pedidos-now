@@ -93,7 +93,7 @@ const Wizard: React.FC = () => {
                   {getStepContent(activeStep)}
                 </Typography>
                 <div style={{ marginBottom: "10rem" }}>
-                  <Button disabled={activeStep === 0} onClick={handleBack}>
+                  <Button variant="contained" color="secondary" disabled={activeStep === 0} onClick={handleBack}>
                     Volver
                   </Button>
                   <Button
