@@ -10,6 +10,7 @@ import ProfilePage from "../pages/ProfilePage";
 import RegisterPage from "../pages/RegisterPage";
 import RestaurantMenuPage from "../pages/RestaurantMenuPage";
 import RestaurantsPage from "../pages/RestaurantsPage";
+import WizardPage from "../pages/WizardPage";
 
 const Routes: React.FC = () => {
   return (
@@ -44,6 +45,11 @@ const Routes: React.FC = () => {
         <LoggedInRoute exact path={ClientRoutes.PROFILE}>
           <ProfilePage />
         </LoggedInRoute>
+
+        
+        <Route exact path={ClientRoutes.WIZARD}>
+          <WizardPage />
+        </Route>
 
         <Route>
           <NotFoundPage />

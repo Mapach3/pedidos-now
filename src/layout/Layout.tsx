@@ -15,6 +15,7 @@ import { getMenu } from "../helpers/menu-helper";
 import useStyles from "../styles/styles";
 import { Link } from "react-router-dom";
 import { ClientRoutes } from "../config/enums";
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 const Layout: React.FC = ({ children }) => {
   const classes = useStyles();
@@ -64,6 +65,13 @@ const Layout: React.FC = ({ children }) => {
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
+          { history.location.pathname!==ClientRoutes.HOME&&
+          <ArrowBackIcon 
+            onClick={()=> history.goBack()}
+            style={{ marginRight: "1rem", cursor:"pointer"}}
+          />
+          }
+
           <Link to="/" style={{ textDecoration: "none", color: "white" }}>
             <Typography variant="h5" noWrap>
               PedidosNow
