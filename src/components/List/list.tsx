@@ -1,24 +1,24 @@
 import {Typography } from "@material-ui/core";
 import Card from "../../components/Card/card";
-import { Restaurante } from "../../models/models";
-
 
 interface CardListProps{
-  comercios: Restaurante[];
+  lista: any[];
+  verMenu?: any;
 }
 
-const CardList: React.FC<CardListProps> = ({comercios}) => {
+const CardList: React.FC<CardListProps> = ({lista, verMenu}) => {
 
   return (
     <>
-      {comercios.length ? comercios.map((rest) => (
+      {lista?.length ? lista?.map((rest) => (
             <Card 
+              verMenu={verMenu}
               key={rest.id}
               url={rest.url}
               titulo={rest.titulo}
               descripcion={rest.descripcion}
             />
-      )): <Typography variant="h5">No encontramos restaurantes en esa localidad</Typography>}
+      )): <Typography variant="h5">No se encontraron resultados</Typography>}
     </>
   );
 }
