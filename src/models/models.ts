@@ -4,6 +4,7 @@ export interface Restaurante {
   url: string;
   titulo: string;
   localidad: string;
+  menu: Producto[];
 }
 
 export interface ItemPedido {

@@ -55,7 +55,7 @@ const Pedido: React.FC<PedidoProps> = ({
                       </Button>
                     </Tooltip>
                   )}
-                  {item.cantidad} x {item.producto.nombre}
+                  {item.cantidad} x {item.producto.titulo}
                   <div style={{ float: "right" }}>
                     ${item.cantidad * item.producto.precio}
                   </div>
