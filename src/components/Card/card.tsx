@@ -17,8 +17,8 @@ const useStyles = makeStyles((theme) => ({
   media: {
     borderRadius: "10%",
     border: "0.5px solid",
-    width: "10rem",
-    height: "10rem",
+    width: "8rem",
+    height: "8rem",
   },
   contend: {
     width: "100%",

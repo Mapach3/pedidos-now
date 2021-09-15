@@ -1,5 +1,18 @@
-import {Typography } from "@material-ui/core";
+import {makeStyles, Typography } from "@material-ui/core";
 import Card from "../../components/Card/card";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    margin: 50,
+  },
+}));
+
+interface props {
+  url: string;
+  titulo: string;
+  descripcion: string;
+  verMenu?: any;
+}
 
 interface CardListProps{
   lista: any[];
@@ -7,6 +20,7 @@ interface CardListProps{
 }
 
 const CardList: React.FC<CardListProps> = ({lista, verMenu}) => {
+  const classes = useStyles();
 
   return (
     <>
@@ -18,7 +32,7 @@ const CardList: React.FC<CardListProps> = ({lista, verMenu}) => {
               titulo={rest.titulo}
               descripcion={rest.descripcion}
             />
-      )): <Typography variant="h5">No se encontraron resultados</Typography>}
+      )): <Typography className={classes.root} variant="h5">No se encontraron resultados</Typography>}
     </>
   );
 }
