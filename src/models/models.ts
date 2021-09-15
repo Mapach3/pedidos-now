@@ -6,11 +6,6 @@ export interface Restaurante {
   localidad: string;
 }
 
-export interface Producto {
-  nombre: string;
-  precio: number;
-}
-
 export interface ItemPedido {
   producto: Producto;
   cantidad: number;
@@ -19,4 +14,12 @@ export interface ItemPedido {
 export interface PedidoItems {
   items: ItemPedido[];
   restaurante: string;
+}
+
+export interface Producto {
+    id: string;
+    descripcion: string;
+    url: string;
+    titulo: string;
+    precio: number;
 }
