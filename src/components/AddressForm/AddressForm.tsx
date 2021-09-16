@@ -62,31 +62,15 @@ const AddressForm: React.FC = () => {
       </Typography>
       <form onSubmit={handleSubmit}>
         <TextField
-          onChange={(event) => setAlias(event.target.value)}
-          id="alias"
-          label="alias"
-          variant="outlined"
-          style={{ width: "100%", paddingBottom: "1rem" }}
-        />
-        <TextField
           onChange={(event) => setCalle(event.target.value)}
           id="calle"
-          label="Calle"
+          label="Dirección"
           variant="outlined"
           required
           style={{ width: "100%", paddingBottom: "1rem" }}
         />
-        <TextField
-          onChange={(event) => setNumeroPuerta(event.target.value)}
-          label="Numero de puerta"
-          type="numeroPuerta"
-          variant="outlined"
-          required
-          style={{ width: "100%", paddingBottom: "1rem" }}
-        />
-
         <Select
-          label="Ciudad"
+          label="Localidad"
           onChange={(event: React.ChangeEvent<any>) =>
             setCiudad(event.target.value)
           }
@@ -114,23 +98,6 @@ const AddressForm: React.FC = () => {
           required
           style={{ width: "100%", paddingBottom: "1rem", marginTop: "1rem" }}
         />
-        <div style={{ textAlign: "center", marginTop: "1rem" }}>
-          <Button
-            disabled={isSubmitting}
-            variant="contained"
-            color="secondary"
-            type="submit"
-            style={{ width: "40%" }}
-          >
-            Agregar direccion
-            {isSubmitting && (
-              <CircularProgress
-                size="1.2rem"
-                style={{ marginLeft: "1.1rem" }}
-              />
-            )}
-          </Button>
-        </div>
       </form>
     </Container>
   );
