@@ -4,7 +4,7 @@ export enum ClientRoutes {
   LOGOUT = "/logout",
   REGISTER = "/register",
   PROFILE = "/profile",
-  WIZARD ="/wizard",
+  CHECKOUT = "/checkout",
   RESTAURANTS = "/restaurants/:location",
-  RESTAURANT_MENU = "/restaurantMenu/:titulo"
+  RESTAURANT_MENU = "/restaurantMenu/:titulo",
 }

@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -12,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
     margin: 20,
     padding: 15,
     cursor: "pointer",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   media: {
     borderRadius: "10%",
@@ -47,24 +46,39 @@ interface props {
   precio: number;
 }
 
-export default function ItemCard({ url, titulo, descripcion, verMenu, precio }: props) {
+export default function ItemCard({
+  url,
+  titulo,
+  descripcion,
+  verMenu,
+  precio,
+}: props) {
   const classes = useStyles();
 
   return (
-    <Card onClick={verMenu?(e)=>{verMenu(e, titulo)}:()=>{}} className={classes.root} variant="outlined">
+    <Card
+      onClick={
+        verMenu
+          ? (e) => {
+              verMenu(e, titulo);
+            }
+          : () => {}
+      }
+      className={classes.root}
+      variant="outlined"
+    >
       <Grid container direction="row" alignItems="center">
         <Grid container item xs={4} justify="flex-start">
-          <img className={classes.media} src={url} alt="No hay foto"/>
+          <img className={classes.media} src={url} alt="No hay foto" />
         </Grid>
 
-        <Grid container item xs={6} justify="center" >
+        <Grid container item xs={6} justify="center">
           <CardContent className={classes.contend}>
-            <Typography style={{fontWeight: 'bold'}}>{titulo}</Typography>
+            <Typography style={{ fontWeight: "bold" }}>{titulo}</Typography>
             <Typography>{descripcion}</Typography>
-            {precio&&<Typography>Precio: ${precio}</Typography>}
+            {precio && <Typography>Precio: ${precio}</Typography>}
           </CardContent>
         </Grid>
-
       </Grid>
     </Card>
   );

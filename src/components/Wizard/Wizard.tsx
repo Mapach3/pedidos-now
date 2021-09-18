@@ -6,9 +6,20 @@ import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import AddressForm from "../AddressForm/AddressForm";
-import { Grid } from "@material-ui/core";
+import {
+  CircularProgress,
+  Container,
+  Grid,
+  TextField,
+} from "@material-ui/core";
 import Pedido from "../Pedido/Pedido";
 import { PedidoItems } from "../../models/models";
+import { Locations, LocationsEnumLabels } from "../../enums/Locations";
+import PagoForm from "../PagoForm/PagoForm";
+import {
+  PaymentMethods,
+  PaymentMethodsLabels,
+} from "../../enums/PaymentMethods";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,26 +41,22 @@ function getSteps() {
   return ["Dirección de entrega", "Forma de pago", "¡Ultimo paso!"];
 }
 
-function getStepContent(stepIndex: number) {
-  switch (stepIndex) {
-    case 0:
-      return <AddressForm />;
-    case 1:
-      return "Formulario pago";
-    case 2:
-      return "Verificacion";
-    default:
-      return "Unknown stepIndex";
-  }
-}
-
 const Wizard: React.FC = () => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
   const steps = getSteps();
+
+  //Direccion State
+  const [calle, setCalle] = useState("");
+  const [ciudad, setCiudad] = useState(Locations.LOMAS_DE_ZAMORA as string);
+  const [telefono, setTelefono] = useState("");
+
+  //Pago State
+  const [metodoPago, setMetodoPago] = useState("");
+
   const [pedido] = useState<PedidoItems>(
-    localStorage.getItem("PedidosNow.Pedido")
-      ? JSON.parse(localStorage.getItem("PedidosNow.Pedido")!)
+    sessionStorage.getItem("PedidosNow.Pedido")
+      ? JSON.parse(sessionStorage.getItem("PedidosNow.Pedido")!)
       : { items: [], restaurante: "" }
   );
 
@@ -64,6 +71,80 @@ const Wizard: React.FC = () => {
   const handleReset = () => {
     setActiveStep(0);
   };
+
+  function getStepContent(stepIndex: number) {
+    switch (stepIndex) {
+      case 0:
+        return (
+          <AddressForm
+            calle={calle}
+            setCalle={(value: string) => setCalle(value)}
+            ciudad={ciudad}
+            setCiudad={(value: string) => setCiudad(value)}
+            telefono={telefono}
+            setTelefono={(value: string) => setTelefono(value)}
+          />
+        );
+      case 1:
+        return (
+          <PagoForm
+            metodoPago={metodoPago}
+            setMetodoPago={(value: string) => setMetodoPago(value)}
+          />
+        );
+      case 2:
+        return (
+          <Container
+            component="main"
+            maxWidth="sm"
+            style={{
+              marginBottom: "1rem",
+              justifyContent: "flex-start",
+            }}
+          >
+            <Typography
+              variant="h6"
+              style={{
+                textAlign: "center",
+                paddingBottom: "1rem",
+              }}
+            >
+              ¿Son correctos estos datos?
+            </Typography>
+            <TextField
+              label="Dirección"
+              variant="outlined"
+              value={calle}
+              InputProps={{ readOnly: true }}
+              style={{ width: "100%", marginTop: "1rem" }}
+            />
+            <TextField
+              label="Localidad"
+              variant="outlined"
+              value={LocationsEnumLabels[ciudad as Locations]}
+              InputProps={{ readOnly: true }}
+              style={{ width: "100%", marginTop: "1rem" }}
+            />
+            <TextField
+              label="Teléfono"
+              variant="outlined"
+              value={telefono}
+              InputProps={{ readOnly: true }}
+              style={{ width: "100%", marginTop: "1rem" }}
+            />
+            <TextField
+              label="Método de pago"
+              variant="outlined"
+              value={PaymentMethodsLabels[metodoPago as PaymentMethods]}
+              InputProps={{ readOnly: true }}
+              style={{ width: "100%", marginTop: "1rem" }}
+            />
+          </Container>
+        );
+      default:
+        return "Unknown stepIndex";
+    }
+  }
 
   return (
     <Grid container style={{ marginTop: "1rem" }}>
@@ -81,22 +162,37 @@ const Wizard: React.FC = () => {
           </Stepper>
           <div>
             {activeStep === steps.length ? (
-              <div>
-                <Typography className={classes.instructions}>
-                  All steps completed
-                </Typography>
+              <>
+                <div style={{ textAlign: "center" }}>
+                  <Typography className={classes.instructions}>
+                    Finalizando pedido...
+                  </Typography>
+                  <div>
+                    <CircularProgress />
+                  </div>
+                </div>
                 <Button onClick={handleReset}>Reset</Button>
-              </div>
+              </>
             ) : (
               <div>
                 <Typography className={classes.instructions}>
                   {getStepContent(activeStep)}
                 </Typography>
                 <div style={{ marginBottom: "10rem" }}>
-                  <Button variant="contained" color="secondary" disabled={activeStep === 0} onClick={handleBack}>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    disabled={activeStep === 0}
+                    onClick={handleBack}
+                  >
                     Volver
                   </Button>
                   <Button
+                    disabled={
+                      (activeStep === 0 &&
+                        (!calle.length || !telefono.length)) ||
+                      (activeStep === 1 && !metodoPago.length)
+                    }
                     variant="contained"
                     color="primary"
                     onClick={handleNext}
