@@ -146,6 +146,21 @@ const Wizard: React.FC = () => {
     }
   }
 
+  if (!pedido.items.length) {
+    return (
+      <Grid
+        container
+        sm={12}
+        md={12}
+        lg={5}
+        justifyContent="center"
+        style={{ marginTop: "1rem", marginLeft: "auto", marginRight: "auto" }}
+      >
+        <Pedido />
+      </Grid>
+    );
+  }
+
   return (
     <Grid container style={{ marginTop: "1rem" }}>
       <Grid item xs={12} lg={6}>
