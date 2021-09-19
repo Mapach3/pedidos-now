@@ -1,47 +1,30 @@
 import {
-  Button,
-  CircularProgress,
   Container,
   MenuItem,
   Select,
   TextField,
   Typography,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React from "react";
 import { Locations, LocationsEnumLabels } from "../../enums/Locations";
 
-const AddressForm: React.FC = () => {
-  const [alias, setAlias] = useState("");
-  const [calle, setCalle] = useState("");
-  const [numeroPuerta, setNumeroPuerta] = useState("");
-  const [contraseña, setContraseña] = useState("");
-  const [ciudad, setCiudad] = useState(Locations.LOMAS_DE_ZAMORA);
-  const [barrio, setBarrio] = useState(Locations.LOMAS_DE_ZAMORA);
-  const [telefono, setTelefono] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+interface Props {
+  calle: string;
+  setCalle: (value: string) => void;
+  ciudad: string;
+  setCiudad: (value: string) => void;
+  telefono: string;
+  setTelefono: (value: string) => void;
+}
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    console.log({
-      alias,
-      calle,
-      numeroPuerta,
-      contraseña,
-      ciudad,
-      barrio,
-      telefono,
-    });
-    try {
-      setIsSubmitting(true);
-
-      //emitir evento para cambiar de step en el wizard
-    } catch (error: any) {
-      alert("Error: " + error.code + ": " + error.message);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
+const AddressForm: React.FC<Props> = ({
+  setCalle,
+  setCiudad,
+  setTelefono,
+  calle,
+  ciudad,
+  telefono,
+}) => {
   return (
     <Container
       component="main"
@@ -58,47 +41,47 @@ const AddressForm: React.FC = () => {
           paddingBottom: "1rem",
         }}
       >
-        Agregar direccion
+        Ingresa estos datos para finalizar el pedido
       </Typography>
-      <form onSubmit={handleSubmit}>
-        <TextField
-          onChange={(event) => setCalle(event.target.value)}
-          id="calle"
-          label="Dirección"
-          variant="outlined"
-          required
-          style={{ width: "100%", paddingBottom: "1rem" }}
-        />
-        <Select
-          label="Localidad"
-          onChange={(event: React.ChangeEvent<any>) =>
-            setCiudad(event.target.value)
-          }
-          required
-          variant="outlined"
-          style={{ width: "100%" }}
-          labelId="userType"
-          value={ciudad}
-          defaultValue={ciudad}
-        >
-          {Object.values(Locations).map((item) => (
-            <MenuItem key={item} value={Locations[item]}>
-              {LocationsEnumLabels[item]}
-            </MenuItem>
-          ))}
-        </Select>
+      <TextField
+        onChange={(event) => setCalle(event.target.value)}
+        id="calle"
+        label="Dirección"
+        variant="outlined"
+        required
+        style={{ width: "100%", paddingBottom: "1rem" }}
+        value={calle}
+      />
+      <Select
+        label="Localidad"
+        onChange={(event: React.ChangeEvent<any>) =>
+          setCiudad(event.target.value)
+        }
+        required
+        variant="outlined"
+        style={{ width: "100%" }}
+        labelId="userType"
+        value={ciudad}
+        defaultValue={ciudad}
+      >
+        {Object.values(Locations).map((item) => (
+          <MenuItem key={item} value={Locations[item]}>
+            {LocationsEnumLabels[item]}
+          </MenuItem>
+        ))}
+      </Select>
 
-        <TextField
-          onChange={(event: React.ChangeEvent<any>) =>
-            setTelefono(event.target.value)
-          }
-          label="Telefono"
-          type="telefono"
-          variant="outlined"
-          required
-          style={{ width: "100%", paddingBottom: "1rem", marginTop: "1rem" }}
-        />
-      </form>
+      <TextField
+        onChange={(event: React.ChangeEvent<any>) =>
+          setTelefono(event.target.value)
+        }
+        label="Telefono"
+        type="telefono"
+        variant="outlined"
+        value={telefono}
+        required
+        style={{ width: "100%", paddingBottom: "1rem", marginTop: "1rem" }}
+      />
     </Container>
   );
 };

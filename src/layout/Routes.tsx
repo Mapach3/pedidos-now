@@ -46,8 +46,7 @@ const Routes: React.FC = () => {
           <ProfilePage />
         </LoggedInRoute>
 
-        
-        <Route exact path={ClientRoutes.WIZARD}>
+        <Route exact path={ClientRoutes.CHECKOUT}>
           <WizardPage />
         </Route>
 
