@@ -20,6 +20,7 @@ import {
   PaymentMethods,
   PaymentMethodsLabels,
 } from "../../enums/PaymentMethods";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -50,6 +51,7 @@ const Wizard: React.FC = () => {
   const [calle, setCalle] = useState("");
   const [ciudad, setCiudad] = useState(Locations.LOMAS_DE_ZAMORA as string);
   const [telefono, setTelefono] = useState("");
+  const itemsPedido = useSelector((state:any) => state.infoPedido);
 
   //Pago State
   const [metodoPago, setMetodoPago] = useState("");
@@ -146,7 +148,7 @@ const Wizard: React.FC = () => {
     }
   }
 
-  if (!pedido.items.length) {
+  if (!itemsPedido.infoPedido.length) {
     return (
       <Grid
         container
@@ -156,6 +158,7 @@ const Wizard: React.FC = () => {
         justifyContent="center"
         style={{ marginTop: "1rem", marginLeft: "auto", marginRight: "auto" }}
       >
+        <Pedido />
       </Grid>
     );
   }

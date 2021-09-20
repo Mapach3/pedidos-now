@@ -5,3 +5,13 @@ export const agregarACarrito = (data) => dispach => {
        payload:data
    })
 }
+
+
+export const agregarNombre = (nombre) => dispach => {
+    console.log(nombre);
+    dispach({
+        type:'agregarNombreSucursal',
+        payload:nombre
+    })
+ }
+ 

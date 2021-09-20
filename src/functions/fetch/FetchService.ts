@@ -24,10 +24,14 @@ class FetchService {
       .where("titulo","==",titulo)
       .get();
     let docs: any[] = [];
+    let docId:string='';
     querySnapshot.forEach((doc) => {
+      doc.data().id = doc.id;
+      docId = doc.id;
       if (doc.exists) docs.push(doc.data() as Restaurante);
     });
     let restaurante: Restaurante = docs.pop();
+    restaurante.uid= docId;
     return restaurante;
   }
 

@@ -25,6 +25,7 @@ const RestaurantMenu: React.FC = () => {
       const response = await FetchService.fetchRestaurantByTitulo(
         params.titulo as string
       );
+      console.log( {response});
       setProductos(response.menu)
       setIsLoadingMenu(false);
     };

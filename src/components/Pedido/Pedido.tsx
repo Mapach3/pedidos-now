@@ -8,6 +8,9 @@ import {
 } from "@material-ui/core";
 import { SearchOutlined } from "@material-ui/icons";
 import React from "react";
+import { useSelector } from "react-redux";
+import { useHistory } from "react-router";
+import { ClientRoutes } from "../../config/enums";
 import { PedidoItems } from "../../models/models";
 
 interface PedidoProps {
@@ -21,26 +24,31 @@ const Pedido: React.FC<PedidoProps> = ({
   renderEditButton = false,
   isRestaurantView = true,
 }) => {
+  const history = useHistory();
+  const itemsPedido = useSelector((state:any) => state.infoPedido);
+
   const calcularSubtotal = () => {
     let subTotal = 0;
-    if (pedido) {
-      pedido.items.forEach((item) => {
+    if (itemsPedido) {
+      itemsPedido.infoPedido.forEach((item:any) => {
         subTotal += item.cantidad * item.precio;
       });
     }
     return subTotal;
   };
 
+  console.log(itemsPedido);
+
   return (
     <Card style={{ width: "70%" }}>
       <CardContent>
-        {pedido && pedido.items.length ? (
+        {itemsPedido && itemsPedido.infoPedido.length ? (
           <>
             <Typography style={{ textAlign: "center" }} gutterBottom>
-              Mi pedido a: {pedido.restaurante}
+              Mi pedido a: {itemsPedido.nombreRestaurante}
             </Typography>
             <Divider />
-            {pedido.items.map((item) => (
+            {itemsPedido.infoPedido.map((item:any) => (
               <div style={{ margin: "0.5rem" }}>
                 <Typography>
                   {isRestaurantView && (
@@ -69,7 +77,7 @@ const Pedido: React.FC<PedidoProps> = ({
             <Divider />
             {isRestaurantView && (
               <div style={{ textAlign: "center", marginTop: "1rem" }}>
-                <Button variant="contained" color="secondary">
+                <Button variant="contained" color="secondary" onClick={() => history.push(ClientRoutes.CHECKOUT)}>
                   Terminar Pedido
                 </Button>
               </div>

@@ -1,5 +1,6 @@
 let initialState = {
     infoPedido:[],
+    nombreRestaurante:'',
 }
 
 function reducer (store=initialState, action:any){
@@ -10,7 +11,11 @@ function reducer (store=initialState, action:any){
                     return null
                 }
                 return {...store,infoPedido:[...store.infoPedido,action.payload]} 
-            
+            case 'agregarNombreSucursal':
+                if(!action.payload){
+                    return null
+                }
+                return {...store,nombreRestaurante:action.payload} 
             default:
                 return store;    
         }
