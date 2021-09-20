@@ -1,5 +1,7 @@
 import { Button, Dialog, DialogTitle, Grid, makeStyles, TextField, Typography } from "@material-ui/core";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { agregarACarrito } from "../../redux/actions/pedidoAction";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -14,12 +16,17 @@ const useStyles = makeStyles((theme) => ({
 
 export  const ModalCarrito = (props:any) => {
     const [cantidad,setCantidad] = useState("1");
-     const {handleClose,open, producto, precio} = props;
+    const {handleClose,open, producto, precio, nombreSucursal} = props;
+    const dispath = useDispatch();
     const classes = useStyles();
+
+
     const agregarCarrito = () => {
+        dispath(agregarACarrito({producto:producto,cantidad:cantidad,precio:precio,nombreSucursal:nombreSucursal}))
         console.log('producto: '+producto);
         console.log('precio: '+precio);
         console.log('cantidad: '+cantidad);
+        handleClose();
     }
 
     const onChangeCantidad = (e:any) => {

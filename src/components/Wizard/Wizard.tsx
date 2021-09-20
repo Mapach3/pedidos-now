@@ -156,7 +156,6 @@ const Wizard: React.FC = () => {
         justifyContent="center"
         style={{ marginTop: "1rem", marginLeft: "auto", marginRight: "auto" }}
       >
-        <Pedido />
       </Grid>
     );
   }

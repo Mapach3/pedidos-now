@@ -9,7 +9,7 @@ import { ModalCarrito } from "../Modal/ModalCarrito";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: "100%",
+    width: "90%",
     margin: 20,
     padding: 15,
     cursor: "pointer",
@@ -46,6 +46,7 @@ interface props {
   descripcion: string;
   verMenu?: any;
   precio: number;
+  nombreSucursal?:string;
 }
 
 export default function ItemCard({
@@ -54,6 +55,7 @@ export default function ItemCard({
   descripcion,
   verMenu,
   precio,
+  nombreSucursal
 }: props) {
   const classes = useStyles();
   const [open, setOpen] = useState(false); 
@@ -65,8 +67,7 @@ export default function ItemCard({
 
   return (
     <div>
-      <ModalCarrito key={url} producto={titulo} precio={precio} handleClose={()=>setOpen(false)} open={open}/>
-
+      <ModalCarrito key={url} producto={titulo} precio={precio} handleClose={()=>setOpen(false)} nombreSucursal={nombreSucursal}  open={open}/>
     <Card
       onClick={
         verMenu

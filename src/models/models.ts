@@ -10,6 +10,7 @@ export interface Restaurante {
 export interface ItemPedido {
   producto: Producto;
   cantidad: number;
+  precio:number;
 }
 
 export interface PedidoItems {
