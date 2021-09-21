@@ -18,9 +18,10 @@ interface props {
 interface CardListProps {
   lista: any[];
   verMenu?: any;
+  nombreSucursal?:string;
 }
 
-const CardList: React.FC<CardListProps> = ({ lista, verMenu }) => {
+const CardList: React.FC<CardListProps> = ({ lista, verMenu,nombreSucursal }) => {
   const classes = useStyles();
 
   return (
@@ -34,6 +35,7 @@ const CardList: React.FC<CardListProps> = ({ lista, verMenu }) => {
             titulo={rest.titulo}
             descripcion={rest.descripcion}
             precio={rest.precio}
+            nombreSucursal={nombreSucursal}
           />
         ))
       ) : (

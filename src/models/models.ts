@@ -1,5 +1,6 @@
 export interface Restaurante {
   id: string;
+  uid: string;
   descripcion: string;
   url: string;
   titulo: string;
@@ -10,6 +11,7 @@ export interface Restaurante {
 export interface ItemPedido {
   producto: Producto;
   cantidad: number;
+  precio:number;
 }
 
 export interface PedidoItems {

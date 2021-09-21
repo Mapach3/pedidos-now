@@ -9,12 +9,15 @@ import { Producto } from "../../models/models";
 import { useParams } from "react-router";
 import FetchService from "../../functions/fetch/FetchService";
 import CardList from "../List/list";
+import Pedido from "../Pedido/Pedido";
+import { useSelector } from 'react-redux'
 
 
 const RestaurantMenu: React.FC = () => {
   const params:any = useParams();
   const [productos, setProductos] = useState<Producto[]>([]);
   const [isLoadingMenu, setIsLoadingMenu] = useState(false);
+  const itemsPedido = useSelector((state:any) => state.infoPedido);
 
   useEffect(() => {
     const fetchProductos = async () => {
@@ -22,6 +25,7 @@ const RestaurantMenu: React.FC = () => {
       const response = await FetchService.fetchRestaurantByTitulo(
         params.titulo as string
       );
+      console.log( {response});
       setProductos(response.menu)
       setIsLoadingMenu(false);
     };
@@ -41,10 +45,12 @@ const RestaurantMenu: React.FC = () => {
         {isLoadingMenu ? (
           <CircularProgress />
         ) : (
-          <CardList lista={productos}/>
+          <CardList lista={productos} nombreSucursal={params.titulo}/>
         )}
       </Grid>
-      <Grid item xs={3}></Grid>
+      <Grid item xs={3}>
+        <Pedido pedido={{items:itemsPedido.infoPedido,restaurante:params.titulo}}/>
+      </Grid>
     </Grid>
   );
 };

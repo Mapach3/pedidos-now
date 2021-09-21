@@ -4,10 +4,12 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import { red } from "@material-ui/core/colors";
 import { Grid } from "@material-ui/core";
+import { useState } from "react";
+import { ModalCarrito } from "../Modal/ModalCarrito";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: "100%",
+    width: "90%",
     margin: 20,
     padding: 15,
     cursor: "pointer",
@@ -44,6 +46,7 @@ interface props {
   descripcion: string;
   verMenu?: any;
   precio: number;
+  nombreSucursal?:string;
 }
 
 export default function ItemCard({
@@ -52,17 +55,26 @@ export default function ItemCard({
   descripcion,
   verMenu,
   precio,
+  nombreSucursal
 }: props) {
   const classes = useStyles();
+  const [open, setOpen] = useState(false); 
+
+
+  const openModalSeleccion =  () => {
+    setOpen(true);
+  }
 
   return (
+    <div>
+      <ModalCarrito key={url} producto={titulo} precio={precio} handleClose={()=>setOpen(false)} nombreSucursal={nombreSucursal}  open={open}/>
     <Card
       onClick={
         verMenu
           ? (e) => {
               verMenu(e, titulo);
             }
-          : () => {}
+          : openModalSeleccion
       }
       className={classes.root}
       variant="outlined"
@@ -81,5 +93,7 @@ export default function ItemCard({
         </Grid>
       </Grid>
     </Card>
+    </div>
+
   );
 }
