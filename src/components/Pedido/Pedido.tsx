@@ -31,7 +31,7 @@ const Pedido: React.FC<PedidoProps> = ({
     let subTotal = 0;
     if (itemsPedido) {
       itemsPedido.infoPedido.forEach((item:any) => {
-        subTotal += item.cantidad * item.precio;
+        subTotal += item.cantidad * item.precio + 119;
       });
     }
     return subTotal;
@@ -65,11 +65,15 @@ const Pedido: React.FC<PedidoProps> = ({
                   )}
                   {item.cantidad} x {item.producto}
                   <div style={{ float: "right" }}>
-                    ${item.cantidad * item.precio}
+                    ${item.cantidad * item.precio }
                   </div>
                 </Typography>
               </div>
             ))}
+            <Typography style={{ marginTop: "1rem" }}>
+              Envío:
+              <div style={{ float: "right" }}>$119</div>
+            </Typography>
             <Typography style={{ marginTop: "1rem" }}>
               Subtotal:
               <div style={{ float: "right" }}>${calcularSubtotal()}</div>
