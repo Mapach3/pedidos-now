@@ -21,6 +21,7 @@ import {
   PaymentMethodsLabels,
 } from "../../enums/PaymentMethods";
 import { useSelector } from "react-redux";
+import { OrdersService } from "../../fetch/OrdersService";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -64,6 +65,9 @@ const Wizard: React.FC = () => {
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    if (activeStep === steps.length - 1) {
+      processOrder();
+    }
   };
 
   const handleBack = () => {
@@ -72,6 +76,30 @@ const Wizard: React.FC = () => {
 
   const handleReset = () => {
     setActiveStep(0);
+  };
+
+  const processOrder = async () => {
+    const order = { items: itemsPedido, total: calcularSubtotal(), user_id: localStorage.getItem("PedidosNow.UserId") }
+    console.log(order);
+    try {
+      await OrdersService.postOrderToCollection(order);
+    }
+    catch {
+      console.log("Error con el pedido");
+    }
+    finally {
+      console.log("Pedido exitoso");
+    }
+  }
+
+  const calcularSubtotal = () => {
+    let subTotal = 0;
+    if (pedido) {
+      itemsPedido.infoPedido.forEach((item:any) => {
+        subTotal += item.cantidad * item.precio;
+      });
+    }
+    return subTotal;
   };
 
   function getStepContent(stepIndex: number) {

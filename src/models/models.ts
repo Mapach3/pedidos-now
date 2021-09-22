@@ -26,3 +26,9 @@ export interface Producto {
     titulo: string;
     precio: number;
 }
+
+export interface Order {
+  user_id: string | null;
+  items: PedidoItems;
+  total: number;
+}
