@@ -11,9 +11,9 @@ import {
   Container,
   Grid,
   TextField,
-  Dialog, 
+  Dialog,
   DialogTitle,
-  DialogActions
+  DialogActions,
 } from "@material-ui/core";
 import Pedido from "../Pedido/Pedido";
 import { PedidoItems } from "../../models/models";
@@ -57,7 +57,7 @@ const Wizard: React.FC = () => {
   const [calle, setCalle] = useState("");
   const [ciudad, setCiudad] = useState(Locations.LOMAS_DE_ZAMORA as string);
   const [telefono, setTelefono] = useState("");
-  const itemsPedido = useSelector((state:any) => state.infoPedido);
+  const itemsPedido = useSelector((state: any) => state.infoPedido);
 
   //Pago State
   const [metodoPago, setMetodoPago] = useState("");
@@ -82,34 +82,40 @@ const Wizard: React.FC = () => {
   const handleReset = () => {
     setActiveStep(0);
   };
-    
+
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const history = useHistory();
-  
+
   const processOrder = async () => {
-    const order = { items: itemsPedido, total: calcularSubtotal(), user_id: localStorage.getItem("PedidosNow.UserId") }
-    
+    const order = {
+      items: itemsPedido,
+      total: calcularSubtotal(),
+      user_id: localStorage.getItem("PedidosNow.UserId"),
+    };
+
     console.log(order);
     try {
       await OrdersService.postOrderToCollection(order);
-      setDialogMessage("Pedido confirmado con éxito! te avisaremos cuando salga el repartidor");
+      setDialogMessage(
+        "Pedido confirmado con éxito! te avisaremos cuando salga el repartidor"
+      );
       setOpenDialog(true);
-    }
-    catch {
-      setDialogMessage("Lo sentimos, ocurrió un error al generar tu pedido. Por favor intenta nuevamente en unos minutos.");
+    } catch {
+      setDialogMessage(
+        "Lo sentimos, ocurrió un error al generar tu pedido. Por favor intenta nuevamente en unos minutos."
+      );
       setOpenDialog(true);
+    } finally {
+      console.log("finally");
     }
-    finally {
-      console.log("finally")
-    }
-  }
+  };
 
   const calcularSubtotal = () => {
     let subTotal = 0;
     if (pedido) {
-      itemsPedido.infoPedido.forEach((item:any) => {
-        subTotal += item.cantidad * item.precio
+      itemsPedido.infoPedido.forEach((item: any) => {
+        subTotal += item.cantidad * item.precio;
       });
     }
     return subTotal;
@@ -206,79 +212,92 @@ const Wizard: React.FC = () => {
 
   return (
     <>
-
-    <Grid container style={{ marginTop: "1rem" }}>
-      <Grid item xs={12} lg={6}>
-        <div
-          className={classes.root}
-          style={{ width: "80%", marginLeft: "1rem" }}
-        >
-          <Stepper activeStep={activeStep} alternativeLabel>
-            {steps.map((label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-          <div>
-            {activeStep === steps.length ? (
-              <>
-                <div style={{ textAlign: "center" }}>
+      <Grid container style={{ marginTop: "1rem" }}>
+        <Grid item xs={12} lg={6}>
+          <div
+            className={classes.root}
+            style={{ width: "80%", marginLeft: "1rem" }}
+          >
+            <Stepper activeStep={activeStep} alternativeLabel>
+              {steps.map((label) => (
+                <Step key={label}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+            <div>
+              {activeStep === steps.length ? (
+                <>
+                  <div style={{ textAlign: "center" }}>
+                    <Typography className={classes.instructions}>
+                      Finalizando pedido...
+                    </Typography>
+                    <div>
+                      <CircularProgress />
+                    </div>
+                  </div>
+                  <Button onClick={handleReset}>Reset</Button>
+                </>
+              ) : (
+                <div>
                   <Typography className={classes.instructions}>
-                    Finalizando pedido...
+                    {getStepContent(activeStep)}
                   </Typography>
-                  <div>
-                    <CircularProgress />
+                  <div style={{ marginBottom: "10rem" }}>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      disabled={activeStep === 0}
+                      onClick={handleBack}
+                    >
+                      Volver
+                    </Button>
+                    <Button
+                      disabled={
+                        (activeStep === 0 &&
+                          (!calle.length || !telefono.length)) ||
+                        (activeStep === 1 && !metodoPago.length)
+                      }
+                      variant="contained"
+                      color="primary"
+                      onClick={handleNext}
+                      style={{ float: "right" }}
+                    >
+                      {activeStep === steps.length - 1
+                        ? "Finalizar"
+                        : "Siguiente"}
+                    </Button>
                   </div>
                 </div>
-                <Button onClick={handleReset}>Reset</Button>
-              </>
-            ) : (
-              <div>
-                <Typography className={classes.instructions}>
-                  {getStepContent(activeStep)}
-                </Typography>
-                <div style={{ marginBottom: "10rem" }}>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    disabled={activeStep === 0}
-                    onClick={handleBack}
-                  >
-                    Volver
-                  </Button>
-                  <Button
-                    disabled={
-                      (activeStep === 0 &&
-                        (!calle.length || !telefono.length)) ||
-                      (activeStep === 1 && !metodoPago.length)
-                    }
-                    variant="contained"
-                    color="primary"
-                    onClick={handleNext}
-                    style={{ float: "right" }}
-                  >
-                    {activeStep === steps.length - 1
-                      ? "Finalizar"
-                      : "Siguiente"}
-                  </Button>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </div>
+        </Grid>
+        <Grid item xs={12} lg={5}>
+          <Pedido pedido={pedido} isRestaurantView={false} />
+        </Grid>
       </Grid>
-      <Grid item xs={12} lg={6}>
-        <Pedido pedido={pedido} />
-      </Grid>
-    </Grid>
 
-    <Dialog fullWidth maxWidth={'xs'} onClose={setOpenDialog}  open={openDialog} ><DialogTitle id="alert-dialog-title">
-          {dialogMessage} 
+      <Dialog
+        fullWidth
+        maxWidth={"xs"}
+        onClose={setOpenDialog}
+        open={openDialog}
+      >
+        <DialogTitle id="alert-dialog-title">
+          {dialogMessage}
           <DialogActions>
-          <Button variant="contained" style={{ marginRight: "7rem", marginTop: "1rem" }} color="secondary" onClick={() => history.push(ClientRoutes.HOME)}>Volver a la home</Button>
-        </DialogActions>
-        </DialogTitle></Dialog>
+            <Button
+              variant="contained"
+              style={{ marginRight: "7rem", marginTop: "1rem" }}
+              color="secondary"
+              onClick={() => history.push(ClientRoutes.HOME)}
+            >
+              Volver a la home
+            </Button>
+          </DialogActions>
+        </DialogTitle>
+      </Dialog>
     </>
   );
 };
