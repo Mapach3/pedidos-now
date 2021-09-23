@@ -1,8 +1,4 @@
-import {
-  CircularProgress,
-  Grid,
-  TextField,
-} from "@material-ui/core";
+import { CircularProgress, Grid, TextField } from "@material-ui/core";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { Producto } from "../../models/models";
@@ -10,14 +6,13 @@ import { useParams } from "react-router";
 import FetchService from "../../functions/fetch/FetchService";
 import CardList from "../List/list";
 import Pedido from "../Pedido/Pedido";
-import { useSelector } from 'react-redux'
-
+import { useSelector } from "react-redux";
 
 const RestaurantMenu: React.FC = () => {
-  const params:any = useParams();
+  const params: any = useParams();
   const [productos, setProductos] = useState<Producto[]>([]);
   const [isLoadingMenu, setIsLoadingMenu] = useState(false);
-  const itemsPedido = useSelector((state:any) => state.infoPedido);
+  const itemsPedido = useSelector((state: any) => state.infoPedido);
 
   useEffect(() => {
     const fetchProductos = async () => {
@@ -25,15 +20,15 @@ const RestaurantMenu: React.FC = () => {
       const response = await FetchService.fetchRestaurantByTitulo(
         params.titulo as string
       );
-      console.log( {response});
-      setProductos(response.menu)
+      console.log({ response });
+      setProductos(response.menu);
       setIsLoadingMenu(false);
     };
     fetchProductos();
   }, [params.titulo]);
 
   return (
-    <Grid container style={{ padding: "1rem 0 10rem 0" }}>
+    <Grid container style={{ padding: "1rem 1rem 10rem 1rem" }}>
       <Grid item xs={3}></Grid>
       <Grid item style={{ textAlign: "center" }} xs={6}>
         <TextField
@@ -45,11 +40,13 @@ const RestaurantMenu: React.FC = () => {
         {isLoadingMenu ? (
           <CircularProgress />
         ) : (
-          <CardList lista={productos} nombreSucursal={params.titulo}/>
+          <CardList lista={productos} nombreSucursal={params.titulo} />
         )}
       </Grid>
       <Grid item xs={3}>
-        <Pedido pedido={{items:itemsPedido.infoPedido,restaurante:params.titulo}}/>
+        <Pedido
+          pedido={{ items: itemsPedido.infoPedido, restaurante: params.titulo }}
+        />
       </Grid>
     </Grid>
   );

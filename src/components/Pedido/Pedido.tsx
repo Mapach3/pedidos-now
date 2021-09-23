@@ -25,13 +25,13 @@ const Pedido: React.FC<PedidoProps> = ({
   isRestaurantView = true,
 }) => {
   const history = useHistory();
-  const itemsPedido = useSelector((state:any) => state.infoPedido);
+  const itemsPedido = useSelector((state: any) => state.infoPedido);
 
   const calcularSubtotal = () => {
     let subTotal = 0;
     if (itemsPedido) {
-      itemsPedido.infoPedido.forEach((item:any) => {
-        subTotal += item.cantidad * item.precio;
+      itemsPedido.infoPedido.forEach((item: any) => {
+        subTotal += item.cantidad * item.precio + 119;
       });
     }
     return subTotal;
@@ -40,7 +40,7 @@ const Pedido: React.FC<PedidoProps> = ({
   console.log(itemsPedido);
 
   return (
-    <Card style={{ width: "70%" }}>
+    <Card>
       <CardContent>
         {itemsPedido && itemsPedido.infoPedido.length ? (
           <>
@@ -48,7 +48,7 @@ const Pedido: React.FC<PedidoProps> = ({
               Mi pedido a: {itemsPedido.nombreRestaurante}
             </Typography>
             <Divider />
-            {itemsPedido.infoPedido.map((item:any) => (
+            {itemsPedido.infoPedido.map((item: any) => (
               <div style={{ margin: "0.5rem" }}>
                 <Typography>
                   {isRestaurantView && (
@@ -71,13 +71,21 @@ const Pedido: React.FC<PedidoProps> = ({
               </div>
             ))}
             <Typography style={{ marginTop: "1rem" }}>
+              Envío:
+              <div style={{ float: "right" }}>$119</div>
+            </Typography>
+            <Typography style={{ marginTop: "1rem" }}>
               Subtotal:
               <div style={{ float: "right" }}>${calcularSubtotal()}</div>
             </Typography>
             <Divider />
             {isRestaurantView && (
               <div style={{ textAlign: "center", marginTop: "1rem" }}>
-                <Button variant="contained" color="secondary" onClick={() => history.push(ClientRoutes.CHECKOUT)}>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => history.push(ClientRoutes.CHECKOUT)}
+                >
                   Terminar Pedido
                 </Button>
               </div>
