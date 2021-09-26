@@ -1,4 +1,4 @@
-import app, { firestore as db } from "../config";
+import { firestore as db } from "../config";
 import { Order } from "../models/models";
 
 const orders = db.collection("orders");
