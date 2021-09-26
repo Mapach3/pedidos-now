@@ -8,10 +8,11 @@ import {
 } from "@material-ui/core";
 import { SearchOutlined } from "@material-ui/icons";
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { ClientRoutes } from "../../config/enums";
 import { PedidoItems } from "../../models/models";
+import { eliminarItemDeCarrito } from "../../redux/actions/pedidoAction";
 
 interface PedidoProps {
   pedido?: PedidoItems;
@@ -26,6 +27,7 @@ const Pedido: React.FC<PedidoProps> = ({
 }) => {
   const history = useHistory();
   const itemsPedido = useSelector((state: any) => state.infoPedido);
+  const dispath = useDispatch();
 
   const calcularSubtotal = () => {
     let subTotal = 0;
@@ -37,7 +39,10 @@ const Pedido: React.FC<PedidoProps> = ({
     return subTotal;
   };
 
-  console.log(itemsPedido);
+  const eliminarDeCarrito = (posicionCarrito: number) => {
+    debugger;
+    dispath(eliminarItemDeCarrito(posicionCarrito));
+  };
 
   return (
     <Card>
@@ -58,6 +63,7 @@ const Pedido: React.FC<PedidoProps> = ({
                         variant="text"
                         style={{ margin: 0 }}
                         size="small"
+                        onClick={() => eliminarDeCarrito(item.posicionCarrito)}
                       >
                         X
                       </Button>

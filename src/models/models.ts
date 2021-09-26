@@ -11,7 +11,7 @@ export interface Restaurante {
 export interface ItemPedido {
   producto: Producto;
   cantidad: number;
-  precio:number;
+  precio: number;
 }
 
 export interface PedidoItems {
@@ -20,15 +20,22 @@ export interface PedidoItems {
 }
 
 export interface Producto {
-    id: string;
-    descripcion: string;
-    url: string;
-    titulo: string;
-    precio: number;
+  id: string;
+  descripcion: string;
+  url: string;
+  titulo: string;
+  precio: number;
 }
 
 export interface Order {
   user_id: string | null;
-  items: PedidoItems;
+  items: ItemPedido[];
   total: number;
+  nombre_restaurante: string;
+  telefono: string;
+  localidad: string;
+  direccion: string;
+  estado: string;
+  metodoPago: string;
+  rechazado_restaurante: boolean;
 }

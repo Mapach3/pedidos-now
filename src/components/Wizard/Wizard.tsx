@@ -16,7 +16,7 @@ import {
   DialogActions,
 } from "@material-ui/core";
 import Pedido from "../Pedido/Pedido";
-import { PedidoItems } from "../../models/models";
+import { Order, PedidoItems } from "../../models/models";
 import { Locations, LocationsEnumLabels } from "../../enums/Locations";
 import PagoForm from "../PagoForm/PagoForm";
 import {
@@ -27,6 +27,7 @@ import { useSelector } from "react-redux";
 import { OrdersService } from "../../fetch/OrdersService";
 import { useHistory } from "react-router";
 import { ClientRoutes } from "../../config/enums";
+import { EstadoPedido } from "../../enums/EstadoPedido";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -62,11 +63,14 @@ const Wizard: React.FC = () => {
   //Pago State
   const [metodoPago, setMetodoPago] = useState("");
 
+  //Wizard State
   const [pedido] = useState<PedidoItems>(
     sessionStorage.getItem("PedidosNow.Pedido")
       ? JSON.parse(sessionStorage.getItem("PedidosNow.Pedido")!)
       : { items: [], restaurante: "" }
   );
+
+  const [isSubmittingPedido, setIsSubmittingPedido] = useState<boolean>(false);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -88,26 +92,33 @@ const Wizard: React.FC = () => {
   const history = useHistory();
 
   const processOrder = async () => {
-    const order = {
-      items: itemsPedido,
+    debugger;
+    const order: Order = {
+      items: itemsPedido.infoPedido,
       total: calcularSubtotal(),
       user_id: localStorage.getItem("PedidosNow.UserId"),
+      nombre_restaurante: itemsPedido.nombreRestaurante,
+      localidad: ciudad,
+      telefono: telefono,
+      direccion: calle,
+      estado: EstadoPedido.ESPERANDO,
+      rechazado_restaurante: false,
+      metodoPago: metodoPago,
     };
-
-    console.log(order);
     try {
+      setIsSubmittingPedido(true);
       await OrdersService.postOrderToCollection(order);
       setDialogMessage(
         "Pedido confirmado con éxito! te avisaremos cuando salga el repartidor"
       );
       setOpenDialog(true);
-    } catch {
+    } catch (error: any) {
       setDialogMessage(
         "Lo sentimos, ocurrió un error al generar tu pedido. Por favor intenta nuevamente en unos minutos."
       );
       setOpenDialog(true);
     } finally {
-      console.log("finally");
+      setIsSubmittingPedido(false);
     }
   };
 
@@ -228,15 +239,19 @@ const Wizard: React.FC = () => {
             <div>
               {activeStep === steps.length ? (
                 <>
-                  <div style={{ textAlign: "center" }}>
-                    <Typography className={classes.instructions}>
-                      Finalizando pedido...
-                    </Typography>
-                    <div>
-                      <CircularProgress />
+                  {isSubmittingPedido ? (
+                    <div style={{ textAlign: "center" }}>
+                      <Typography className={classes.instructions}>
+                        Finalizando pedido...
+                      </Typography>
+                      <div>
+                        <CircularProgress />
+                      </div>
                     </div>
-                  </div>
-                  <Button onClick={handleReset}>Reset</Button>
+                  ) : (
+                    <div>Proceso Finalizado</div>
+                  )}
+                  )<Button onClick={handleReset}>Reset</Button>
                 </>
               ) : (
                 <div>

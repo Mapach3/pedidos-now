@@ -6,9 +6,12 @@ export const agregarACarrito = (data) => dispach => {
    })
 }
 
+export const eliminarItemDeCarrito = (posicion) => dispach => {
+    dispach({type: 'eliminarItemDeCarrito', payload: posicion});
+}
+
 
 export const agregarNombre = (nombre) => dispach => {
-    console.log(nombre);
     dispach({
         type:'agregarNombreSucursal',
         payload:nombre
