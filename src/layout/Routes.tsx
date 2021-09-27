@@ -9,6 +9,7 @@ import Logout from "../pages/Logout";
 import ProfilePage from "../pages/ProfilePage";
 import RegisterPage from "../pages/RegisterPage";
 import RestaurantMenuPage from "../pages/RestaurantMenuPage";
+import RestaurantOrders from "../pages/RestaurantOrders";
 import RestaurantsPage from "../pages/RestaurantsPage";
 import WizardPage from "../pages/WizardPage";
 
@@ -48,6 +49,9 @@ const Routes: React.FC = () => {
 
         <Route exact path={ClientRoutes.CHECKOUT}>
           <WizardPage />
+        </Route>
+        <Route exact path={ClientRoutes.ORDERS_LIST}>
+          <RestaurantOrders />
         </Route>
 
         <Route>

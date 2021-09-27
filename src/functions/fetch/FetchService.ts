@@ -1,5 +1,5 @@
 import { firestore as db } from "../../config";
-import { Producto, Restaurante } from "../../models/models";
+import { Order, Producto, Restaurante } from "../../models/models";
 
 class FetchService {
   public static async fetchRestaurantsByLocalidad(
@@ -45,6 +45,19 @@ class FetchService {
     let docs: any[] = [];
     querySnapshot.forEach((doc) => {
       if (doc.exists) docs.push(doc.data() as Producto);
+    });
+    return docs;
+  }
+  public static async fetchOrdersByRestaurant(
+    restaurantName: string
+  ): Promise<Order[]> {
+    const querySnapshot = await db
+      .collection("orders")
+      .where("nombre_restaurante", "==", restaurantName)
+      .get();
+    let docs: any[] = [];
+    querySnapshot.forEach((doc) => {
+      if (doc.exists) docs.push(doc.data() as Order);
     });
     return docs;
   }
