@@ -23,11 +23,12 @@ import {
   PaymentMethods,
   PaymentMethodsLabels,
 } from "../../enums/PaymentMethods";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { OrdersService } from "../../fetch/OrdersService";
 import { useHistory } from "react-router";
 import { ClientRoutes } from "../../config/enums";
 import { EstadoPedido } from "../../enums/EstadoPedido";
+import { clearPedido } from "../../redux/actions/pedidoAction";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -62,6 +63,7 @@ const Wizard: React.FC = () => {
 
   //Pago State
   const [metodoPago, setMetodoPago] = useState("");
+  const dispath = useDispatch();
 
   //Wizard State
   const [pedido] = useState<PedidoItems>(
@@ -83,6 +85,12 @@ const Wizard: React.FC = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+  const cancelPedido = () => {
+    setActiveStep(0);  
+    dispath(clearPedido());
+    history.push(ClientRoutes.HOME);
+  };
+
   const handleReset = () => {
     setActiveStep(0);
   };
@@ -92,7 +100,6 @@ const Wizard: React.FC = () => {
   const history = useHistory();
 
   const processOrder = async () => {
-    debugger;
     const order: Order = {
       items: itemsPedido.infoPedido,
       total: calcularSubtotal(),
@@ -258,7 +265,7 @@ const Wizard: React.FC = () => {
                   <Typography className={classes.instructions}>
                     {getStepContent(activeStep)}
                   </Typography>
-                  <div style={{ marginBottom: "10rem" }}>
+                  <Grid style={{ marginBottom: "10rem" }} container justifyContent="space-between">
                     <Button
                       variant="contained"
                       color="secondary"
@@ -266,6 +273,13 @@ const Wizard: React.FC = () => {
                       onClick={handleBack}
                     >
                       Volver
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={cancelPedido}
+                    >
+                      Cancel
                     </Button>
                     <Button
                       disabled={
@@ -276,13 +290,12 @@ const Wizard: React.FC = () => {
                       variant="contained"
                       color="primary"
                       onClick={handleNext}
-                      style={{ float: "right" }}
                     >
                       {activeStep === steps.length - 1
                         ? "Finalizar"
                         : "Siguiente"}
                     </Button>
-                  </div>
+                  </Grid>
                 </div>
               )}
             </div>

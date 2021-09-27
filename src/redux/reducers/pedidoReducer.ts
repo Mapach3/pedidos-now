@@ -6,7 +6,8 @@ let initialState: GlobalState = {
 };
 
 function reducer(store = initialState, action: any) {
-  debugger;
+  console.log(action.type)
+
   switch (action.type) {
     case "agregarCarrito":
       if (!action.payload) {
@@ -29,6 +30,13 @@ function reducer(store = initialState, action: any) {
           (item) => item.posicionCarrito !== action.payload
         ),
       };
+    case "clearPedido": 
+      console.log('action')
+      return {
+        ...store,
+        infoPedido:[],
+        nombreRestaurante:''
+      }
     default:
       return store;
   }
