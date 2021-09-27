@@ -31,7 +31,6 @@ function reducer(store = initialState, action: any) {
         ),
       };
     case "clearPedido": 
-      console.log('action')
       return {
         ...store,
         infoPedido:[],

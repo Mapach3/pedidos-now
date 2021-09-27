@@ -19,7 +19,6 @@ export const agregarNombre = (nombre) => dispach => {
  }
  
 export const clearPedido = () => dispach => {
-    console.log('ingrese a funcino clearPedido')
     dispach({
         type:'clearPedido',
     })
