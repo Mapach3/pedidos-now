@@ -1,5 +1,6 @@
 import { firestore as db } from "../../config";
 import { Order, Producto, Restaurante } from "../../models/models";
+import {EstadoPedido} from "../../enums/EstadoPedido";
 
 class FetchService {
   public static async fetchRestaurantsByLocalidad(
@@ -53,12 +54,20 @@ class FetchService {
   ): Promise<Order[]> {
     const querySnapshot = await db
       .collection("orders")
-      .where("nombre_restaurante", "==", restaurantName)
+      .where("nombre_restaurante", "==", restaurantName) //Reemplazar por usuario cuando este la relacion
       .where("rechazado_restaurante","==", false)
+      .where("estado","==", EstadoPedido.ESPERANDO)
       .get();
     let docs: any[] = [];
+    let docId:string='';
+    debugger;
     querySnapshot.forEach((doc) => {
-      if (doc.exists) docs.push(doc.data() as Order);
+      docId = doc.id;
+      if (doc.exists){
+        let order:Order = (doc.data() as Order)
+        order.uid = docId
+        docs.push(order);
+      } 
     });
     return docs;
   }

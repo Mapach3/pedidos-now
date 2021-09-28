@@ -24,7 +24,7 @@ const OrdersTable: React.FC = () => {
 
     useEffect(() => {
         const fetchOrders = async () => {
-            //Dejo puesto un nombre de un restaurant para probar el flujo - Reemplazar por owner id en vez de nombre restaurante
+            //Dejo puesto un nombre de un restaurant para probar el flujo - Reemplazar por owner id en vez de nombre restaurante cuando este la relacion con el usuario
           const response = await FetchService.fetchOrdersByRestaurant('Mc Donalds Lomas');
           console.log({ response });
           setItemPedido(response);
@@ -40,9 +40,9 @@ const useStyles = makeStyles({
 const classes = useStyles();
 const history = useHistory();
 
-const aceptarPedido = async (userId: string | null) => {
+const aceptarPedido = async (uid?: string) => {
   try {
-    await OrdersService.updateStateRestaurantPendingOrderCollection(userId,true);
+    await OrdersService.updateStateRestaurantPendingOrderCollection(false,true,uid);
     setDialogMessage(
       "Pedido confirmado con éxito!"
     );
@@ -50,6 +50,22 @@ const aceptarPedido = async (userId: string | null) => {
   } catch (error: any) {
     setDialogMessage(
       "Lo sentimos, ocurrió un error al aceptar tu pedido. Por favor intenta nuevamente en unos minutos."
+    );
+    setOpenDialog(true);
+  } finally {
+  }
+};
+
+const rechazarPedido = async (uid?: string) => {
+  try {
+    await OrdersService.updateStateRestaurantPendingOrderCollection(true,false,uid);
+    setDialogMessage(
+      "Pedido rechazado con éxito!"
+    );
+    setOpenDialog(true);
+  } catch (error: any) {
+    setDialogMessage(
+      "Lo sentimos, ocurrió un error al rechazar tu pedido. Por favor intenta nuevamente en unos minutos."
     );
     setOpenDialog(true);
   } finally {
@@ -143,10 +159,24 @@ const aceptarPedido = async (userId: string | null) => {
                        paddingBottom: "1rem",
                      }}
                      variant="contained"
-                     onClick={() => aceptarPedido(row.user_id)}
+                     onClick={() => aceptarPedido(row.uid)}
                    >
                      Aceptar
-                   </Button>
+                   </Button>               
+              }</TableCell>
+              <TableCell align="right">{
+                    <Button
+                    color="secondary"
+                    style={{
+                      marginLeft: "1rem",
+                      paddingTop: "1rem",
+                      paddingBottom: "1rem",
+                    }}
+                    variant="contained"
+                    onClick={() => rechazarPedido(row.uid)}
+                    >
+                    Rechazar
+                    </Button>
               }</TableCell>
             </TableRow>
           ))}
