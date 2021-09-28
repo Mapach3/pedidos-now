@@ -4,6 +4,7 @@ import LoggedInRoute from "../components/LoggedInRoute/LoggedInRoute";
 import NotFoundPage from "../components/NotFound/NotFoundPage";
 import { ClientRoutes } from "../config/enums";
 import HomePage from "../pages/HomePage";
+import HomePageComerciante from "../pages/HomePageComerciante";
 import Login from "../pages/Login";
 import Logout from "../pages/Logout";
 import ProfilePage from "../pages/ProfilePage";
@@ -40,6 +41,10 @@ const Routes: React.FC = () => {
 
         <Route exact path={ClientRoutes.RESTAURANT_MENU}>
           <RestaurantMenuPage />
+        </Route>
+
+        <Route exact path={ClientRoutes.HOME_COMERCIANTE}>
+          <HomePageComerciante />
         </Route>
 
         {/* LoggedInRoute requiring route, otherwise Redirects to Login */}

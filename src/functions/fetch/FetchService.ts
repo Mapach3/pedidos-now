@@ -54,6 +54,7 @@ class FetchService {
     const querySnapshot = await db
       .collection("orders")
       .where("nombre_restaurante", "==", restaurantName)
+      .where("rechazado_restaurante","==", false)
       .get();
     let docs: any[] = [];
     querySnapshot.forEach((doc) => {
