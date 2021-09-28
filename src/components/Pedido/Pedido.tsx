@@ -40,7 +40,6 @@ const Pedido: React.FC<PedidoProps> = ({
   };
 
   const eliminarDeCarrito = (posicionCarrito: number) => {
-    debugger;
     dispath(eliminarItemDeCarrito(posicionCarrito));
   };
 

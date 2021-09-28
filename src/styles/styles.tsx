@@ -52,6 +52,14 @@ const useStyles = makeStyles((theme) => ({
     bottom: 0,
     left: 0,
   },
+
+  grid: {
+    padding: "1rem",
+  },
+
+  label: {
+    paddingBottom: "0.4rem"
+  },
 }));
 
 export default useStyles;

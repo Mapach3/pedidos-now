@@ -6,6 +6,8 @@ export interface Restaurante {
   titulo: string;
   localidad: string;
   menu: Producto[];
+  precioEnvio: string;
+  dueño: string
 }
 
 export interface ItemPedido {

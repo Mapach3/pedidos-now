@@ -8,6 +8,7 @@ import Login from "../pages/Login";
 import Logout from "../pages/Logout";
 import ProfilePage from "../pages/ProfilePage";
 import RegisterPage from "../pages/RegisterPage";
+import RestaurantsCreatePage from "../pages/RestaurantCreatePage";
 import RestaurantMenuPage from "../pages/RestaurantMenuPage";
 import RestaurantsPage from "../pages/RestaurantsPage";
 import WizardPage from "../pages/WizardPage";
@@ -39,11 +40,15 @@ const Routes: React.FC = () => {
 
         <Route exact path={ClientRoutes.RESTAURANT_MENU}>
           <RestaurantMenuPage />
-        </Route>
+        </Route>        
 
         {/* LoggedInRoute requiring route, otherwise Redirects to Login */}
         <LoggedInRoute exact path={ClientRoutes.PROFILE}>
           <ProfilePage />
+        </LoggedInRoute>
+
+        <LoggedInRoute exact path={ClientRoutes.RESTAURANT_CREATE}>
+          <RestaurantsCreatePage />
         </LoggedInRoute>
 
         <Route exact path={ClientRoutes.CHECKOUT}>

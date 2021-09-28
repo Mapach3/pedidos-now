@@ -7,14 +7,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface props {
-  url: string;
-  titulo: string;
-  descripcion: string;
-  verMenu?: any;
-  precio?: number;
-}
-
 interface CardListProps {
   lista: any[];
   verMenu?: any;
