@@ -9,7 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import FetchService from '../../functions/fetch/FetchService';
 import { Order } from '../../models/models';
-import { Dialog, DialogTitle, DialogActions, Container, Typography } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogActions, Container, Typography,Grid } from '@material-ui/core';
 import Button from "@material-ui/core/Button";
 import { useHistory } from "react-router";
 import { ClientRoutes } from "../../config/enums";
@@ -113,44 +113,60 @@ const rechazarPedido = async (uid?: string) => {
         columns = {columns}     
       /> */}
 
-
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Nombre Restaurante</TableCell>
-            <TableCell align="right">Telefono</TableCell>
-            <TableCell align="right">Localidad</TableCell>
-            <TableCell align="right">Direccion</TableCell>
-            <TableCell align="right">Estado</TableCell>
-            <TableCell align="right">Metodo de Pago</TableCell>
-            <TableCell align="right">Total</TableCell>
-              <TableRow>
-              <TableCell align="center">Producto</TableCell>
-              <TableCell align="center">Cantidad</TableCell>
-              <TableCell align="center">Precio</TableCell>
+            <TableCell align="center">Nombre Restaurante</TableCell>
+            <TableCell align="center">Telefono</TableCell>
+            <TableCell align="center">Localidad</TableCell>
+            <TableCell align="center">Direccion</TableCell>
+            <TableCell align="center">Estado</TableCell>
+            <TableCell align="center">Metodo de Pago</TableCell>
+            <TableCell align="center">Total</TableCell>
+           
+            <TableRow>
+
+              <TableRow>  
+                <TableCell align="center">Items de Producto</TableCell>
               </TableRow>
-            <TableCell align="right">Aceptar Pedido</TableCell>
-          </TableRow>
+              
+              <TableRow>  
+                <TableCell align="center">Producto</TableCell>
+                <TableCell align="center">Cantidad</TableCell>
+                <TableCell align="center">Precio</TableCell>
+              </TableRow>
+
+            </TableRow>
+            
+            <TableCell align="center">Aceptar Pedido</TableCell>
+            <TableCell align="center">Rechazar Pedido</TableCell>
+            </TableRow>
         </TableHead>
         <TableBody>
           {itemsPedidos.map((row) => (
             <TableRow key={row.nombre_restaurante}>
               <TableCell component="th" scope="row"> {row.nombre_restaurante}</TableCell>
-              <TableCell align="right">{row.telefono}</TableCell>
-              <TableCell align="right">{row.localidad}</TableCell>
-              <TableCell align="right">{row.direccion}</TableCell>
-              <TableCell align="right">{row.estado}</TableCell>
-              <TableCell align="right">{row.metodoPago}</TableCell>
-              <TableCell align="right">{row.total}</TableCell>
+              <TableCell align="center">{row.telefono}</TableCell>
+              <TableCell align="center">{row.localidad}</TableCell>
+              <TableCell align="center">{row.direccion}</TableCell>
+              <TableCell align="center">{row.estado}</TableCell>
+              <TableCell align="center">{row.metodoPago}</TableCell>
+              <TableCell align="center">{row.total}</TableCell>              
+    
               {row.items.map((prod) => (
-                 <TableRow key={row.nombre_restaurante}>
-                  <TableCell align="center">{prod.producto}</TableCell>
+                <TableRow key={row.nombre_restaurante}>
+                <>
+
+                  <TableCell align="center">{prod.producto}</TableCell>       
                   <TableCell align="center">{prod.cantidad}</TableCell>
                   <TableCell align="center">{prod.precio}</TableCell>
-                </TableRow>
+
+                </>
+               </TableRow>
               ))}
-              <TableCell align="right">{
+
+              <TableCell align="center">{
                      <Button
                      color="secondary"
                      style={{
@@ -164,7 +180,7 @@ const rechazarPedido = async (uid?: string) => {
                      Aceptar
                    </Button>               
               }</TableCell>
-              <TableCell align="right">{
+              <TableCell align="center">{
                     <Button
                     color="secondary"
                     style={{
