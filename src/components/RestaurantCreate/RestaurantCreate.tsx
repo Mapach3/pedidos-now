@@ -19,6 +19,7 @@ import useStyles from "../../styles/styles";
 import { Locations, LocationsEnumLabels } from "../../enums/Locations";
 import { storage, firestore } from "../../config";
 import { Alert } from "@material-ui/lab";
+import { RestaurantsService } from "../../fetch/RestaurantsService";
 
 const RestaurantCreate: React.FC = () => {
   const [isUploading, setIsUploading] = useState(false);
@@ -48,6 +49,12 @@ const RestaurantCreate: React.FC = () => {
     setIsUploading(true);
     try {
       if (titulo && descripcion && precioEnvio && imagen && localidad) {
+        const restaurant = await RestaurantsService.getRestaurantByName(titulo);
+        if (restaurant) {
+          setResultado("ERROR: Restaurante duplicado.");
+          setIsUploading(false);
+          return;
+        }
         // Storage
         const storageRef = storage.ref();
         const fileRef = storageRef.child("restaurants/" + titulo);

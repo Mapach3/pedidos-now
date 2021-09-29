@@ -17,13 +17,26 @@ export const getMenu = () => {
     },
   ];
 
+  const comercianteMenu = [
+    {
+      text: "Perfil",
+      url: "/profile",
+    },
+    {
+      text: "Cargar Restaurante",
+      url: "/restaurantCreate",
+    },
+  ];
+
   if (typeof window !== "undefined") {
     const userTypeAux = localStorage.getItem("PedidosNow.UserType");
 
     return userTypeAux
       ? userTypeAux === "CLIENTE"
         ? loggedInMenu
-        : notLoggedMenu
+        : userTypeAux === "COMERCIANTE"
+            ? comercianteMenu
+            : notLoggedMenu
       : notLoggedMenu;
   }
 
