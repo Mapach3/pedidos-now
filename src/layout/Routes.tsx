@@ -51,6 +51,10 @@ const Routes: React.FC = () => {
           <RestaurantsCreatePage />
         </LoggedInRoute>
 
+        <LoggedInRoute exact path={ClientRoutes.PRODUCT_CREATE}>
+          <RestaurantsCreatePage />
+        </LoggedInRoute>
+
         <Route exact path={ClientRoutes.CHECKOUT}>
           <WizardPage />
         </Route>
