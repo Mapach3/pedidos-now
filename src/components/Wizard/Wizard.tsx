@@ -238,7 +238,7 @@ const Wizard: React.FC = () => {
             <div>
               {activeStep === steps.length ? (
                 <>
-                  {isSubmittingPedido ? (
+                  {isSubmittingPedido && (
                     <div style={{ textAlign: "center" }}>
                       <Typography className={classes.instructions}>
                         Finalizando pedido...
@@ -247,10 +247,7 @@ const Wizard: React.FC = () => {
                         <CircularProgress />
                       </div>
                     </div>
-                  ) : (
-                    <div>Proceso Finalizado</div>
                   )}
-                  )<Button onClick={handleReset}>Reset</Button>
                 </>
               ) : (
                 <div>

@@ -5,7 +5,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router";
+import { Redirect, useHistory } from "react-router";
 import { ClientRoutes } from "../config/enums";
 import { UsersService } from "../fetch/UsersService";
 import Layout from "../layout/Layout";
@@ -30,6 +30,12 @@ const Logout: React.FC<{}> = () => {
 
     logout();
   });
+
+  const isLoggedIn = !!localStorage.getItem("PedidosNow.JWT");
+
+  if (!isLoggedIn) {
+    return <Redirect to={ClientRoutes.LOGIN} />;
+  }
 
   return (
     <Layout>

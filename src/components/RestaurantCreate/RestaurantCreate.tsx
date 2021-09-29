@@ -20,6 +20,7 @@ import { Locations, LocationsEnumLabels } from "../../enums/Locations";
 import { storage, firestore } from "../../config";
 import { Alert } from "@material-ui/lab";
 import { RestaurantsService } from "../../fetch/RestaurantsService";
+import { Restaurante } from "../../models/models";
 
 const RestaurantCreate: React.FC = () => {
   const [isUploading, setIsUploading] = useState(false);
@@ -60,24 +61,23 @@ const RestaurantCreate: React.FC = () => {
         const fileRef = storageRef.child("restaurants/" + titulo);
         await fileRef.put(imagen);
 
+        const url = await fileRef.getDownloadURL();
+        const entity: Restaurante = {
+          titulo,
+          url,
+          descripcion,
+          precioEnvio,
+          menu: [],
+          localidad,
+          dueño: localStorage.getItem("PedidosNow.UserId") || "",
+        };
+
         // Firestore
-        await fileRef.getDownloadURL().then((url: string) => {
-          firestore
-            .collection("restaurants")
-            .doc()
-            .set({
-              titulo: titulo,
-              imagen: url,
-              descripcion: descripcion,
-              precioEnvio: precioEnvio,
-              productos: [],
-              localidad: localidad,
-              dueño: localStorage.getItem("PedidosNow.UserId"),
-            });
-        });
+        await firestore.collection("restaurants").doc().set(entity);
+
         console.log("Restaurante dado de alta con éxito");
         setResultado("Restaurante dado de alta con éxito");
-        setSuccess(true)
+        setSuccess(true);
       }
     } catch (error) {
       console.log("Error al dar de alta el restaurante");
@@ -170,6 +170,7 @@ const RestaurantCreate: React.FC = () => {
         >
           <Grid item>
             <Button
+              disabled={isUploading}
               variant="contained"
               onClick={() => createRestaurant()}
               color="secondary"
@@ -184,11 +185,18 @@ const RestaurantCreate: React.FC = () => {
             ) : (
               <Snackbar
                 anchorOrigin={{ horizontal: "center", vertical: "top" }}
-                open={success}
+                open={!!resultado}
                 autoHideDuration={3000}
-                onClose={() => setSuccess(false)}
+                onClose={() => {
+                  setSuccess(false);
+                  setResultado("");
+                }}
               >
-                <Alert color="success" severity="success" variant="filled">
+                <Alert
+                  color={success ? "success" : "error"}
+                  severity={success ? "success" : "error"}
+                  variant="filled"
+                >
                   {resultado}
                 </Alert>
               </Snackbar>

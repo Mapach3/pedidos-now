@@ -1,13 +1,13 @@
 export interface Restaurante {
-  id: string;
-  uid: string;
+  id?: string;
+  uid?: string;
   descripcion: string;
   url: string;
   titulo: string;
   localidad: string;
   menu: Producto[];
   precioEnvio: string;
-  dueño: string
+  dueño: string;
 }
 
 export interface ItemPedido {
