@@ -12,6 +12,7 @@ import RestaurantsCreatePage from "../pages/RestaurantCreatePage";
 import RestaurantMenuPage from "../pages/RestaurantMenuPage";
 import RestaurantsPage from "../pages/RestaurantsPage";
 import WizardPage from "../pages/WizardPage";
+import ProductCreatePage from "../pages/ProductCreatePage";
 
 const Routes: React.FC = () => {
   return (
@@ -52,7 +53,7 @@ const Routes: React.FC = () => {
         </LoggedInRoute>
 
         <LoggedInRoute exact path={ClientRoutes.PRODUCT_CREATE}>
-          <RestaurantsCreatePage />
+          <ProductCreatePage />
         </LoggedInRoute>
 
         <Route exact path={ClientRoutes.CHECKOUT}>
