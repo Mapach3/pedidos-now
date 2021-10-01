@@ -114,7 +114,7 @@ const ProductCreate: React.FC = () => {
       <Grid item xs={4}>
         <Grid item className={classes.grid}>
           <Typography align="center" variant="h4">
-            Alta de restaurante
+            Alta de producto
           </Typography>
         </Grid>
 

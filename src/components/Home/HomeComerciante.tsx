@@ -3,6 +3,7 @@ import Button from "@material-ui/core/Button";
 import { MenuItem, Select, Typography } from "@material-ui/core";
 import useStyles from "../../styles/styles";
 import { useHistory } from "react-router";
+import { ClientRoutes } from "../../config/enums";
 
 interface HomeProps {}
 
@@ -16,7 +17,7 @@ const Home: React.FC<HomeProps> = () => {
   };
 
   const altaComercio = (e: any) => {
-    e.preventDefault();
+    history.push(ClientRoutes.RESTAURANT_CREATE);
     //Push vista
   };
 
@@ -31,7 +32,7 @@ const Home: React.FC<HomeProps> = () => {
   };
 
   const altaProducto = (e: any) => {
-    e.preventDefault();
+    history.push(ClientRoutes.PRODUCT_CREATE);
     //Push vista
   };
 
@@ -39,7 +40,6 @@ const Home: React.FC<HomeProps> = () => {
     <div className={classes.homeContainer}>
       <div className={classes.homeSearch}>
         <div style={{ display: "flex" }}>
-        
           <Button
             color="secondary"
             style={{
