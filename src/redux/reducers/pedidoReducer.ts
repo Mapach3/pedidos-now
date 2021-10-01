@@ -28,6 +28,12 @@ function reducer(store = initialState, action: any) {
           (item) => item.posicionCarrito !== action.payload
         ),
       };
+    case "clearPedido":
+      return {
+        ...store,
+        infoPedido: [],
+        nombreRestaurante: "",
+      };
     default:
       return store;
   }

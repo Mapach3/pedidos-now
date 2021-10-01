@@ -15,6 +15,7 @@ import { ClientRoutes } from "../config/enums";
 import { UsersService } from "../fetch/UsersService";
 import Layout from "../layout/Layout";
 import { User } from "../models/User";
+import {UserTypes} from "../enums/UserTypes";
 
 const Login: React.FC<{}> = () => {
   const [email, setEmail] = useState("");
@@ -50,7 +51,13 @@ const Login: React.FC<{}> = () => {
 
       setOpen(true);
       setTimeout(() => {
-        history.push(ClientRoutes.HOME);
+        if (user.tipo = UserTypes.COMERCIANTE)
+        {
+          history.push(ClientRoutes.HOME_COMERCIANTE);
+        }
+        else{
+          history.push(ClientRoutes.HOME);
+        }
       }, 3000);
     } catch (error: any) {
       alert("Error: " + error.code + ": " + error.message);

@@ -18,3 +18,8 @@ export const agregarNombre = (nombre) => dispach => {
     })
  }
  
+export const clearPedido = () => dispach => {
+    dispach({
+        type:'clearPedido',
+    })
+ }
