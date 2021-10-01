@@ -15,6 +15,7 @@ import RestaurantMenuPage from "../pages/RestaurantMenuPage";
 import RestaurantOrders from "../pages/RestaurantOrders";
 import RestaurantsPage from "../pages/RestaurantsPage";
 import WizardPage from "../pages/WizardPage";
+import ProductCreatePage from "../pages/ProductCreatePage";
 
 const Routes: React.FC = () => {
   return (
