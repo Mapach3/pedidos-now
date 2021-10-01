@@ -7,4 +7,6 @@ export enum ClientRoutes {
   CHECKOUT = "/checkout",
   RESTAURANTS = "/restaurants/:location",
   RESTAURANT_MENU = "/restaurantMenu/:titulo",
+  HOME_COMERCIANTE = "/comerciante",
+  ORDERS_LIST ="/restaurants/orders/pendings",
 }

@@ -28,6 +28,7 @@ export interface Producto {
 }
 
 export interface Order {
+  uid?: string;
   user_id: string | null;
   items: ItemPedido[];
   total: number;
