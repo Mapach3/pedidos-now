@@ -19,7 +19,7 @@ export class RestaurantsService {
   }
 
   public static async getRestaurantsByOwner(
-    owner_id: string
+    owner_id: string | null
   ): Promise<Restaurante[]> {
     const querySnapshot = await db
       .collection("restaurants")

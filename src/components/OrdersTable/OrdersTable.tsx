@@ -21,8 +21,7 @@ import Button from "@material-ui/core/Button";
 import { useHistory } from "react-router";
 import { ClientRoutes } from "../../config/enums";
 import { OrdersService } from "../../fetch/OrdersService";
-import DataTable from "../../components/Table/Table";
-import { GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+import { RestaurantsService } from "../../fetch/RestaurantsService";
 
 const OrdersTable: React.FC = () => {
   const [itemsPedidos, setItemPedido] = useState<Order[]>([]);
@@ -32,15 +31,17 @@ const OrdersTable: React.FC = () => {
 
   useEffect(() => {
     const fetchOrders = async () => {
-      //Dejo puesto un nombre de un restaurant para probar el flujo - Reemplazar por owner id en vez de nombre restaurante cuando este la relacion con el usuario
-      const response = await FetchService.fetchOrdersByRestaurant(
-        "Mc Donalds Lomas"
+      let comercianteLogueado = localStorage.getItem("PedidosNow.UserId");
+      let nombresRestaurantes: string[] = [];
+      const responseResto = await RestaurantsService.getRestaurantsByOwner(comercianteLogueado);
+      responseResto.forEach(item => 
+        nombresRestaurantes.push(item.titulo)
       );
-      console.log({ response });
+      const response = await FetchService.fetchOrdersByRestaurant(nombresRestaurantes);
       setItemPedido(response);
     };
     fetchOrders();
-  }, ["Mc Donalds Lomas"]);
+  }, []);
 
   const useStyles = makeStyles({
     table: {

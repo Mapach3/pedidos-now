@@ -46,11 +46,11 @@ class FetchService {
     return docs;
   }
   public static async fetchOrdersByRestaurant(
-    restaurantName: string
+    restaurantName: string[]
   ): Promise<Order[]> {
     const querySnapshot = await db
       .collection("orders")
-      .where("nombre_restaurante", "==", restaurantName) //Reemplazar por usuario cuando este la relacion
+      .where("nombre_restaurante", "in", restaurantName) 
       .where("rechazado_restaurante", "==", false)
       .where("estado", "==", EstadoPedido.ESPERANDO)
       .get();
