@@ -12,13 +12,11 @@ const Home: React.FC<HomeProps> = () => {
   const history = useHistory();
 
   const pedidosPendientes = (e: any) => {
-    e.preventDefault();
     history.push(`/restaurants/orders/pendings`);
   };
 
   const altaComercio = (e: any) => {
     history.push(ClientRoutes.RESTAURANT_CREATE);
-    //Push vista
   };
 
   const modificarComercio = (e: any) => {
@@ -33,7 +31,6 @@ const Home: React.FC<HomeProps> = () => {
 
   const altaProducto = (e: any) => {
     history.push(ClientRoutes.PRODUCT_CREATE);
-    //Push vista
   };
 
   return (

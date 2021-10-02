@@ -4,12 +4,15 @@ import { Restaurante } from "../models/models";
 const restaurants = db.collection("restaurants");
 
 export class RestaurantsService {
-  static async getRestaurantByName(name: String) {
-    let restaurant = undefined;
+  static async getRestaurantByName(name: String) : Promise<Restaurante>{
     const querySnapshot = await restaurants.where("titulo", "==", name).get();
+    let docId: string = "";
+    let restaurant: any 
     querySnapshot.forEach((doc) => {
+      docId = doc.id;
       if (doc.exists) {
-        restaurant = doc.data();
+        restaurant = doc.data() as Restaurante;
+        restaurant.uid = docId;
       }
     });
     return restaurant;

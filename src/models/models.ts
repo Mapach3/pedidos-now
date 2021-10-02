@@ -22,11 +22,10 @@ export interface PedidoItems {
 }
 
 export interface Producto {
-  id: string;
   descripcion: string;
   url: string;
   titulo: string;
-  precio: number;
+  precio: string;
 }
 
 export interface Order {

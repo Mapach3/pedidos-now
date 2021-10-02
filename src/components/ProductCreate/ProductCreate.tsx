@@ -20,7 +20,7 @@ import { storage, firestore } from "../../config";
 import { Alert } from "@material-ui/lab";
 import { RestaurantsService } from "../../fetch/RestaurantsService";
 import firebase from "firebase";
-
+import { Restaurante,Producto } from "../../models/models";
 
 const ProductCreate: React.FC = () => {
   const [isUploading, setIsUploading] = useState(false);
@@ -32,7 +32,7 @@ const ProductCreate: React.FC = () => {
   const [descripcion, setDescripcion] = useState("");
   const [imagen, setImagen] = useState(null);
   const [precio, setPrecio] = useState("");
-  const [restaurantes, setRestaurantes] = useState<any[]>([]);
+  const [restaurantes, setRestaurantes] = useState<Restaurante[]>([]);
   const [restauranteDelProducto, setRestauranteDelProducto] = useState("");
 
   const onFileChange = (e: any) => {
@@ -66,31 +66,45 @@ const ProductCreate: React.FC = () => {
     setIsUploading(true);
     try {
       if (titulo && descripcion && precio && imagen && restauranteDelProducto) {
-        let restaurant: any = {};
-        restaurant = await RestaurantsService.getRestaurantByName(titulo);
+        let restaurant: Restaurante 
+        restaurant = await RestaurantsService.getRestaurantByName(restauranteDelProducto);
+        
         // Storage
         const storageRef = storage.ref();
         const fileRef = storageRef.child("restaurants/" + titulo);
         await fileRef.put(imagen);
+
         if (restaurant) {
-        // Firestore
-        await fileRef.getDownloadURL().then((url: string) => {
-            restaurant.update({
-              menu: firebase.firestore.FieldValue.arrayUnion({
-              titulo: titulo,
-              imagen: url,
-              descripcion: descripcion,
-              precio: precio
-              })
-            });
-        });
+          const url = await fileRef.getDownloadURL();
+          let menu: Producto[] = restaurant.menu
+          let producto: Producto = {
+            descripcion: descripcion,
+            precio: precio,
+            titulo: titulo,
+            url: url
+          }
+          menu.push(producto)
+          // restaurant.update({
+          //   menu: firebase.firestore.FieldValue.arrayUnion({
+          //   titulo: titulo,
+          //   imagen: url,
+          //   descripcion: descripcion,
+          //   precio: precio
+          //   })
+
+          // Firestore
+          await firestore.collection("restaurants").doc(restaurant.uid).update({
+            menu: menu
+          })
         }
-        console.log("Producto dado de alta con éxito");
+
         setResultado("Producto dado de alta con éxito");
         setSuccess(true);
+      }else{
+        setResultado("Faltan campos por completar");
+        setSuccess(false);
       }
     } catch (error) {
-      console.log("Error al dar de alta el producto");
       setResultado("ERROR: No se pudo dar de alta el nuevo producto");
     } finally {
       setIsUploading(false);
@@ -152,7 +166,7 @@ const ProductCreate: React.FC = () => {
             required
             variant="outlined"
             value={restauranteDelProducto}
-            defaultValue={restauranteDelProducto}
+            defaultValue={restaurantes}
           >
             {
             restaurantes.map((item) => (
@@ -181,6 +195,7 @@ const ProductCreate: React.FC = () => {
         >
           <Grid item>
             <Button
+              disabled={isUploading}
               variant="contained"
               onClick={() => createProduct()}
               color="secondary"
@@ -195,11 +210,18 @@ const ProductCreate: React.FC = () => {
             ) : (
               <Snackbar
                 anchorOrigin={{ horizontal: "center", vertical: "top" }}
-                open={success}
+                open={!!resultado}
                 autoHideDuration={3000}
-                onClose={() => setSuccess(false)}
+                onClose={() => {
+                  setSuccess(false);
+                  setResultado("");
+                }}
               >
-                <Alert color="success" severity="success" variant="filled">
+                <Alert
+                  color={success ? "success" : "error"}
+                  severity={success ? "success" : "error"}
+                  variant="filled"
+                >
                   {resultado}
                 </Alert>
               </Snackbar>

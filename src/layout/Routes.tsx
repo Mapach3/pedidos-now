@@ -7,7 +7,6 @@ import HomePage from "../pages/HomePage";
 import HomePageComerciante from "../pages/HomePageComerciante";
 import Login from "../pages/Login";
 import Logout from "../pages/Logout";
-import ProductCreatePage from "../pages/ProductCreatePage";
 import ProfilePage from "../pages/ProfilePage";
 import RegisterPage from "../pages/RegisterPage";
 import RestaurantsCreatePage from "../pages/RestaurantCreatePage";

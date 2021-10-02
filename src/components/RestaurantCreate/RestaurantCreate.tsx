@@ -78,6 +78,9 @@ const RestaurantCreate: React.FC = () => {
         console.log("Restaurante dado de alta con éxito");
         setResultado("Restaurante dado de alta con éxito");
         setSuccess(true);
+      }else{
+        setResultado("Faltan campos por completar");
+        setSuccess(false);
       }
     } catch (error) {
       console.log("Error al dar de alta el restaurante");
