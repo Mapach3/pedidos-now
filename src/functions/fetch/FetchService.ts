@@ -67,6 +67,27 @@ class FetchService {
     });
     return docs;
   }
+
+  public static async fetchOrdersPendingOfShipments(
+  ): Promise<Order[]> {
+    const querySnapshot = await db
+      .collection("orders") //POR AHORA TRAE DE TODOS - VER RELACION DE REPARTIDORES CON RESTAURANTES
+      .where("rechazado_restaurante", "==", false)
+      .where("estado", "in", [EstadoPedido.EN_CAMINO,EstadoPedido.PREPARANDO])
+      .get();
+    let docs: any[] = [];
+    let docId: string = "";
+    debugger;
+    querySnapshot.forEach((doc) => {
+      docId = doc.id;
+      if (doc.exists) {
+        let order: Order = doc.data() as Order;
+        order.uid = docId;
+        docs.push(order);
+      }
+    });
+    return docs;
+  }
 }
 
 export default FetchService;

@@ -10,5 +10,7 @@ export enum ClientRoutes {
   RESTAURANT_CREATE = "/restaurantCreate/",
   PRODUCT_CREATE = "/productCreate/",
   HOME_COMERCIANTE = "/comerciante",
+  HOME_REPARTIDOR = "/repartidor",
   ORDERS_LIST = "/restaurants/orders/pendings",
+  ORDERS_LIST_DISTRIBUTOR = "/repartidor/orders/pendings",
 }

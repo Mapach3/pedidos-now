@@ -5,6 +5,7 @@ import NotFoundPage from "../components/NotFound/NotFoundPage";
 import { ClientRoutes } from "../config/enums";
 import HomePage from "../pages/HomePage";
 import HomePageComerciante from "../pages/HomePageComerciante";
+import HomePageRepartidor from "../pages/HomePageRepartidor";
 import Login from "../pages/Login";
 import Logout from "../pages/Logout";
 import ProfilePage from "../pages/ProfilePage";
@@ -12,6 +13,7 @@ import RegisterPage from "../pages/RegisterPage";
 import RestaurantsCreatePage from "../pages/RestaurantCreatePage";
 import RestaurantMenuPage from "../pages/RestaurantMenuPage";
 import RestaurantOrders from "../pages/RestaurantOrders";
+import RepartidorOrders from "../pages/RepartidorOrders";
 import RestaurantsPage from "../pages/RestaurantsPage";
 import WizardPage from "../pages/WizardPage";
 import ProductCreatePage from "../pages/ProductCreatePage";
@@ -49,6 +51,10 @@ const Routes: React.FC = () => {
           <HomePageComerciante />
         </Route>
 
+        <Route exact path={ClientRoutes.HOME_REPARTIDOR}>
+          <HomePageRepartidor />
+        </Route>
+
         {/* LoggedInRoute requiring route, otherwise Redirects to Login */}
         <LoggedInRoute exact path={ClientRoutes.PROFILE}>
           <ProfilePage />
@@ -67,6 +73,10 @@ const Routes: React.FC = () => {
         </Route>
         <Route exact path={ClientRoutes.ORDERS_LIST}>
           <RestaurantOrders />
+        </Route>
+
+        <Route exact path={ClientRoutes.ORDERS_LIST_DISTRIBUTOR}>
+          <RepartidorOrders />
         </Route>
 
         <Route>

@@ -8,7 +8,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import FetchService from "../../functions/fetch/FetchService";
-import { Order } from "../../models/models";
+import { Order, Producto } from "../../models/models";
 import {
   Dialog,
   DialogTitle,
@@ -21,26 +21,27 @@ import Button from "@material-ui/core/Button";
 import { useHistory } from "react-router";
 import { ClientRoutes } from "../../config/enums";
 import { OrdersService } from "../../fetch/OrdersService";
-import DataTable from "../../components/Table/Table";
-import { GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+import { EstadoPedido } from "../../enums/EstadoPedido";
+import ItemCard from "../../components/Card/cardRepartidor";
 
-const OrdersTable: React.FC = () => {
+const PendingOrdersOfShipment: React.FC = () => {
   const [itemsPedidos, setItemPedido] = useState<Order[]>([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [openCard, setOpenCard] = useState(false);
+  const [producto, setProducto] = useState<Producto>();
+  const [cantidad, setCantidad] = useState<number>(0);
+  const [precio, setPrecio] = useState<number>(0);
+  
   useEffect(() => {
     const fetchOrders = async () => {
-      //Dejo puesto un nombre de un restaurant para probar el flujo - Reemplazar por owner id en vez de nombre restaurante cuando este la relacion con el usuario
-      const response = await FetchService.fetchOrdersByRestaurant(
-        "Mc Donalds Lomas"
-      );
+      const response = await FetchService.fetchOrdersPendingOfShipments();
       console.log({ response });
-      setItemPedido(response);
+      setItemPedido(response);     
     };
     fetchOrders();
-  }, ["Mc Donalds Lomas"]);
+  }, []);
 
   const useStyles = makeStyles({
     table: {
@@ -50,19 +51,18 @@ const OrdersTable: React.FC = () => {
   const classes = useStyles();
   const history = useHistory();
 
-  const aceptarPedido = async (uid?: string) => {
+  const actualizarEstado = async (estado:EstadoPedido,uid?: string) => {
     try {
       setIsSubmitting(true);
-      await OrdersService.updateStateRestaurantPendingOrderCollection(
-        false,
-        true,
+      await OrdersService.updatePendingOrderOfShipment(
+        estado,
         uid
       );
-      setDialogMessage("Pedido confirmado con éxito!");
+      setDialogMessage("Pedido actualizado con éxito!");
       setOpenDialog(true);
     } catch (error: any) {
       setDialogMessage(
-        "Lo sentimos, ocurrió un error al aceptar tu pedido. Por favor intenta nuevamente en unos minutos."
+        "Lo sentimos, ocurrió un error al actualizar tu pedido. Por favor intenta nuevamente en unos minutos."
       );
       setOpenDialog(true);
     } finally {
@@ -70,24 +70,11 @@ const OrdersTable: React.FC = () => {
     }
   };
 
-  const rechazarPedido = async (uid?: string) => {
-    try {
-      setIsSubmitting(true);
-      await OrdersService.updateStateRestaurantPendingOrderCollection(
-        true,
-        false,
-        uid
-      );
-      setDialogMessage("Pedido rechazado con éxito!");
-      setOpenDialog(true);
-    } catch (error: any) {
-      setDialogMessage(
-        "Lo sentimos, ocurrió un error al rechazar tu pedido. Por favor intenta nuevamente en unos minutos."
-      );
-      setOpenDialog(true);
-    } finally {
-      setIsSubmitting(false);
-    }
+  const verDetallePedido = (producto:Producto,cantidad:number,precio:number) => {
+    setProducto(producto);
+    setCantidad(cantidad);
+    setPrecio(precio);
+    setOpenCard(true);
   };
 
   return (
@@ -101,7 +88,7 @@ const OrdersTable: React.FC = () => {
       >
         Pedidos
       </Typography>
-      
+
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="simple table">
           <TableHead>
@@ -114,17 +101,7 @@ const OrdersTable: React.FC = () => {
               <TableCell align="center">Metodo de Pago</TableCell>
               <TableCell align="center">Total</TableCell>
 
-              <TableRow>
-                <TableRow>
-                  <TableCell align="center">Items de Producto</TableCell>
-                </TableRow>
-
-                <TableRow>
-                  <TableCell align="center">Producto</TableCell>
-                  <TableCell align="center">Cantidad</TableCell>
-                  <TableCell align="center">Precio</TableCell>
-                </TableRow>
-              </TableRow>
+              <TableCell align="center">Detalle de Productos</TableCell>
 
               <TableCell align="center">Aceptar Pedido</TableCell>
               <TableCell align="center">Rechazar Pedido</TableCell>
@@ -147,9 +124,25 @@ const OrdersTable: React.FC = () => {
                 {row.items.map((prod) => (
                   <TableRow key={row.nombre_restaurante}>
                     <>
-                      <TableCell align="center">{prod.producto}</TableCell>
-                      <TableCell align="center">{prod.cantidad}</TableCell>
-                      <TableCell align="center">{prod.precio}</TableCell>
+                      <TableCell align="center">   
+                        {        
+                          <Button
+                            disabled={isSubmitting}
+                            color="secondary"
+                            style={{
+                              marginLeft: "1rem",
+                              paddingTop: "1rem",
+                              paddingBottom: "1rem",
+                            }}
+                            variant="contained"
+                            onClick={
+                              () => verDetallePedido(prod.producto,prod.cantidad,prod.precio)
+                            }
+                          >
+                            Ver Detalle
+                          </Button>    
+                        }            
+                    </TableCell>
                     </>
                   </TableRow>
                 ))}
@@ -157,7 +150,7 @@ const OrdersTable: React.FC = () => {
                 <TableCell align="center">
                   {
                     <Button
-                      disabled={isSubmitting}
+                      disabled={(row.estado == EstadoPedido.EN_CAMINO || isSubmitting) ? true : false}
                       color="secondary"
                       style={{
                         marginLeft: "1rem",
@@ -165,9 +158,9 @@ const OrdersTable: React.FC = () => {
                         paddingBottom: "1rem",
                       }}
                       variant="contained"
-                      onClick={() => aceptarPedido(row.uid)}
+                      onClick={() => actualizarEstado(EstadoPedido.EN_CAMINO,row.uid)}
                     >
-                      Aceptar
+                      En camino
                     </Button>
                   }
                 </TableCell>
@@ -182,9 +175,9 @@ const OrdersTable: React.FC = () => {
                         paddingBottom: "1rem",
                       }}
                       variant="contained"
-                      onClick={() => rechazarPedido(row.uid)}
+                      onClick={() => actualizarEstado(EstadoPedido.RECIBIDO,row.uid)}
                     >
-                      Rechazar
+                      Recibido
                     </Button>
                   }
                 </TableCell>
@@ -193,6 +186,10 @@ const OrdersTable: React.FC = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+       <ItemCard
+        open= {openCard} handleClose={()=>setOpenCard(false)} producto={producto} precio={precio} cantidad={cantidad}
+       />
 
       <Dialog
         fullWidth
@@ -207,7 +204,7 @@ const OrdersTable: React.FC = () => {
               variant="contained"
               style={{ marginRight: "7rem", marginTop: "1rem" }}
               color="secondary"
-              onClick={() => history.push(ClientRoutes.HOME_COMERCIANTE)}
+              onClick={() => history.push(ClientRoutes.HOME_REPARTIDOR)}
             >
               Volver a la home
             </Button>
@@ -217,4 +214,4 @@ const OrdersTable: React.FC = () => {
     </Container>
   );
 };
-export default OrdersTable;
+export default PendingOrdersOfShipment;

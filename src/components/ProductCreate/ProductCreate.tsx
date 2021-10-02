@@ -84,14 +84,7 @@ const ProductCreate: React.FC = () => {
             url: url
           }
           menu.push(producto)
-          // restaurant.update({
-          //   menu: firebase.firestore.FieldValue.arrayUnion({
-          //   titulo: titulo,
-          //   imagen: url,
-          //   descripcion: descripcion,
-          //   precio: precio
-          //   })
-
+          
           // Firestore
           await firestore.collection("restaurants").doc(restaurant.uid).update({
             menu: menu

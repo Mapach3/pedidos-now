@@ -22,11 +22,16 @@ export const getMenu = () => {
       text: "Perfil",
       url: "/profile",
     },
+  ];
+
+  const repartidorMenu = [
     {
-      text: "Cargar Restaurante",
-      url: "/restaurantCreate",
+      text: "Perfil",
+      url: "/profile",
     },
   ];
+
+
 
   if (typeof window !== "undefined") {
     const userTypeAux = localStorage.getItem("PedidosNow.UserType");
@@ -36,7 +41,9 @@ export const getMenu = () => {
         ? loggedInMenu
         : userTypeAux === "COMERCIANTE"
             ? comercianteMenu
-            : notLoggedMenu
+            : userTypeAux === "REPARTIDOR"
+               ? repartidorMenu
+               : notLoggedMenu
       : notLoggedMenu;
   }
 

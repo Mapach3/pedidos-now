@@ -21,4 +21,10 @@ export class OrdersService {
       })
     }
   }
+
+  static async updatePendingOrderOfShipment(estado:EstadoPedido,uid?: string) {  
+      await orders.doc(uid).update({
+        estado: estado,
+      })
+  }
 }
