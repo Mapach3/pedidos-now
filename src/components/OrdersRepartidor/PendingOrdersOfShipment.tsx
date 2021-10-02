@@ -104,7 +104,7 @@ const PendingOrdersOfShipment: React.FC = () => {
               <TableCell align="center">Detalle de Productos</TableCell>
 
               <TableCell align="center">Aceptar Pedido</TableCell>
-              <TableCell align="center">Rechazar Pedido</TableCell>
+              <TableCell align="center">Confirmar Recepcion</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
