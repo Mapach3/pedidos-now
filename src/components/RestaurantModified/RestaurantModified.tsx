@@ -22,7 +22,7 @@ import { Alert } from "@material-ui/lab";
 import { RestaurantsService } from "../../fetch/RestaurantsService";
 import { Restaurante } from "../../models/models";
 
-const RestaurantCreate: React.FC = () => {
+const RestaurantModified: React.FC = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [resultado, setResultado] = useState("");
@@ -213,4 +213,4 @@ const RestaurantCreate: React.FC = () => {
   );
 };
 
-export default RestaurantCreate;
+export default RestaurantModified;

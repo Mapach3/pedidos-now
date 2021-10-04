@@ -17,6 +17,9 @@ import RepartidorOrders from "../pages/RepartidorOrders";
 import RestaurantsPage from "../pages/RestaurantsPage";
 import WizardPage from "../pages/WizardPage";
 import ProductCreatePage from "../pages/ProductCreatePage";
+import RestaurantsModifiedPage from "../pages/RestaurantModifiedPage";
+import RestaurantsDeletePage from "../pages/RestaurantDeletePage";
+
 
 const Routes: React.FC = () => {
   return (
@@ -62,6 +65,14 @@ const Routes: React.FC = () => {
 
         <LoggedInRoute exact path={ClientRoutes.RESTAURANT_CREATE}>
           <RestaurantsCreatePage />
+        </LoggedInRoute>
+
+        <LoggedInRoute exact path={ClientRoutes.RESTAURANT_MODIFIED}>
+          <RestaurantsModifiedPage />
+        </LoggedInRoute>
+
+        <LoggedInRoute exact path={ClientRoutes.RESTAURANT_DELETE}>
+          <RestaurantsDeletePage />
         </LoggedInRoute>
 
         <LoggedInRoute exact path={ClientRoutes.PRODUCT_CREATE}>

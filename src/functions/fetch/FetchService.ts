@@ -9,6 +9,7 @@ class FetchService {
     const querySnapshot = await db
       .collection("restaurants")
       .where("localidad", "==", localidad)
+      .where("isDelete","==",false)
       .get();
     let docs: any[] = [];
     querySnapshot.forEach((doc) => {
@@ -23,6 +24,7 @@ class FetchService {
     const querySnapshot = await db
       .collection("restaurants")
       .where("titulo", "==", titulo)
+      .where("isDelete","==",false)
       .get();
     let docs: any[] = [];
     let docId: string = "";
@@ -38,7 +40,7 @@ class FetchService {
 
   public static async fetchMenuByRestaurantId(id: string): Promise<Producto[]> {
     const subCollection: string = "restaurants/" + id + "/menu";
-    const querySnapshot = await db.collection(subCollection).get();
+    const querySnapshot = await db.collection(subCollection).where("isDelete","==",false).get();
     let docs: any[] = [];
     querySnapshot.forEach((doc) => {
       if (doc.exists) docs.push(doc.data() as Producto);

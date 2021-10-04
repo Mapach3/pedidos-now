@@ -20,11 +20,11 @@ const Home: React.FC<HomeProps> = () => {
   };
 
   const modificarComercio = (e: any) => {
-    //Push vista
+    history.push(ClientRoutes.RESTAURANT_MODIFIED);
   };
 
   const bajaComercio = (e: any) => {
-    //Push vista
+    history.push(ClientRoutes.RESTAURANT_DELETE);
   };
 
   const altaProducto = (e: any) => {

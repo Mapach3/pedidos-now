@@ -8,6 +8,8 @@ export enum ClientRoutes {
   RESTAURANTS = "/restaurants/:location",
   RESTAURANT_MENU = "/restaurantMenu/:titulo",
   RESTAURANT_CREATE = "/restaurantCreate/",
+  RESTAURANT_MODIFIED = "/restaurantModified",
+  RESTAURANT_DELETE = "/restaurantDelete",
   PRODUCT_CREATE = "/productCreate/",
   HOME_COMERCIANTE = "/comerciante",
   HOME_REPARTIDOR = "/repartidor",
