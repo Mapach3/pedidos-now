@@ -40,6 +40,21 @@ export class RestaurantsService {
     return docs;  
   }
 
+  public static async getRestaurantByUid(uid: string): Promise<Restaurante> {
+    const doc = await restaurants.doc(uid).get();
+    let docRes: any
+    let restaurant: any 
+    let docId: string = "";
+
+    docId = doc.id;
+    if (doc.exists){
+      restaurant = doc.data() as Restaurante;
+      restaurant.uid = docId;
+      docRes = restaurant;
+    } 
+    return docRes;  
+  }
+
   public static async deleteRestaurantByUid(uidRestaurant: string) {
     await restaurants.doc(uidRestaurant).update({
       isDelete: true,

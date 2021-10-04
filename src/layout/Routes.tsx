@@ -18,6 +18,7 @@ import RestaurantsPage from "../pages/RestaurantsPage";
 import WizardPage from "../pages/WizardPage";
 import ProductCreatePage from "../pages/ProductCreatePage";
 import RestaurantsModifiedPage from "../pages/RestaurantModifiedPage";
+import RestaurantsModifiedPageSelector from "../pages/RestaurantModifiedPageSelector";
 import RestaurantsDeletePage from "../pages/RestaurantDeletePage";
 
 
@@ -69,6 +70,10 @@ const Routes: React.FC = () => {
 
         <LoggedInRoute exact path={ClientRoutes.RESTAURANT_MODIFIED}>
           <RestaurantsModifiedPage />
+        </LoggedInRoute>
+
+        <LoggedInRoute exact path={ClientRoutes.RESTAURANT_MODIFIED_SELECTOR}>
+          <RestaurantsModifiedPageSelector />
         </LoggedInRoute>
 
         <LoggedInRoute exact path={ClientRoutes.RESTAURANT_DELETE}>

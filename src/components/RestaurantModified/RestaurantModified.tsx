@@ -21,8 +21,10 @@ import { storage, firestore } from "../../config";
 import { Alert } from "@material-ui/lab";
 import { RestaurantsService } from "../../fetch/RestaurantsService";
 import { Restaurante } from "../../models/models";
+import { useParams } from "react-router";
 
 const RestaurantModified: React.FC = () => {
+  const params: any = useParams();
   const [isUploading, setIsUploading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [resultado, setResultado] = useState("");
@@ -33,9 +35,22 @@ const RestaurantModified: React.FC = () => {
   const [imagen, setImagen] = useState(null);
   const [localidad, setLocalidad] = useState("");
   const [precioEnvio, setPrecioEnvio] = useState("");
-  const [productos, setProductos] = useState([]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const fetchRestaurant = async () => {
+      const responseResto = await RestaurantsService.getRestaurantByUid(params.uid);
+      setTitulo(responseResto.titulo);
+      setDescripcion(responseResto.descripcion);
+      setLocalidad(responseResto.localidad);
+      setPrecioEnvio(responseResto.precioEnvio);
+
+      // // Storage
+      // const storageRef = storage.ref();
+      // const fileRef = storageRef.child("restaurants/" + responseResto.titulo);
+      // await fileRef.put(imagen);
+    };
+    fetchRestaurant();
+  }, [params.uid]);
 
   const onFileChange = (e: any) => {
     const reader = new FileReader();
@@ -46,46 +61,34 @@ const RestaurantModified: React.FC = () => {
     } else setImagen(null);
   };
 
-  const createRestaurant = async () => {
+  const modificarRestaurante = async () => {
     setIsUploading(true);
     try {
-      if (titulo && descripcion && precioEnvio && imagen && localidad) {
-        const restaurant = await RestaurantsService.getRestaurantByName(titulo);
-        if (restaurant) {
-          setResultado("ERROR: Restaurante duplicado.");
-          setIsUploading(false);
-          return;
-        }
-        // Storage
-        const storageRef = storage.ref();
-        const fileRef = storageRef.child("restaurants/" + titulo);
-        await fileRef.put(imagen);
+      if (titulo && descripcion && precioEnvio /*&& imagen*/ && localidad) {
+        // // Storage
+        // const storageRef = storage.ref();
+        // const fileRef = storageRef.child("restaurants/" + titulo);
+        // await fileRef.put(imagen);
 
-        const url = await fileRef.getDownloadURL();
-        const entity: Restaurante = {
-          titulo,
-          url,
-          descripcion,
-          precioEnvio,
-          menu: [],
-          localidad,
-          dueño: localStorage.getItem("PedidosNow.UserId") || "",
-          isDelete: false
-        };
+        // const url = await fileRef.getDownloadURL();
 
         // Firestore
-        await firestore.collection("restaurants").doc().set(entity);
+        await firestore.collection("restaurants").doc(params.uid).update({
+          titulo: titulo,
+          // url: url,
+          descripcion: descripcion,
+          precioEnvio: precioEnvio,
+          localidad: localidad,
+        });
 
-        console.log("Restaurante dado de alta con éxito");
-        setResultado("Restaurante dado de alta con éxito");
+        setResultado("Restaurante modificado con éxito");
         setSuccess(true);
       }else{
         setResultado("Faltan campos por completar");
         setSuccess(false);
       }
     } catch (error) {
-      console.log("Error al dar de alta el restaurante");
-      setResultado("ERROR: No se pudo dar de alta el nuevo restaurante");
+      setResultado("ERROR: No se pudo modificar el restaurante");
     } finally {
       setIsUploading(false);
     }
@@ -99,7 +102,7 @@ const RestaurantModified: React.FC = () => {
       <Grid item xs={4}>
         <Grid item className={classes.grid}>
           <Typography align="center" variant="h4">
-            Alta de restaurante
+            Modificacion de restaurante
           </Typography>
         </Grid>
 
@@ -109,6 +112,8 @@ const RestaurantModified: React.FC = () => {
             label="Ingrese un nombre único"
             variant="outlined"
             onChange={(e) => setTitulo(e.target.value)}
+            defaultValue={titulo}
+            value={titulo}
           />
         </Grid>
 
@@ -118,10 +123,12 @@ const RestaurantModified: React.FC = () => {
             label="Ingrese una descripción"
             variant="outlined"
             onChange={(e) => setDescripcion(e.target.value)}
+            defaultValue={descripcion}
+            value={descripcion}
           />
         </Grid>
 
-        <Grid item className={classes.grid}>
+        {/* <Grid item className={classes.grid}>
           <InputLabel className={classes.label}>
             Seleccione una imagen como logo del restaurante
           </InputLabel>
@@ -132,8 +139,10 @@ const RestaurantModified: React.FC = () => {
             inputProps={{
               accept: ".png, .jpg, .bmp",
             }}
+            defaultValue={imagen}
+            value={imagen}
           />
-        </Grid>
+        </Grid> */}
 
         <Grid item className={classes.grid}>
           <InputLabel className={classes.label}>Localidad</InputLabel>
@@ -163,6 +172,8 @@ const RestaurantModified: React.FC = () => {
             type="number"
             startAdornment={<InputAdornment position="start">$</InputAdornment>}
             onChange={(e) => setPrecioEnvio(e.target.value)}
+            value={precioEnvio}
+            defaultValue={precioEnvio}
           />
         </Grid>
 
@@ -176,10 +187,10 @@ const RestaurantModified: React.FC = () => {
             <Button
               disabled={isUploading}
               variant="contained"
-              onClick={() => createRestaurant()}
+              onClick={() => modificarRestaurante()}
               color="secondary"
             >
-              Crear restaurante
+              Modificar restaurante
             </Button>
           </Grid>
 

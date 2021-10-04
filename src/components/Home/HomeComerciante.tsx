@@ -20,7 +20,7 @@ const Home: React.FC<HomeProps> = () => {
   };
 
   const modificarComercio = (e: any) => {
-    history.push(ClientRoutes.RESTAURANT_MODIFIED);
+    history.push(ClientRoutes.RESTAURANT_MODIFIED_SELECTOR);
   };
 
   const bajaComercio = (e: any) => {
