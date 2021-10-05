@@ -70,6 +70,7 @@ const RestaurantCreate: React.FC = () => {
           menu: [],
           localidad,
           dueño: localStorage.getItem("PedidosNow.UserId") || "",
+          isDelete: false
         };
 
         // Firestore

@@ -51,11 +51,16 @@ const Login: React.FC<{}> = () => {
 
       setOpen(true);
       setTimeout(() => {
-        if (user.tipo = UserTypes.COMERCIANTE)
+        if (user.tipo == UserTypes.COMERCIANTE)
         {
           history.push(ClientRoutes.HOME_COMERCIANTE);
         }
-        else{
+        
+        if (user.tipo == UserTypes.REPARTIDOR){
+          history.push(ClientRoutes.HOME_REPARTIDOR);
+        }
+
+        if (user.tipo == UserTypes.CLIENTE){
           history.push(ClientRoutes.HOME);
         }
       }, 3000);

@@ -16,13 +16,15 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useHistory } from "react-router";
 import useStyles from "../../styles/styles";
+import { Locations, LocationsEnumLabels } from "../../enums/Locations";
 import { storage, firestore } from "../../config";
 import { Alert } from "@material-ui/lab";
 import { RestaurantsService } from "../../fetch/RestaurantsService";
-import firebase from "firebase";
-import { Restaurante,Producto } from "../../models/models";
+import { Restaurante } from "../../models/models";
+import { useParams } from "react-router";
 
-const ProductCreate: React.FC = () => {
+const RestaurantModified: React.FC = () => {
+  const params: any = useParams();
   const [isUploading, setIsUploading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [resultado, setResultado] = useState("");
@@ -31,9 +33,24 @@ const ProductCreate: React.FC = () => {
   const [titulo, setTitulo] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [imagen, setImagen] = useState(null);
-  const [precio, setPrecio] = useState("");
-  const [restaurantes, setRestaurantes] = useState<Restaurante[]>([]);
-  const [restauranteDelProducto, setRestauranteDelProducto] = useState("");
+  const [localidad, setLocalidad] = useState("");
+  const [precioEnvio, setPrecioEnvio] = useState("");
+
+  useEffect(() => {
+    const fetchRestaurant = async () => {
+      const responseResto = await RestaurantsService.getRestaurantByUid(params.uid);
+      setTitulo(responseResto.titulo);
+      setDescripcion(responseResto.descripcion);
+      setLocalidad(responseResto.localidad);
+      setPrecioEnvio(responseResto.precioEnvio);
+
+      // // Storage
+      // const storageRef = storage.ref();
+      // const fileRef = storageRef.child("restaurants/" + responseResto.titulo);
+      // await fileRef.put(imagen);
+    };
+    fetchRestaurant();
+  }, [params.uid]);
 
   const onFileChange = (e: any) => {
     const reader = new FileReader();
@@ -44,61 +61,34 @@ const ProductCreate: React.FC = () => {
     } else setImagen(null);
   };
 
-  useEffect(() => {
-    const fetchOwnerRestaraunts = async () => {
-      let owner_id = localStorage.getItem("PedidosNow.UserId");
-      let ownerRestaurants: any[] = [];
-      if (!owner_id) {
-        owner_id = "";
-      }
-      const queryResult = await RestaurantsService.getRestaurantsByOwner(
-        owner_id
-      );
-      queryResult.map((item) => {
-        ownerRestaurants.push(item);
-      });
-      setRestaurantes(ownerRestaurants);
-    };
-    fetchOwnerRestaraunts();
-  }, []);
-
-  const createProduct = async () => {
+  const modificarRestaurante = async () => {
     setIsUploading(true);
     try {
-      if (titulo && descripcion && precio && imagen && restauranteDelProducto) {
-        let restaurant: Restaurante 
-        restaurant = await RestaurantsService.getRestaurantByName(restauranteDelProducto);
-        
-        // Storage
-        const storageRef = storage.ref();
-        const fileRef = storageRef.child("restaurants/" + titulo);
-        await fileRef.put(imagen);
+      if (titulo && descripcion && precioEnvio /*&& imagen*/ && localidad) {
+        // // Storage
+        // const storageRef = storage.ref();
+        // const fileRef = storageRef.child("restaurants/" + titulo);
+        // await fileRef.put(imagen);
 
-        if (restaurant) {
-          const url = await fileRef.getDownloadURL();
-          let menu: Producto[] = restaurant.menu
-          let producto: Producto = {
-            descripcion: descripcion,
-            precio: precio,
-            titulo: titulo,
-            url: url
-          }
-          menu.push(producto)
-          
-          // Firestore
-          await firestore.collection("restaurants").doc(restaurant.uid).update({
-            menu: menu
-          })
-        }
+        // const url = await fileRef.getDownloadURL();
 
-        setResultado("Producto dado de alta con éxito");
+        // Firestore
+        await firestore.collection("restaurants").doc(params.uid).update({
+          titulo: titulo,
+          // url: url,
+          descripcion: descripcion,
+          precioEnvio: precioEnvio,
+          localidad: localidad,
+        });
+
+        setResultado("Restaurante modificado con éxito");
         setSuccess(true);
       }else{
         setResultado("Faltan campos por completar");
         setSuccess(false);
       }
     } catch (error) {
-      setResultado("ERROR: No se pudo dar de alta el nuevo producto");
+      setResultado("ERROR: No se pudo modificar el restaurante");
     } finally {
       setIsUploading(false);
     }
@@ -112,16 +102,18 @@ const ProductCreate: React.FC = () => {
       <Grid item xs={4}>
         <Grid item className={classes.grid}>
           <Typography align="center" variant="h4">
-            Alta de producto
+            Modificacion de restaurante
           </Typography>
         </Grid>
 
         <Grid item className={classes.grid}>
           <TextField
             className={classes.root}
-            label="Ingrese un nombre de producto"
+            label="Ingrese un nombre único"
             variant="outlined"
             onChange={(e) => setTitulo(e.target.value)}
+            defaultValue={titulo}
+            value={titulo}
           />
         </Grid>
 
@@ -131,12 +123,14 @@ const ProductCreate: React.FC = () => {
             label="Ingrese una descripción"
             variant="outlined"
             onChange={(e) => setDescripcion(e.target.value)}
+            defaultValue={descripcion}
+            value={descripcion}
           />
         </Grid>
 
-        <Grid item className={classes.grid}>
+        {/* <Grid item className={classes.grid}>
           <InputLabel className={classes.label}>
-            Seleccione una imagen como logo del producto
+            Seleccione una imagen como logo del restaurante
           </InputLabel>
           <Input
             className={classes.root}
@@ -145,38 +139,41 @@ const ProductCreate: React.FC = () => {
             inputProps={{
               accept: ".png, .jpg, .bmp",
             }}
+            defaultValue={imagen}
+            value={imagen}
           />
-        </Grid>
+        </Grid> */}
 
         <Grid item className={classes.grid}>
-          <InputLabel className={classes.label}>restauranteDelProducto</InputLabel>
-           <Select
-            label="restauranteDelProducto"
+          <InputLabel className={classes.label}>Localidad</InputLabel>
+          <Select
+            label="Localidad"
             className={classes.root}
             onChange={(event: React.ChangeEvent<any>) =>
-              setRestauranteDelProducto(event.target.value)
+              setLocalidad(event.target.value)
             }
             required
             variant="outlined"
-            value={restauranteDelProducto}
-            defaultValue={restaurantes}
+            value={localidad}
+            defaultValue={localidad}
           >
-            {
-            restaurantes.map((item) => (
-              <MenuItem key={item.titulo} value={item.titulo}>
-                {item.titulo}
+            {Object.values(Locations).map((item) => (
+              <MenuItem key={item} value={Locations[item]}>
+                {LocationsEnumLabels[item]}
               </MenuItem>
             ))}
-          </Select> 
+          </Select>
         </Grid>
 
         <Grid item className={classes.grid}>
-          <InputLabel className={classes.label}>Precio unitario</InputLabel>
+          <InputLabel className={classes.label}>Precio de envío</InputLabel>
           <OutlinedInput
             className={classes.root}
             type="number"
             startAdornment={<InputAdornment position="start">$</InputAdornment>}
-            onChange={(e) => setPrecio(e.target.value)}
+            onChange={(e) => setPrecioEnvio(e.target.value)}
+            value={precioEnvio}
+            defaultValue={precioEnvio}
           />
         </Grid>
 
@@ -190,10 +187,10 @@ const ProductCreate: React.FC = () => {
             <Button
               disabled={isUploading}
               variant="contained"
-              onClick={() => createProduct()}
+              onClick={() => modificarRestaurante()}
               color="secondary"
             >
-              Agregar producto
+              Modificar restaurante
             </Button>
           </Grid>
 
@@ -227,4 +224,4 @@ const ProductCreate: React.FC = () => {
   );
 };
 
-export default ProductCreate;
+export default RestaurantModified;
