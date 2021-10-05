@@ -65,7 +65,7 @@ const RestaurantModifiedSelector: React.FC = () => {
             <TableCell align="center">Localidad</TableCell>
             <TableCell align="center">Precio de Envio</TableCell>
 
-            <TableCell align="center">Eliminar Restaurante</TableCell>
+            <TableCell align="center">Modificar Restaurante</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
