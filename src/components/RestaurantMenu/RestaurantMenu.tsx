@@ -6,15 +6,18 @@ import { useParams } from "react-router";
 import FetchService from "../../functions/fetch/FetchService";
 import CardList from "../List/list";
 import Pedido from "../Pedido/Pedido";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { clearPedido } from "../../redux/actions/pedidoAction";
 
 const RestaurantMenu: React.FC = () => {
   const params: any = useParams();
   const [productos, setProductos] = useState<Producto[]>([]);
   const [isLoadingMenu, setIsLoadingMenu] = useState(false);
   const itemsPedido = useSelector((state: any) => state.infoPedido);
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(clearPedido());
     const fetchProductos = async () => {
       setIsLoadingMenu(true);
       const response = await FetchService.fetchRestaurantByTitulo(
@@ -25,7 +28,7 @@ const RestaurantMenu: React.FC = () => {
       setIsLoadingMenu(false);
     };
     fetchProductos();
-  }, [params.titulo]);
+  }, [params.titulo, dispatch]);
 
   return (
     <Grid container style={{ padding: "1rem 1rem 10rem 1rem" }}>

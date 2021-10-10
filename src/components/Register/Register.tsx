@@ -36,6 +36,7 @@ const Register: React.FC = () => {
       setIsSubmitting(true);
 
       await auth.createUserWithEmailAndPassword(email, contraseña);
+      const uid = auth.currentUser!.uid;
 
       await UsersService.postUserToCollection({
         nombre,
@@ -43,6 +44,7 @@ const Register: React.FC = () => {
         email,
         tipo: tipoUsuario,
         cuit,
+        uid,
       });
 
       const currentUser = auth.currentUser;
@@ -53,7 +55,7 @@ const Register: React.FC = () => {
       localStorage.setItem("PedidosNow.UserType", tipoUsuario);
       localStorage.setItem("PedidosNow.Nombre", nombre);
       localStorage.setItem("PedidosNow.Apellido", apellido);
-      localStorage.setItem("PedidosNow.UserId", auth.currentUser?.uid || "");
+      localStorage.setItem("PedidosNow.UserId", uid);
 
       setOpen(true);
       setTimeout(() => {

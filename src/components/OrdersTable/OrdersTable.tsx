@@ -31,14 +31,18 @@ const OrdersTable: React.FC = () => {
 
   useEffect(() => {
     const fetchOrders = async () => {
-      let comercianteLogueado = localStorage.getItem("PedidosNow.UserId");
-      let nombresRestaurantes: string[] = [];
-      const responseResto = await RestaurantsService.getRestaurantsByOwner(comercianteLogueado);
-      responseResto.forEach(item => 
-        nombresRestaurantes.push(item.titulo)
-      );
-      const response = await FetchService.fetchOrdersByRestaurant(nombresRestaurantes);
-      setItemPedido(response);
+      try {
+        let comercianteLogueado = localStorage.getItem("PedidosNow.UserId");
+        let nombresRestaurantes: string[] = [];
+        const responseResto = await RestaurantsService.getRestaurantsByOwner(
+          comercianteLogueado
+        );
+        responseResto.forEach((item) => nombresRestaurantes.push(item.titulo));
+        const response = await FetchService.fetchOrdersByRestaurant(
+          nombresRestaurantes
+        );
+        setItemPedido(response);
+      } catch (error: any) {}
     };
     fetchOrders();
   }, []);
@@ -102,7 +106,7 @@ const OrdersTable: React.FC = () => {
       >
         Pedidos
       </Typography>
-      
+
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="simple table">
           <TableHead>

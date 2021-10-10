@@ -4,4 +4,5 @@ export interface User {
   email: string;
   tipo: string;
   cuit?: string;
+  uid: string;
 }
