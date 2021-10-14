@@ -111,7 +111,7 @@ const PendingOrdersOfShipment: React.FC = () => {
                 <TableCell align="center">{row.direccion}</TableCell>
                 <TableCell align="center">{row.estado}</TableCell>
                 <TableCell align="center">{row.metodoPago}</TableCell>
-                <TableCell align="center">{row.total}</TableCell>
+                <TableCell align="center">${row.total}</TableCell>
                 <TableCell align="center">
                   <Button
                     disabled={isSubmitting}

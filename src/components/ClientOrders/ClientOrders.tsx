@@ -30,9 +30,7 @@ const ClientOrders: React.FC = () => {
   const [dialogMessage, setDialogMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [openCard, setOpenCard] = useState(false);
-  const [producto, setProducto] = useState<Producto>();
-  const [cantidad, setCantidad] = useState<number>(0);
-  const [precio, setPrecio] = useState<number>(0);
+  const [selectedPedidoDetail, setSelectedPedidoDetail] = useState<any>();
   
   useEffect(() => {
     const fetchOrders = async () => {
@@ -51,10 +49,8 @@ const ClientOrders: React.FC = () => {
   const classes = useStyles();
   const history = useHistory();
 
-  const verDetallePedido = (producto:Producto,cantidad:number,precio:number) => {
-    setProducto(producto);
-    setCantidad(cantidad);
-    setPrecio(precio);
+  const verDetallePedido = (itemsPedido: any) => {
+    setSelectedPedidoDetail(itemsPedido);
     setOpenCard(true);
   };
 
@@ -96,12 +92,8 @@ const ClientOrders: React.FC = () => {
                 <TableCell align="center">{row.direccion}</TableCell>
                 <TableCell align="center">{row.estado}</TableCell>
                 <TableCell align="center">{row.metodoPago}</TableCell>
-                <TableCell align="center">{row.total}</TableCell>
-
-                {row.items.map((prod) => (
-                  <TableRow key={row.nombre_restaurante}>
-                    <>
-                      <TableCell align="center">   
+                <TableCell align="center">${row.total}</TableCell>
+                <TableCell align="center">   
                         {        
                           <Button
                             disabled={isSubmitting}
@@ -113,25 +105,26 @@ const ClientOrders: React.FC = () => {
                             }}
                             variant="contained"
                             onClick={
-                              () => verDetallePedido(prod.producto,prod.cantidad,prod.precio)
+                              () => verDetallePedido(row.items)
                             }
                           >
                             Ver Detalle
                           </Button>    
                         }            
-                    </TableCell>
-                    </>
-                  </TableRow>
-                ))}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
 
+      {selectedPedidoDetail && (
        <ItemCard
-        open= {openCard} handleClose={()=>setOpenCard(false)} producto={producto} precio={precio} cantidad={cantidad}
+        open= {openCard} 
+        handleClose={()=>setOpenCard(false)}
+        pedidoDetail={selectedPedidoDetail}
        />
+       )}
 
       <Dialog
         fullWidth
