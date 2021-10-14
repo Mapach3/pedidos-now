@@ -5,15 +5,15 @@ import Typography from "@material-ui/core/Typography";
 import { red } from "@material-ui/core/colors";
 import { Grid } from "@material-ui/core";
 import { useState } from "react";
-import { Producto } from "../../models/models";
-import CardActions from '@mui/material/CardActions';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button'
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import { ItemPedidoOrder, Producto } from "../../models/models";
+import CardActions from "@mui/material/CardActions";
+import CardMedia from "@mui/material/CardMedia";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,50 +49,44 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface props {
-  open:boolean,
-  handleClose: any
-  producto: Producto | undefined;
-  cantidad: number;
-  precio: number;
+  open: boolean;
+  handleClose: any;
+  pedidoDetail: ItemPedidoOrder[];
 }
 
-export default function ItemCard({
-  open,
-  handleClose,
-  producto,
-  cantidad,
-  precio
-}: props) {
+export default function ItemCard({ open, handleClose, pedidoDetail }: props) {
   const classes = useStyles();
 
   return (
     <div>
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title">
-        {"Detalle de Pedido"}
-      </DialogTitle>
-      <DialogContent>
-            <Card className={classes.root} variant="outlined">
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Detalle de Pedido"}</DialogTitle>
+        <DialogContent>
+          <Card className={classes.root} variant="outlined">
             <CardMedia
               component="img"
               height="140"
               image="https://images.deliveryhero.io/image/pedidosya/home-backgrounds/home-background-ar.jpg?quality=100&width=1345"
             />
             <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                {producto}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Cantidad: {cantidad}  Precio: ${precio}
-              </Typography>
+              {pedidoDetail.map((producto) => (
+                <>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {producto.producto}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Cantidad: {producto.cantidad} Precio: ${producto.precio}
+                  </Typography>
+                </>
+              ))}
             </CardContent>
             <CardActions>
-              <Button 
+              <Button
                 color="secondary"
                 style={{
                   marginLeft: "1rem",
@@ -100,19 +94,20 @@ export default function ItemCard({
                   paddingBottom: "1rem",
                 }}
                 variant="contained"
-                onClick={() => handleClose()}>
-                  Cerrar
+                onClick={() => handleClose()}
+              >
+                Cerrar
               </Button>
             </CardActions>
           </Card>
-      </DialogContent>
-      {/* <DialogActions>
+        </DialogContent>
+        {/* <DialogActions>
         <Button onClick={handleClose}>Disagree</Button>
         <Button onClick={handleClose} autoFocus>
           Agree
         </Button>
       </DialogActions> */}
-    </Dialog>
+      </Dialog>
     </div>
   );
 }
