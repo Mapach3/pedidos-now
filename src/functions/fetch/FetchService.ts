@@ -90,6 +90,24 @@ class FetchService {
     });
     return docs;
   }
+
+    public static async fetchClientOrders(): Promise<Order[]> {
+    const querySnapshot = await db
+      .collection("orders") 
+      .where("user_id", "==", localStorage.getItem("PedidosNow.UserId"),)
+      .get();
+    let docs: any[] = [];
+    let docId: string = "";
+    querySnapshot.forEach((doc) => {
+      docId = doc.id;
+      if (doc.exists) {
+        let order: Order = doc.data() as Order;
+        order.uid = docId;
+        docs.push(order);
+      }
+    });
+    return docs;
+  }
 }
 
 export default FetchService;

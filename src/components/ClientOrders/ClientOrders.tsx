@@ -24,19 +24,19 @@ import { OrdersService } from "../../fetch/OrdersService";
 import { EstadoPedido } from "../../enums/EstadoPedido";
 import ItemCard from "../../components/Card/cardRepartidor";
 
-const PendingOrdersOfShipment: React.FC = () => {
+const ClientOrders: React.FC = () => {
   const [itemsPedidos, setItemPedido] = useState<Order[]>([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [openCard, setOpenCard] = useState(false);
   const [selectedPedidoDetail, setSelectedPedidoDetail] = useState<any>();
-
+  
   useEffect(() => {
     const fetchOrders = async () => {
-      const response = await FetchService.fetchOrdersPendingOfShipments();
+      const response = await FetchService.fetchClientOrders();
       console.log({ response });
-      setItemPedido(response);
+      setItemPedido(response);     
     };
     fetchOrders();
   }, []);
@@ -48,22 +48,6 @@ const PendingOrdersOfShipment: React.FC = () => {
   });
   const classes = useStyles();
   const history = useHistory();
-
-  const actualizarEstado = async (estado: EstadoPedido, uid?: string) => {
-    try {
-      setIsSubmitting(true);
-      await OrdersService.updatePendingOrderOfShipment(estado, uid);
-      setDialogMessage("Pedido actualizado con éxito!");
-      setOpenDialog(true);
-    } catch (error: any) {
-      setDialogMessage(
-        "Lo sentimos, ocurrió un error al actualizar tu pedido. Por favor intenta nuevamente en unos minutos."
-      );
-      setOpenDialog(true);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   const verDetallePedido = (itemsPedido: any) => {
     setSelectedPedidoDetail(itemsPedido);
@@ -93,17 +77,14 @@ const PendingOrdersOfShipment: React.FC = () => {
               <TableCell align="center">Estado</TableCell>
               <TableCell align="center">Metodo de Pago</TableCell>
               <TableCell align="center">Total</TableCell>
-
               <TableCell align="center">Detalle de Productos</TableCell>
-
-              <TableCell align="center">Aceptar Pedido</TableCell>
-              <TableCell align="center">Confirmar Recepcion</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {itemsPedidos.map((row) => (
               <TableRow key={row.nombre_restaurante}>
                 <TableCell component="th" scope="row">
+                  {" "}
                   {row.nombre_restaurante}
                 </TableCell>
                 <TableCell align="center">{row.telefono}</TableCell>
@@ -112,63 +93,24 @@ const PendingOrdersOfShipment: React.FC = () => {
                 <TableCell align="center">{row.estado}</TableCell>
                 <TableCell align="center">{row.metodoPago}</TableCell>
                 <TableCell align="center">${row.total}</TableCell>
-                <TableCell align="center">
-                  <Button
-                    disabled={isSubmitting}
-                    color="secondary"
-                    style={{
-                      marginLeft: "1rem",
-                      paddingTop: "1rem",
-                      paddingBottom: "1rem",
-                    }}
-                    variant="contained"
-                    onClick={() => verDetallePedido(row.items)}
-                  >
-                    Ver Detalle
-                  </Button>
-                </TableCell>
-
-                <TableCell align="center">
-                  {
-                    <Button
-                      disabled={
-                        row.estado === EstadoPedido.EN_CAMINO || isSubmitting
-                          ? true
-                          : false
-                      }
-                      color="secondary"
-                      style={{
-                        marginLeft: "1rem",
-                        paddingTop: "1rem",
-                        paddingBottom: "1rem",
-                      }}
-                      variant="contained"
-                      onClick={() =>
-                        actualizarEstado(EstadoPedido.EN_CAMINO, row.uid)
-                      }
-                    >
-                      En camino
-                    </Button>
-                  }
-                </TableCell>
-                <TableCell align="center">
-                  {
-                    <Button
-                      disabled={isSubmitting}
-                      color="secondary"
-                      style={{
-                        marginLeft: "1rem",
-                        paddingTop: "1rem",
-                        paddingBottom: "1rem",
-                      }}
-                      variant="contained"
-                      onClick={() =>
-                        actualizarEstado(EstadoPedido.RECIBIDO, row.uid)
-                      }
-                    >
-                      Recibido
-                    </Button>
-                  }
+                <TableCell align="center">   
+                        {        
+                          <Button
+                            disabled={isSubmitting}
+                            color="secondary"
+                            style={{
+                              marginLeft: "1rem",
+                              paddingTop: "1rem",
+                              paddingBottom: "1rem",
+                            }}
+                            variant="contained"
+                            onClick={
+                              () => verDetallePedido(row.items)
+                            }
+                          >
+                            Ver Detalle
+                          </Button>    
+                        }            
                 </TableCell>
               </TableRow>
             ))}
@@ -177,12 +119,12 @@ const PendingOrdersOfShipment: React.FC = () => {
       </TableContainer>
 
       {selectedPedidoDetail && (
-        <ItemCard
-          open={openCard}
-          handleClose={() => setOpenCard(false)}
-          pedidoDetail={selectedPedidoDetail}
-        />
-      )}
+       <ItemCard
+        open= {openCard} 
+        handleClose={()=>setOpenCard(false)}
+        pedidoDetail={selectedPedidoDetail}
+       />
+       )}
 
       <Dialog
         fullWidth
@@ -197,7 +139,7 @@ const PendingOrdersOfShipment: React.FC = () => {
               variant="contained"
               style={{ marginRight: "7rem", marginTop: "1rem" }}
               color="secondary"
-              onClick={() => history.push(ClientRoutes.HOME_REPARTIDOR)}
+              onClick={() => history.push(ClientRoutes.HOME)}
             >
               Volver a la home
             </Button>
@@ -207,4 +149,4 @@ const PendingOrdersOfShipment: React.FC = () => {
     </Container>
   );
 };
-export default PendingOrdersOfShipment;
+export default ClientOrders;

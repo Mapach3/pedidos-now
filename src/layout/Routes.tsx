@@ -13,6 +13,7 @@ import RegisterPage from "../pages/RegisterPage";
 import RestaurantsCreatePage from "../pages/RestaurantCreatePage";
 import RestaurantMenuPage from "../pages/RestaurantMenuPage";
 import RestaurantOrders from "../pages/RestaurantOrders";
+import ClientOrders from "../pages/ClientOrdersPage";
 import RepartidorOrders from "../pages/RepartidorOrders";
 import RestaurantsPage from "../pages/RestaurantsPage";
 import WizardPage from "../pages/WizardPage";
@@ -93,6 +94,10 @@ const Routes: React.FC = () => {
 
         <Route exact path={ClientRoutes.ORDERS_LIST_DISTRIBUTOR}>
           <RepartidorOrders />
+        </Route>
+
+        <Route exact path={ClientRoutes.ORDERS_LIST_CLIENT}>
+          <ClientOrders />
         </Route>
 
         <Route>
