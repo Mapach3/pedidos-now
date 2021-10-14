@@ -8,7 +8,13 @@ export interface Restaurante {
   menu: Producto[];
   precioEnvio: string;
   dueño: string;
-  isDelete: boolean
+  isDelete: boolean;
+}
+
+export interface ItemPedidoOrder {
+  producto: string;
+  cantidad: number;
+  precio: number;
 }
 
 export interface ItemPedido {
