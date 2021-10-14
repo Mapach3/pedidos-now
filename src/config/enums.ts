@@ -16,4 +16,5 @@ export enum ClientRoutes {
   HOME_REPARTIDOR = "/repartidor",
   ORDERS_LIST = "/restaurants/orders/pendings",
   ORDERS_LIST_DISTRIBUTOR = "/repartidor/orders/pendings",
+  ORDERS_LIST_CLIENT = "/orders"
 }

@@ -15,6 +15,10 @@ export const getMenu = () => {
       text: "Perfil",
       url: "/profile",
     },
+    {
+      text: "Mis pedidos",
+      url: "/orders",
+    },
   ];
 
   const comercianteMenu = [
@@ -22,12 +26,20 @@ export const getMenu = () => {
       text: "Perfil",
       url: "/profile",
     },
+    {
+      text: "Pedidos",
+      url: "/restaurants/orders/pendings",
+    },
   ];
 
   const repartidorMenu = [
     {
       text: "Perfil",
       url: "/profile",
+    },
+    {
+      text: "Pedidos",
+      url: "/repartidor/orders/pendings",
     },
   ];
 

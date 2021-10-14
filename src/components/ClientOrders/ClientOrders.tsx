@@ -1,0 +1,159 @@
+import React, { useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+import FetchService from "../../functions/fetch/FetchService";
+import { Order, Producto } from "../../models/models";
+import {
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  Container,
+  Typography,
+  Grid,
+} from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import { useHistory } from "react-router";
+import { ClientRoutes } from "../../config/enums";
+import { OrdersService } from "../../fetch/OrdersService";
+import { EstadoPedido } from "../../enums/EstadoPedido";
+import ItemCard from "../../components/Card/cardRepartidor";
+
+const ClientOrders: React.FC = () => {
+  const [itemsPedidos, setItemPedido] = useState<Order[]>([]);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [openCard, setOpenCard] = useState(false);
+  const [producto, setProducto] = useState<Producto>();
+  const [cantidad, setCantidad] = useState<number>(0);
+  const [precio, setPrecio] = useState<number>(0);
+  
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const response = await FetchService.fetchClientOrders();
+      console.log({ response });
+      setItemPedido(response);     
+    };
+    fetchOrders();
+  }, []);
+
+  const useStyles = makeStyles({
+    table: {
+      minWidth: 650,
+    },
+  });
+  const classes = useStyles();
+  const history = useHistory();
+
+  const verDetallePedido = (producto:Producto,cantidad:number,precio:number) => {
+    setProducto(producto);
+    setCantidad(cantidad);
+    setPrecio(precio);
+    setOpenCard(true);
+  };
+
+  return (
+    <Container component="main" maxWidth="lg" style={{ padding: "1rem" }}>
+      <Typography
+        variant="h6"
+        style={{
+          textAlign: "center",
+          paddingBottom: "1rem",
+        }}
+      >
+        Pedidos
+      </Typography>
+
+      <TableContainer component={Paper}>
+        <Table className={classes.table} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="center">Nombre Restaurante</TableCell>
+              <TableCell align="center">Telefono</TableCell>
+              <TableCell align="center">Localidad</TableCell>
+              <TableCell align="center">Direccion</TableCell>
+              <TableCell align="center">Estado</TableCell>
+              <TableCell align="center">Metodo de Pago</TableCell>
+              <TableCell align="center">Total</TableCell>
+              <TableCell align="center">Detalle de Productos</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {itemsPedidos.map((row) => (
+              <TableRow key={row.nombre_restaurante}>
+                <TableCell component="th" scope="row">
+                  {" "}
+                  {row.nombre_restaurante}
+                </TableCell>
+                <TableCell align="center">{row.telefono}</TableCell>
+                <TableCell align="center">{row.localidad}</TableCell>
+                <TableCell align="center">{row.direccion}</TableCell>
+                <TableCell align="center">{row.estado}</TableCell>
+                <TableCell align="center">{row.metodoPago}</TableCell>
+                <TableCell align="center">{row.total}</TableCell>
+
+                {row.items.map((prod) => (
+                  <TableRow key={row.nombre_restaurante}>
+                    <>
+                      <TableCell align="center">   
+                        {        
+                          <Button
+                            disabled={isSubmitting}
+                            color="secondary"
+                            style={{
+                              marginLeft: "1rem",
+                              paddingTop: "1rem",
+                              paddingBottom: "1rem",
+                            }}
+                            variant="contained"
+                            onClick={
+                              () => verDetallePedido(prod.producto,prod.cantidad,prod.precio)
+                            }
+                          >
+                            Ver Detalle
+                          </Button>    
+                        }            
+                    </TableCell>
+                    </>
+                  </TableRow>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+       <ItemCard
+        open= {openCard} handleClose={()=>setOpenCard(false)} producto={producto} precio={precio} cantidad={cantidad}
+       />
+
+      <Dialog
+        fullWidth
+        maxWidth={"xs"}
+        onClose={setOpenDialog}
+        open={openDialog}
+      >
+        <DialogTitle id="alert-dialog-title">
+          {dialogMessage}
+          <DialogActions>
+            <Button
+              variant="contained"
+              style={{ marginRight: "7rem", marginTop: "1rem" }}
+              color="secondary"
+              onClick={() => history.push(ClientRoutes.HOME)}
+            >
+              Volver a la home
+            </Button>
+          </DialogActions>
+        </DialogTitle>
+      </Dialog>
+    </Container>
+  );
+};
+export default ClientOrders;
