@@ -59,7 +59,17 @@ const Register: React.FC = () => {
 
       setOpen(true);
       setTimeout(() => {
-        history.push(ClientRoutes.HOME);
+        if (tipoUsuario === UserTypes.COMERCIANTE) {
+          history.push(ClientRoutes.HOME_COMERCIANTE);
+        }
+
+        if (tipoUsuario === UserTypes.REPARTIDOR) {
+          history.push(ClientRoutes.HOME_REPARTIDOR);
+        }
+
+        if (tipoUsuario === UserTypes.CLIENTE) {
+          history.push(ClientRoutes.HOME);
+        }
       }, 3000);
     } catch (error: any) {
       alert("Error: " + error.code + ": " + error.message);

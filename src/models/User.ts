@@ -5,4 +5,5 @@ export interface User {
   tipo: string;
   cuit?: string;
   uid: string;
+  docId?: string;
 }
