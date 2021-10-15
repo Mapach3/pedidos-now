@@ -51,6 +51,11 @@ export class UsersService {
       auth.updateCurrentUser(user);
   }
 
+  static async deleteUser(emailActual:string, contraseñaActual:string) {
+    let response = await auth.signInWithEmailAndPassword(emailActual,contraseñaActual);
+    response.user?.delete();
+}
+
   static async emailAlreadyExists(email: string) {
     const result = await UsersService.fetchUserByEmail(email);
     return result !== undefined;

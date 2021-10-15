@@ -7,7 +7,7 @@ const Footer: React.FC<FooterProps> = () => {
   return (
     <footer>
       <Box bgcolor="#E63939" color="white">
-        <Container>
+        {/* <Container>
           <Grid container spacing={5}>
             <Grid item xs={6} sm={3}>
               <Box>Quienes somos</Box>
@@ -26,8 +26,8 @@ const Footer: React.FC<FooterProps> = () => {
               <Box>Acuerdos corporativos</Box>
             </Grid>
           </Grid>
-        </Container>
-        <Grid container spacing={5}>
+        </Container> */}
+        <Grid container /*spacing={5}*/>
           <Grid item xs={12} sm={12}>
             <Typography
               variant="subtitle1"

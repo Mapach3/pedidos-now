@@ -1,15 +1,9 @@
 import {
   CircularProgress,
   Grid,
-  Input,
   TextField,
   Typography,
   Button,
-  Select,
-  MenuItem,
-  InputLabel,
-  InputAdornment,
-  OutlinedInput,
   Snackbar,
   Checkbox,
 } from "@material-ui/core";
@@ -28,6 +22,7 @@ const Profile: React.FC = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [resultado, setResultado] = useState("");
+  //State para modificacion de perfil://
   const [apellido, setApellido] = useState("");
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
@@ -42,6 +37,9 @@ const Profile: React.FC = () => {
   const [contraseñaActualChange, setContraseñaActualChange] = useState("");
   const [contraseñaNuevaChange, setContraseñaNuevaChange] = useState("");
   const [emailActualChangePass, setEmailActualChangePass] = useState("");
+  //State para baja de cuenta://
+  const [contraseñaActualBaja, setContraseñaActualBaja] = useState("");
+  const [emailActualBaja, setEmailActualBaja] = useState("");
   const history = useHistory();
 
   useEffect(() => {
@@ -124,6 +122,29 @@ const Profile: React.FC = () => {
     }, 2000);
     } catch (error: any) {
       setResultado("ERROR: No se pudo cerrar la sesion correctamente.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const eliminarCuenta = async () => {
+    setIsUploading(true);
+    try {
+      if (contraseñaActualBaja && emailActualBaja) {
+        await UsersService.deleteUser(emailActualBaja, contraseñaActualBaja)
+
+        setResultado("Cuenta dada de baja con éxito");
+        setSuccess(true);
+        setTimeout(() => {
+          setIsUploading(false);
+          logout();
+        }, 1500);
+      } else {
+        setResultado("Faltan campos por completar");
+        setSuccess(false);
+      }
+    } catch (error) {
+      setResultado("ERROR: No se pudo dar de baja la cuenta.");
     } finally {
       setIsUploading(false);
     }
@@ -242,30 +263,6 @@ const Profile: React.FC = () => {
                 Modificar Datos de Perfil
               </Button>
             </Grid>
-
-            <Grid item className={classes.grid}>
-              {isUploading ? (
-                <CircularProgress />
-              ) : (
-                <Snackbar
-                  anchorOrigin={{ horizontal: "center", vertical: "top" }}
-                  open={!!resultado}
-                  autoHideDuration={3000}
-                  onClose={() => {
-                    setSuccess(false);
-                    setResultado("");
-                  }}
-                >
-                  <Alert
-                    color={success ? "success" : "error"}
-                    severity={success ? "success" : "error"}
-                    variant="filled"
-                  >
-                    {resultado}
-                  </Alert>
-                </Snackbar>
-              )}
-            </Grid>
           </Grid>
       </Card>
       </Grid>
@@ -330,7 +327,76 @@ const Profile: React.FC = () => {
                 Cambiar Contraseña de Perfil
               </Button>
             </Grid>
+          </Grid>
+      </Card>
+      </Grid>
+      <Grid item xs={2}/>
+      </>
 
+      <>
+      <Grid item xs={2}/>
+      <Grid item xs={8} alignContent={"center"} alignItems={"center"}>
+      <Card variant="outlined">
+            <CardMedia
+              component="img"
+              height="140"
+              image="https://images.deliveryhero.io/image/pedidosya/home-backgrounds/home-background-ar.jpg?quality=100&width=1345" 
+            />
+          <Grid item className={classes.grid}>
+            <Typography align="center" variant="h4">
+              Baja de Cuenta
+            </Typography>
+            <Typography align="center" variant="h6">
+              Para poder realizar la baja de la Cuenta, es necesario completar los siguientes campos para poder validar y confirmar la baja de la misma.
+            </Typography>
+          </Grid>
+
+          <Grid item className={classes.grid}>
+          <TextField
+            className={classes.root}
+            label="Ingrese Email Actual"
+            variant="outlined"
+            onChange={(e) => setEmailActualBaja(e.target.value)}
+            defaultValue={emailActualBaja}
+            value={emailActualBaja}
+          />
+          </Grid>
+
+          <Grid item className={classes.grid}>
+          <TextField
+            className={classes.root}
+            label="Ingrese Contraseña Actual"
+            variant="outlined"
+            type="password"
+            onChange={(e) => setContraseñaActualBaja(e.target.value)}
+            defaultValue={contraseñaActualBaja}
+            value={contraseñaActualBaja}
+          />
+          </Grid>
+
+          <Grid
+            container
+            className={classes.grid}
+            direction="column"
+            alignItems="center"
+          >
+            <Grid item>
+              <Button
+                disabled={isUploading}
+                variant="contained"
+                onClick={() => eliminarCuenta()}
+                color="secondary"
+              >
+                Borrar Cuenta
+              </Button>
+            </Grid>
+          </Grid>
+      </Card>
+      </Grid>
+      <Grid item xs={2}/>
+      </>
+
+      
             <Grid item className={classes.grid}>
               {isUploading ? (
                 <CircularProgress />
@@ -354,11 +420,6 @@ const Profile: React.FC = () => {
                 </Snackbar>
               )}
             </Grid>
-          </Grid>
-      </Card>
-      </Grid>
-      <Grid item xs={2}/>
-      </>
     </Grid>
   );
 };
