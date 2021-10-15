@@ -47,10 +47,10 @@ const useStyles = makeStyles((theme) => ({
 
   footer: {
     textAlign: "center",
-    position: "relative",
+    position: "fixed",
     right: 0,
     bottom: 0,
-    left: 0
+    left: 0,
   },
 
   grid: {
