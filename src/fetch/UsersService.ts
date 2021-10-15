@@ -44,6 +44,13 @@ export class UsersService {
     })
   }
 
+  static async changePasswordUser(emailActual:string, contraseñaActual:string, contraseñaNueva:string) {
+      let response = await auth.signInWithEmailAndPassword(emailActual,contraseñaActual);
+      response.user?.updatePassword(contraseñaNueva);
+      let user = response.user
+      auth.updateCurrentUser(user);
+  }
+
   static async emailAlreadyExists(email: string) {
     const result = await UsersService.fetchUserByEmail(email);
     return result !== undefined;

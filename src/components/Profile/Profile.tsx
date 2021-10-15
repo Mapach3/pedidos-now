@@ -13,13 +13,16 @@ import {
   Snackbar,
   Checkbox,
 } from "@material-ui/core";
+import Card from "@material-ui/core/Card";
+import CardMedia from "@mui/material/CardMedia";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import useStyles from "../../styles/styles";
 import { Alert } from "@material-ui/lab";
 import { UsersService } from "../../fetch/UsersService";
 import { UserTypes } from "../../enums/UserTypes";
-
+import { useHistory } from "react-router";
+import { ClientRoutes } from "../../config/enums";
 
 const Profile: React.FC = () => {
   const [isUploading, setIsUploading] = useState(false);
@@ -35,7 +38,12 @@ const Profile: React.FC = () => {
   const [showInputMailAndContraseña, setShowInputMailAndContraseña] = useState(false);
   const [emailActual, setEmailActual] = useState("");
   const [contraseña, setContraseña] = useState("");
-  
+  //State para cambio de contraseña://
+  const [contraseñaActualChange, setContraseñaActualChange] = useState("");
+  const [contraseñaNuevaChange, setContraseñaNuevaChange] = useState("");
+  const [emailActualChangePass, setEmailActualChangePass] = useState("");
+  const history = useHistory();
+
   useEffect(() => {
     const fetchUser = async () => {
       let userId: string = localStorage.getItem("PedidosNow.UserId") as string;
@@ -48,6 +56,7 @@ const Profile: React.FC = () => {
       setCuit(response.cuit ?? "");
       setDocId(response.docId ?? "");
       setEmailActual(response.email);
+      setEmailActualChangePass(response.email)
     };
     fetchUser();
   }, []);
@@ -81,139 +90,275 @@ const Profile: React.FC = () => {
     }
   };
 
+  const modificarClave = async () => {
+    setIsUploading(true);
+    try {
+      if ( contraseñaActualChange && contraseñaNuevaChange) {
+        await UsersService.changePasswordUser(emailActualChangePass, contraseñaActualChange, contraseñaNuevaChange)
+
+        setResultado("Contraseña Modificada con éxito");
+        setSuccess(true);
+        setTimeout(() => {
+          setIsUploading(false);
+          logout();
+        }, 1500);
+      } else {
+        setResultado("Faltan campos por completar");
+        setSuccess(false);
+      }
+    } catch (error) {
+      setResultado("ERROR: No se pudo modificar la contraseña.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const logout = async () => {
+    setIsUploading(true);
+    try {
+      await UsersService.signOutUser();
+      setResultado("Cerrando sesion...");
+      setSuccess(true);
+      setTimeout(() => {
+      history.push(ClientRoutes.HOME)
+    }, 2000);
+    } catch (error: any) {
+      setResultado("ERROR: No se pudo cerrar la sesion correctamente.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   const classes = useStyles();
 
   return (
     <Grid container className={classes.root}>
-      <Grid item xs={4}></Grid>
-      <Grid item xs={4}>
-        <Grid item className={classes.grid}>
-          <Typography align="center" variant="h4">
-            Datos de Perfil
-          </Typography>
-        </Grid>
-
-        <Grid item className={classes.grid}>
-          <TextField
-            className={classes.root}
-            label="Ingrese un Apellido"
-            variant="outlined"
-            onChange={(e) => setApellido(e.target.value)}
-            defaultValue={apellido}
-            value={apellido}
-          />
-        </Grid>
-
-        <Grid item className={classes.grid}>
-          <TextField
-            className={classes.root}
-            label="Ingrese un Nombre"
-            variant="outlined"
-            onChange={(e) => setNombre(e.target.value)}
-            defaultValue={nombre}
-            value={nombre}
-          />
-        </Grid>
-
-        {tipoUser == UserTypes.COMERCIANTE && (
-        <Grid item className={classes.grid}>
-          <TextField
-            className={classes.root}
-            label="Ingrese un Cuit"
-            variant="outlined"
-            onChange={(e) => setCuit(e.target.value)}
-            defaultValue={cuit}
-            value={cuit}
-          />
-        </Grid>
-        )}
-
-        <Grid container className={classes.grid} direction="row">
-          <Grid item>
-            <TextField
-              disabled={disabledMail}
-              className={classes.root}
-              label="Ingrese un Email"
-              variant="outlined"
-              onChange={(e) => setEmail(e.target.value)}
-              defaultValue={email}
-              value={email}
+      <>
+      <Grid item xs={2}/>
+      <Grid item xs={8} alignContent={"center"} alignItems={"center"}>
+      <Card variant="outlined">
+            <CardMedia
+              component="img"
+              height="140"
+              image="https://images.deliveryhero.io/image/pedidosya/home-backgrounds/home-background-ar.jpg?quality=100&width=1345" 
             />
-          </Grid>
-          <Grid item>
-          <Checkbox
-              aria-label= "Cambiar"
-              checked={disabledMail}
-              onChange={(event) => handleChange(event.target.checked)}
-              inputProps={{ 'aria-label': 'controlled' }}
-            />
-          </Grid>
-        </Grid>
-        
-        {showInputMailAndContraseña && (
-          <Typography align="center" variant="h6">
-            Para poder realizar el cambio de Email, es necesario completar los siguientes campos de validacion.
-          </Typography>
-        )}
-
-        {showInputMailAndContraseña && (
-        <Grid item className={classes.grid}>
-        <TextField
-          disabled={disabledMail}
-          className={classes.root}
-          label="Ingrese Contraseña Actual"
-          variant="outlined"
-          type="password"
-          onChange={(e) => setContraseña(e.target.value)}
-          defaultValue={contraseña}
-          value={contraseña}
-        />
-        </Grid>
-        )}
-
-        <Grid
-          container
-          className={classes.grid}
-          direction="column"
-          alignItems="center"
-        >
-          <Grid item>
-            <Button
-              disabled={isUploading}
-              variant="contained"
-              onClick={() => modificarDatosPerfil()}
-              color="secondary"
-            >
-              Modificar Datos de Perfil
-            </Button>
+          <Grid item className={classes.grid}>
+            <Typography align="center" variant="h4">
+              Datos de Perfil
+            </Typography>
           </Grid>
 
           <Grid item className={classes.grid}>
-            {isUploading ? (
-              <CircularProgress />
-            ) : (
-              <Snackbar
-                anchorOrigin={{ horizontal: "center", vertical: "top" }}
-                open={!!resultado}
-                autoHideDuration={3000}
-                onClose={() => {
-                  setSuccess(false);
-                  setResultado("");
-                }}
-              >
-                <Alert
-                  color={success ? "success" : "error"}
-                  severity={success ? "success" : "error"}
-                  variant="filled"
-                >
-                  {resultado}
-                </Alert>
-              </Snackbar>
-            )}
+            <TextField
+              className={classes.root}
+              label="Ingrese un Apellido"
+              variant="outlined"
+              onChange={(e) => setApellido(e.target.value)}
+              defaultValue={apellido}
+              value={apellido}
+            />
           </Grid>
-        </Grid>
+
+          <Grid item className={classes.grid}>
+            <TextField
+              className={classes.root}
+              label="Ingrese un Nombre"
+              variant="outlined"
+              onChange={(e) => setNombre(e.target.value)}
+              defaultValue={nombre}
+              value={nombre}
+            />
+          </Grid>
+
+          {tipoUser == UserTypes.COMERCIANTE && (
+          <Grid item className={classes.grid}>
+            <TextField
+              className={classes.root}
+              label="Ingrese un Cuit"
+              variant="outlined"
+              onChange={(e) => setCuit(e.target.value)}
+              defaultValue={cuit}
+              value={cuit}
+            />
+          </Grid>
+          )}
+
+          <Grid container className={classes.grid} direction="row">
+            <Grid item>
+              <TextField
+                disabled={disabledMail}
+                className={classes.root}
+                label="Ingrese un Email"
+                variant="outlined"
+                onChange={(e) => setEmail(e.target.value)}
+                defaultValue={email}
+                value={email}
+              />
+            </Grid>
+            <Grid item>
+            <Checkbox
+                aria-label= "Cambiar"
+                checked={disabledMail}
+                onChange={(event) => handleChange(event.target.checked)}
+                inputProps={{ 'aria-label': 'controlled' }}
+              />
+            </Grid>
+          </Grid>
+          
+          {showInputMailAndContraseña && (
+            <Typography align="center" variant="h6">
+              Para poder realizar el cambio de Email, es necesario completar los siguientes campos de validacion.
+            </Typography>
+          )}
+
+          {showInputMailAndContraseña && (
+          <Grid item className={classes.grid}>
+          <TextField
+            disabled={disabledMail}
+            className={classes.root}
+            label="Ingrese Contraseña Actual"
+            variant="outlined"
+            type="password"
+            onChange={(e) => setContraseña(e.target.value)}
+            defaultValue={contraseña}
+            value={contraseña}
+          />
+          </Grid>
+          )}
+
+          <Grid
+            container
+            className={classes.grid}
+            direction="column"
+            alignItems="center"
+          >
+            <Grid item>
+              <Button
+                disabled={isUploading}
+                variant="contained"
+                onClick={() => modificarDatosPerfil()}
+                color="secondary"
+              >
+                Modificar Datos de Perfil
+              </Button>
+            </Grid>
+
+            <Grid item className={classes.grid}>
+              {isUploading ? (
+                <CircularProgress />
+              ) : (
+                <Snackbar
+                  anchorOrigin={{ horizontal: "center", vertical: "top" }}
+                  open={!!resultado}
+                  autoHideDuration={3000}
+                  onClose={() => {
+                    setSuccess(false);
+                    setResultado("");
+                  }}
+                >
+                  <Alert
+                    color={success ? "success" : "error"}
+                    severity={success ? "success" : "error"}
+                    variant="filled"
+                  >
+                    {resultado}
+                  </Alert>
+                </Snackbar>
+              )}
+            </Grid>
+          </Grid>
+      </Card>
       </Grid>
-      <Grid item xs={4}></Grid>
+      <Grid item xs={2}/>
+      </>
+
+      <>
+      <Grid item xs={2}/>
+      <Grid item xs={8} alignContent={"center"} alignItems={"center"}>
+      <Card variant="outlined">
+            <CardMedia
+              component="img"
+              height="140"
+              image="https://images.deliveryhero.io/image/pedidosya/home-backgrounds/home-background-ar.jpg?quality=100&width=1345" 
+            />
+          <Grid item className={classes.grid}>
+            <Typography align="center" variant="h4">
+              Cambio de Contraseña
+            </Typography>
+            <Typography align="center" variant="h6">
+              Para poder realizar el cambio de Contraseña, es necesario completar los siguientes campos:
+            </Typography>
+          </Grid>
+
+          <Grid item className={classes.grid}>
+          <TextField
+            className={classes.root}
+            label="Ingrese Contraseña Actual"
+            variant="outlined"
+            type="password"
+            onChange={(e) => setContraseñaActualChange(e.target.value)}
+            defaultValue={contraseñaActualChange}
+            value={contraseñaActualChange}
+          />
+          </Grid>
+
+          <Grid item className={classes.grid}>
+          <TextField
+            className={classes.root}
+            label="Ingrese Contraseña Nueva"
+            variant="outlined"
+            type="password"
+            onChange={(e) => setContraseñaNuevaChange(e.target.value)}
+            defaultValue={contraseñaNuevaChange}
+            value={contraseñaNuevaChange}
+          />
+          </Grid>
+
+          <Grid
+            container
+            className={classes.grid}
+            direction="column"
+            alignItems="center"
+          >
+            <Grid item>
+              <Button
+                disabled={isUploading}
+                variant="contained"
+                onClick={() => modificarClave()}
+                color="secondary"
+              >
+                Cambiar Contraseña de Perfil
+              </Button>
+            </Grid>
+
+            <Grid item className={classes.grid}>
+              {isUploading ? (
+                <CircularProgress />
+              ) : (
+                <Snackbar
+                  anchorOrigin={{ horizontal: "center", vertical: "top" }}
+                  open={!!resultado}
+                  autoHideDuration={3000}
+                  onClose={() => {
+                    setSuccess(false);
+                    setResultado("");
+                  }}
+                >
+                  <Alert
+                    color={success ? "success" : "error"}
+                    severity={success ? "success" : "error"}
+                    variant="filled"
+                  >
+                    {resultado}
+                  </Alert>
+                </Snackbar>
+              )}
+            </Grid>
+          </Grid>
+      </Card>
+      </Grid>
+      <Grid item xs={2}/>
+      </>
     </Grid>
   );
 };
