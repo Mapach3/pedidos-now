@@ -11,6 +11,12 @@ export interface Restaurante {
   isDelete: boolean;
 }
 
+export interface Direccion {
+  direccion: string;
+  latitud: number;
+  longitud: number;
+}
+
 export interface ItemPedidoOrder {
   producto: string;
   cantidad: number;
