@@ -31,7 +31,6 @@ const Register: React.FC = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    console.log({ nombre, apellido, email, contraseña, tipoUsuario, cuit });
     try {
       setIsSubmitting(true);
 

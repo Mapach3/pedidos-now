@@ -5,17 +5,18 @@ import { useEffect } from "react";
 import CardList from "../../components/List/list";
 import { Restaurante } from "../../models/models";
 import { useHistory, useParams } from "react-router";
+import { haversine_distance } from "../../helpers/distance-helper";
 
 const Restaurants: React.FC = () => {
   const [isLoadingRestaurantes, setIsLoadingRestaurantes] = useState(false);
   const [restaurantes, setRestaurantes] = useState<Restaurante[]>([]);
-  const params:any = useParams();
+  const params: any = useParams();
   const history = useHistory();
 
   const verMenu = (e: any, titulo: string) => {
     e.preventDefault();
     history.push(`/restaurantMenu/${titulo}`);
-  }; 
+  };
 
   useEffect(() => {
     const fetchRestaurants = async () => {
@@ -24,7 +25,22 @@ const Restaurants: React.FC = () => {
       const response = await FetchService.fetchRestaurantsByLocalidad(
         localidad as string
       );
-      setRestaurantes(response);
+      if (localStorage.getItem("PedidosNow.LatLng")) {
+        let userLatLng = JSON.parse(localStorage.getItem("PedidosNow.LatLng")!);
+
+        let restaurantesFiltradosPorDireccion = response.filter(
+          (rest) =>
+            haversine_distance(userLatLng, {
+              lat: rest.mapPoint!.lat,
+              lng: rest.mapPoint!.lng,
+            }) <= 2.5
+        );
+
+        setRestaurantes(restaurantesFiltradosPorDireccion);
+      } else {
+        setRestaurantes([]);
+      }
+
       setIsLoadingRestaurantes(false);
     };
     fetchRestaurants();

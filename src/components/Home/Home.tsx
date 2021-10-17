@@ -12,6 +12,7 @@ import usePlacesAutocomplete, {
 } from "use-places-autocomplete";
 import { Box, List, ListItem } from "@mui/material";
 import { Direccion } from "../../models/models";
+import { ClientRoutes } from "../../config/enums";
 
 interface HomeProps {}
 
@@ -27,8 +28,16 @@ const Home: React.FC<HomeProps> = () => {
     e.preventDefault();
     localStorage.setItem("PedidosNow.Address", value);
     localStorage.setItem("PedidosNow.LatLng", JSON.stringify(latLng));
+    //tomo el search que es la direccion, lo spliteo en comas y tomo el index 1 que es la localidad
+    let localidadFromFullAddress = search
+      .split(",")[1]
+      .trim()
+      .toUpperCase()
+      .replaceAll(" ", "_");
 
-    history.push(`/restaurants/${search}`);
+    history.push(
+      ClientRoutes.RESTAURANTS.replace(":location", localidadFromFullAddress)
+    );
   };
 
   const {
@@ -43,16 +52,16 @@ const Home: React.FC<HomeProps> = () => {
     },
   });
 
-  const handleSelect = (description: any) => async () => {
+  const handleSelect = (suggestion: any) => async () => {
     // When user selects a place, we can replace the keyword without request data from API
     // by setting the second parameter to "false"
-    setValue(description.description, false);
-    setSearch(description.description);
+    setValue(suggestion.description, false);
+    setSearch(suggestion.description);
     clearSuggestions();
 
     // Get latitude and longitude via utility functions
     try {
-      const results = await getGeocode({ address: description.description });
+      const results = await getGeocode({ address: suggestion.description });
       const latLng = await getLatLng(results[0]);
       setLatLng(latLng);
     } catch (error) {
@@ -165,8 +174,16 @@ const Home: React.FC<HomeProps> = () => {
                         lng: direccion.longitud,
                       })
                     );
-
-                    history.push(`/restaurants/${direccion.direccion}`);
+                    history.push(
+                      ClientRoutes.RESTAURANTS.replace(
+                        ":location",
+                        direccion.direccion
+                          .split(",")[1]
+                          .trim()
+                          .replaceAll(" ", "_")
+                          .toUpperCase()
+                      )
+                    );
                   }}
                 >
                   {direccion.direccion}
