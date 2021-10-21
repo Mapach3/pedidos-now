@@ -47,6 +47,10 @@ const Login: React.FC<{}> = () => {
       localStorage.setItem("PedidosNow.UserType", user.tipo);
       localStorage.setItem("PedidosNow.Nombre", user.nombre);
       localStorage.setItem("PedidosNow.Apellido", user.apellido);
+      localStorage.setItem(
+        "PedidosNow.Direcciones",
+        user.direcciones ? JSON.stringify(user.direcciones) : ""
+      );
       localStorage.setItem("PedidosNow.UserId", auth.currentUser?.uid || "");
 
       setOpen(true);

@@ -35,7 +35,6 @@ const PendingOrdersOfShipment: React.FC = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       const response = await FetchService.fetchOrdersPendingOfShipments();
-      console.log({ response });
       setItemPedido(response);
     };
     fetchOrders();

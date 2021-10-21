@@ -9,6 +9,13 @@ export interface Restaurante {
   precioEnvio: string;
   dueño: string;
   isDelete: boolean;
+  mapPoint?: MapPoint;
+}
+
+export interface Direccion {
+  direccion: string;
+  latitud: number;
+  longitud: number;
 }
 
 export interface ItemPedidoOrder {
@@ -47,4 +54,9 @@ export interface Order {
   estado: string;
   metodoPago: string;
   rechazado_restaurante: boolean;
+}
+
+export interface MapPoint {
+  lat: number;
+  lng: number;
 }

@@ -13,48 +13,70 @@ export class UsersService {
     return undefined;
   }
 
-  static async fetchUserById(id: string): Promise<User>{
-    const querySnapshot = await users.where("uid","==",id).get();
+  static async fetchUserById(id: string): Promise<User> {
+    const querySnapshot = await users.where("uid", "==", id).get();
     let docs: any[] = [];
-    let user: User 
+    let user: User;
     let docId: string = "";
     querySnapshot.forEach((doc) => {
       docId = doc.id;
-      if (doc.exists){
+      if (doc.exists) {
         user = doc.data() as User;
         user.docId = docId;
         docs.push(user);
-      } 
+      }
     });
-    return docs[0];  
+    return docs[0];
   }
 
-  static async updateUserToCollection(docId: string, nombre: string, apellido: string, cuit: string, email:string, updateEmail:boolean, emailActual:string,contraseñaActual:string) {
-    if(updateEmail){
-      let response = await auth.signInWithEmailAndPassword(emailActual,contraseñaActual);
+  static async updateUserToCollection(
+    docId: string,
+    nombre: string,
+    apellido: string,
+    cuit: string,
+    email: string,
+    updateEmail: boolean,
+    emailActual: string,
+    contraseñaActual: string
+  ) {
+    if (updateEmail) {
+      let response = await auth.signInWithEmailAndPassword(
+        emailActual,
+        contraseñaActual
+      );
       response.user?.updateEmail(email);
-      let user = response.user
+      let user = response.user;
       auth.updateCurrentUser(user);
     }
     await users.doc(docId).update({
       nombre: nombre,
       apellido: apellido,
       cuit: cuit,
-      email: email
-    })
+      email: email,
+    });
   }
 
-  static async changePasswordUser(emailActual:string, contraseñaActual:string, contraseñaNueva:string) {
-      let response = await auth.signInWithEmailAndPassword(emailActual,contraseñaActual);
-      response.user?.updatePassword(contraseñaNueva);
-      let user = response.user
-      auth.updateCurrentUser(user);
+  static async changePasswordUser(
+    emailActual: string,
+    contraseñaActual: string,
+    contraseñaNueva: string
+  ) {
+    let response = await auth.signInWithEmailAndPassword(
+      emailActual,
+      contraseñaActual
+    );
+    response.user?.updatePassword(contraseñaNueva);
+    let user = response.user;
+    auth.updateCurrentUser(user);
   }
 
-  static async deleteUser(emailActual:string, contraseñaActual:string) {
-    let response = await auth.signInWithEmailAndPassword(emailActual,contraseñaActual);
+  static async deleteUser(emailActual: string, contraseñaActual: string) {
+    let response = await auth.signInWithEmailAndPassword(
+      emailActual,
+      contraseñaActual
+    );
     response.user?.delete();
-}
+  }
 
   static async emailAlreadyExists(email: string) {
     const result = await UsersService.fetchUserByEmail(email);
@@ -72,5 +94,6 @@ export class UsersService {
     localStorage.removeItem("PedidosNow.Nombre");
     localStorage.removeItem("PedidosNow.Apellido");
     localStorage.removeItem("PedidosNow.UserId");
+    localStorage.removeItem("PedidosNow.Direcciones");
   }
 }
