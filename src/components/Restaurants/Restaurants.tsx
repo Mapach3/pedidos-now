@@ -5,26 +5,56 @@ import { useEffect } from "react";
 import CardList from "../../components/List/list";
 import { Restaurante } from "../../models/models";
 import { useHistory, useParams } from "react-router";
+import { haversine_distance } from "../../helpers/distance-helper";
 
 const Restaurants: React.FC = () => {
   const [isLoadingRestaurantes, setIsLoadingRestaurantes] = useState(false);
   const [restaurantes, setRestaurantes] = useState<Restaurante[]>([]);
-  const params:any = useParams();
+  const params: any = useParams();
   const history = useHistory();
 
   const verMenu = (e: any, titulo: string) => {
     e.preventDefault();
     history.push(`/restaurantMenu/${titulo}`);
-  }; 
+  };
+
+  const searchByName = async (name: string) => {
+    setIsLoadingRestaurantes(true);
+    const allRestaurants = await getAllRestaurants();
+    const filteredRestaurants = allRestaurants.filter(restaurant => restaurant.titulo.toLowerCase().includes(name.toLowerCase()));
+    setRestaurantes(filteredRestaurants);
+    setIsLoadingRestaurantes(false);
+  }
+
+  const getAllRestaurants = async () => {
+    let localidad = params.location;
+      const response = await FetchService.fetchRestaurantsByLocalidad(
+        localidad as string
+      );
+      return response;
+  }
 
   useEffect(() => {
     const fetchRestaurants = async () => {
       setIsLoadingRestaurantes(true);
-      let localidad = params.location;
-      const response = await FetchService.fetchRestaurantsByLocalidad(
-        localidad as string
-      );
+      const response = await getAllRestaurants();
       setRestaurantes(response);
+      if (localStorage.getItem("PedidosNow.LatLng")) {
+        let userLatLng = JSON.parse(localStorage.getItem("PedidosNow.LatLng")!);
+
+        let restaurantesFiltradosPorDireccion = response.filter(
+          (rest) =>
+            haversine_distance(userLatLng, {
+              lat: rest.mapPoint!.lat,
+              lng: rest.mapPoint!.lng,
+            }) <= 2.5
+        );
+
+        setRestaurantes(restaurantesFiltradosPorDireccion);
+      } else {
+        setRestaurantes([]);
+      }
+
       setIsLoadingRestaurantes(false);
     };
     fetchRestaurants();
@@ -39,6 +69,7 @@ const Restaurants: React.FC = () => {
           id="outlined-basic"
           label="Buscar..."
           variant="outlined"
+          onChange={(event) => {searchByName(event.target.value)}}
         />
         {isLoadingRestaurantes ? (
           <CircularProgress />

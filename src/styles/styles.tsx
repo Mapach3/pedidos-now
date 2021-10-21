@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   homeContainer: {
-    height: "87.5vh",
+    height: "89vh",
     backgroundImage:
       "url(https://images.deliveryhero.io/image/pedidosya/home-backgrounds/home-background-ar.jpg?quality=100&width=1345)",
     backgroundRepeat: "no-repeat",
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   homeSearch: {
     margin: "auto",
     width: "45%",
-    paddingTop: "20rem",
+    paddingTop: "19.5rem",
   },
 
   loginButton: {
@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   label: {
-    paddingBottom: "0.4rem"
+    paddingBottom: "0.4rem",
   },
 }));
 

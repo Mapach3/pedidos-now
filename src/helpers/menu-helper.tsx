@@ -43,8 +43,6 @@ export const getMenu = () => {
     },
   ];
 
-
-
   if (typeof window !== "undefined") {
     const userTypeAux = localStorage.getItem("PedidosNow.UserType");
 
@@ -52,10 +50,10 @@ export const getMenu = () => {
       ? userTypeAux === "CLIENTE"
         ? loggedInMenu
         : userTypeAux === "COMERCIANTE"
-            ? comercianteMenu
-            : userTypeAux === "REPARTIDOR"
-               ? repartidorMenu
-               : notLoggedMenu
+        ? comercianteMenu
+        : userTypeAux === "REPARTIDOR"
+        ? repartidorMenu
+        : notLoggedMenu
       : notLoggedMenu;
   }
 

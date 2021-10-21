@@ -31,12 +31,11 @@ const ClientOrders: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [openCard, setOpenCard] = useState(false);
   const [selectedPedidoDetail, setSelectedPedidoDetail] = useState<any>();
-  
+
   useEffect(() => {
     const fetchOrders = async () => {
       const response = await FetchService.fetchClientOrders();
-      console.log({ response });
-      setItemPedido(response);     
+      setItemPedido(response);
     };
     fetchOrders();
   }, []);
@@ -93,24 +92,22 @@ const ClientOrders: React.FC = () => {
                 <TableCell align="center">{row.estado}</TableCell>
                 <TableCell align="center">{row.metodoPago}</TableCell>
                 <TableCell align="center">${row.total}</TableCell>
-                <TableCell align="center">   
-                        {        
-                          <Button
-                            disabled={isSubmitting}
-                            color="secondary"
-                            style={{
-                              marginLeft: "1rem",
-                              paddingTop: "1rem",
-                              paddingBottom: "1rem",
-                            }}
-                            variant="contained"
-                            onClick={
-                              () => verDetallePedido(row.items)
-                            }
-                          >
-                            Ver Detalle
-                          </Button>    
-                        }            
+                <TableCell align="center">
+                  {
+                    <Button
+                      disabled={isSubmitting}
+                      color="secondary"
+                      style={{
+                        marginLeft: "1rem",
+                        paddingTop: "1rem",
+                        paddingBottom: "1rem",
+                      }}
+                      variant="contained"
+                      onClick={() => verDetallePedido(row.items)}
+                    >
+                      Ver Detalle
+                    </Button>
+                  }
                 </TableCell>
               </TableRow>
             ))}
@@ -119,12 +116,12 @@ const ClientOrders: React.FC = () => {
       </TableContainer>
 
       {selectedPedidoDetail && (
-       <ItemCard
-        open= {openCard} 
-        handleClose={()=>setOpenCard(false)}
-        pedidoDetail={selectedPedidoDetail}
-       />
-       )}
+        <ItemCard
+          open={openCard}
+          handleClose={() => setOpenCard(false)}
+          pedidoDetail={selectedPedidoDetail}
+        />
+      )}
 
       <Dialog
         fullWidth

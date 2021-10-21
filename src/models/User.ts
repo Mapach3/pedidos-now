@@ -1,3 +1,5 @@
+import { Direccion } from "./models";
+
 export interface User {
   nombre: string;
   apellido: string;
@@ -6,4 +8,5 @@ export interface User {
   cuit?: string;
   uid: string;
   docId?: string;
+  direcciones?: Direccion[];
 }

@@ -70,21 +70,19 @@ const RestaurantCreate: React.FC = () => {
           menu: [],
           localidad,
           dueño: localStorage.getItem("PedidosNow.UserId") || "",
-          isDelete: false
+          isDelete: false,
         };
 
         // Firestore
         await firestore.collection("restaurants").doc().set(entity);
 
-        console.log("Restaurante dado de alta con éxito");
         setResultado("Restaurante dado de alta con éxito");
         setSuccess(true);
-      }else{
+      } else {
         setResultado("Faltan campos por completar");
         setSuccess(false);
       }
     } catch (error) {
-      console.log("Error al dar de alta el restaurante");
       setResultado("ERROR: No se pudo dar de alta el nuevo restaurante");
     } finally {
       setIsUploading(false);
