@@ -17,13 +17,26 @@ const Restaurants: React.FC = () => {
     history.push(`/restaurantMenu/${titulo}`);
   }; 
 
-  useEffect(() => {
-    const fetchRestaurants = async () => {
-      setIsLoadingRestaurantes(true);
-      let localidad = params.location;
+  const searchByName = async (name: string) => {
+    setIsLoadingRestaurantes(true);
+    const allRestaurants = await getAllRestaurants();
+    const filteredRestaurants = allRestaurants.filter(restaurant => restaurant.titulo.toLowerCase().includes(name.toLowerCase()));
+    setRestaurantes(filteredRestaurants);
+    setIsLoadingRestaurantes(false);
+  }
+
+  const getAllRestaurants = async () => {
+    let localidad = params.location;
       const response = await FetchService.fetchRestaurantsByLocalidad(
         localidad as string
       );
+      return response;
+  }
+
+  useEffect(() => {
+    const fetchRestaurants = async () => {
+      setIsLoadingRestaurantes(true);
+      const response = await getAllRestaurants();
       setRestaurantes(response);
       setIsLoadingRestaurantes(false);
     };
@@ -39,6 +52,7 @@ const Restaurants: React.FC = () => {
           id="outlined-basic"
           label="Buscar..."
           variant="outlined"
+          onChange={(event) => {searchByName(event.target.value)}}
         />
         {isLoadingRestaurantes ? (
           <CircularProgress />
