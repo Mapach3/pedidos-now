@@ -16,14 +16,28 @@ const RestaurantMenu: React.FC = () => {
   const itemsPedido = useSelector((state: any) => state.infoPedido);
   const dispatch = useDispatch();
 
+  const searchByName = async (name: string) => {
+    setIsLoadingMenu(true);
+    const allMenu = await getMenu();
+    const filteredItems = allMenu.filter(menuItem => menuItem.titulo.toLowerCase().includes(name.toLowerCase()));
+    setProductos(filteredItems);
+    setIsLoadingMenu(false);
+  }
+
+  const getMenu = async () => {
+    const response = await FetchService.fetchRestaurantByTitulo(
+      params.titulo as string
+    );
+    console.log({ response });
+    return response.menu;
+  }
+
   useEffect(() => {
     dispatch(clearPedido());
     const fetchProductos = async () => {
       setIsLoadingMenu(true);
-      const response = await FetchService.fetchRestaurantByTitulo(
-        params.titulo as string
-      );
-      setProductos(response.menu);
+      const menu = await getMenu();
+      setProductos(menu);
       setIsLoadingMenu(false);
     };
     fetchProductos();
@@ -38,6 +52,7 @@ const RestaurantMenu: React.FC = () => {
           id="outlined-basic"
           label="Buscar productos..."
           variant="outlined"
+          onChange={(event) => {searchByName(event.target.value)}}
         />
         {isLoadingMenu ? (
           <CircularProgress />
