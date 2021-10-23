@@ -21,18 +21,29 @@ const Restaurants: React.FC = () => {
   const searchByName = async (name: string) => {
     setIsLoadingRestaurantes(true);
     const allRestaurants = await getAllRestaurants();
-    const filteredRestaurants = allRestaurants.filter(restaurant => restaurant.titulo.toLowerCase().includes(name.toLowerCase()));
+    let userLatLng = JSON.parse(localStorage.getItem("PedidosNow.LatLng")!);
+    const filteredRestaurants = allRestaurants
+      .filter((restaurant) =>
+        restaurant.titulo.toLowerCase().includes(name.toLowerCase())
+      )
+      .filter(
+        (rest) =>
+          haversine_distance(userLatLng, {
+            lat: rest.mapPoint!.lat,
+            lng: rest.mapPoint!.lng,
+          }) <= 2.5
+      );
     setRestaurantes(filteredRestaurants);
     setIsLoadingRestaurantes(false);
-  }
+  };
 
   const getAllRestaurants = async () => {
     let localidad = params.location;
-      const response = await FetchService.fetchRestaurantsByLocalidad(
-        localidad as string
-      );
-      return response;
-  }
+    const response = await FetchService.fetchRestaurantsByLocalidad(
+      localidad as string
+    );
+    return response;
+  };
 
   useEffect(() => {
     const fetchRestaurants = async () => {
@@ -69,7 +80,9 @@ const Restaurants: React.FC = () => {
           id="outlined-basic"
           label="Buscar..."
           variant="outlined"
-          onChange={(event) => {searchByName(event.target.value)}}
+          onChange={(event) => {
+            searchByName(event.target.value);
+          }}
         />
         {isLoadingRestaurantes ? (
           <CircularProgress />

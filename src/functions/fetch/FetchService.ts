@@ -74,7 +74,7 @@ class FetchService {
 
   public static async fetchOrdersPendingOfShipments(): Promise<Order[]> {
     const querySnapshot = await db
-      .collection("orders") //POR AHORA TRAE DE TODOS - VER RELACION DE REPARTIDORES CON RESTAURANTES
+      .collection("orders")
       .where("rechazado_restaurante", "==", false)
       .where("estado", "in", [EstadoPedido.EN_CAMINO, EstadoPedido.PREPARANDO])
       .get();
@@ -91,10 +91,10 @@ class FetchService {
     return docs;
   }
 
-    public static async fetchClientOrders(): Promise<Order[]> {
+  public static async fetchClientOrders(): Promise<Order[]> {
     const querySnapshot = await db
-      .collection("orders") 
-      .where("user_id", "==", localStorage.getItem("PedidosNow.UserId"),)
+      .collection("orders")
+      .where("user_id", "==", localStorage.getItem("PedidosNow.UserId"))
       .get();
     let docs: any[] = [];
     let docId: string = "";
