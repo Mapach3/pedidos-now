@@ -11,6 +11,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   agregarACarrito,
+  agregarDireccion,
   agregarNombre,
 } from "../../redux/actions/pedidoAction";
 
@@ -25,12 +26,20 @@ const useStyles = makeStyles((theme) => ({
 
 export const ModalCarrito = (props: any) => {
   const [cantidad, setCantidad] = useState("1");
-  const { handleClose, open, producto, precio, nombreSucursal } = props;
+  const {
+    handleClose,
+    open,
+    producto,
+    precio,
+    nombreSucursal,
+    direccionSucursal,
+  } = props;
   const dispath = useDispatch();
   const classes = useStyles();
   const itemsPedido = useSelector((state: any) => state.infoPedido);
 
   const agregarCarrito = () => {
+    debugger;
     dispath(
       agregarACarrito({
         producto: producto,
@@ -40,6 +49,7 @@ export const ModalCarrito = (props: any) => {
       })
     );
     dispath(agregarNombre(nombreSucursal));
+    dispath(agregarDireccion(direccionSucursal));
     handleClose();
   };
 

@@ -1,7 +1,7 @@
 import { CircularProgress, Grid, TextField } from "@material-ui/core";
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { Producto } from "../../models/models";
+import { Producto, Restaurante } from "../../models/models";
 import { useParams } from "react-router";
 import FetchService from "../../functions/fetch/FetchService";
 import CardList from "../List/list";
@@ -15,6 +15,8 @@ const RestaurantMenu: React.FC = () => {
   const [isLoadingMenu, setIsLoadingMenu] = useState(false);
   const itemsPedido = useSelector((state: any) => state.infoPedido);
   const dispatch = useDispatch();
+
+  const [fetchedRestaurant, setFetchedRestaurant] = useState<Restaurante>();
 
   const searchByName = async (name: string) => {
     setIsLoadingMenu(true);
@@ -31,6 +33,7 @@ const RestaurantMenu: React.FC = () => {
       params.titulo as string
     );
     console.log({ response });
+    setFetchedRestaurant(response);
     return response.menu;
   };
 
@@ -46,7 +49,7 @@ const RestaurantMenu: React.FC = () => {
   }, [params.titulo, dispatch]);
 
   return (
-    <Grid container style={{ padding: "1rem 1rem 10rem 1rem" }}>
+    <Grid container style={{ padding: "1rem 1rem 3rem 1rem" }}>
       <Grid item xs={3}></Grid>
       <Grid item style={{ textAlign: "center" }} xs={6}>
         <TextField
@@ -61,7 +64,11 @@ const RestaurantMenu: React.FC = () => {
         {isLoadingMenu ? (
           <CircularProgress />
         ) : (
-          <CardList lista={productos} nombreSucursal={params.titulo} />
+          <CardList
+            lista={productos}
+            nombreSucursal={params.titulo}
+            direccionSucursal={fetchedRestaurant?.direccion.split(",")[0]}
+          />
         )}
       </Grid>
 

@@ -56,8 +56,12 @@ const Wizard: React.FC = () => {
   const steps = getSteps();
 
   //Direccion State
-  const [calle, setCalle] = useState("");
-  const [ciudad, setCiudad] = useState(Locations.LOMAS_DE_ZAMORA as string);
+  const [calle, setCalle] = useState(
+    localStorage.getItem("PedidosNow.Address")!.split(",")[0]
+  );
+  const [ciudad, setCiudad] = useState(
+    localStorage.getItem("PedidosNow.Address")!.split(",")[1].trim()
+  );
   const [telefono, setTelefono] = useState("");
   const itemsPedido = useSelector((state: any) => state.infoPedido);
 
@@ -86,7 +90,7 @@ const Wizard: React.FC = () => {
   };
 
   const cancelPedido = () => {
-    setActiveStep(0);  
+    setActiveStep(0);
     dispath(clearPedido());
     history.push(ClientRoutes.HOME);
   };
@@ -100,6 +104,7 @@ const Wizard: React.FC = () => {
   const history = useHistory();
 
   const processOrder = async () => {
+    debugger;
     const order: Order = {
       items: itemsPedido.infoPedido,
       total: calcularSubtotal(),
@@ -107,7 +112,8 @@ const Wizard: React.FC = () => {
       nombre_restaurante: itemsPedido.nombreRestaurante,
       localidad: ciudad,
       telefono: telefono,
-      direccion: calle,
+      direccion_entrega: calle,
+      direccion_restaurante: itemsPedido.direccionRestaurante,
       estado: EstadoPedido.ESPERANDO,
       rechazado_restaurante: false,
       metodoPago: metodoPago,
@@ -144,10 +150,6 @@ const Wizard: React.FC = () => {
       case 0:
         return (
           <AddressForm
-            calle={calle}
-            setCalle={(value: string) => setCalle(value)}
-            ciudad={ciudad}
-            setCiudad={(value: string) => setCiudad(value)}
             telefono={telefono}
             setTelefono={(value: string) => setTelefono(value)}
           />
@@ -188,7 +190,7 @@ const Wizard: React.FC = () => {
             <TextField
               label="Localidad"
               variant="outlined"
-              value={LocationsEnumLabels[ciudad as Locations]}
+              value={ciudad}
               InputProps={{ readOnly: true }}
               style={{ width: "100%", marginTop: "1rem" }}
             />
@@ -262,7 +264,11 @@ const Wizard: React.FC = () => {
                   <Typography className={classes.instructions}>
                     {getStepContent(activeStep)}
                   </Typography>
-                  <Grid style={{ marginBottom: "10rem" }} container justifyContent="space-between">
+                  <Grid
+                    style={{ marginBottom: "10rem" }}
+                    container
+                    justifyContent="space-between"
+                  >
                     <Button
                       variant="contained"
                       color="secondary"
@@ -280,8 +286,7 @@ const Wizard: React.FC = () => {
                     </Button>
                     <Button
                       disabled={
-                        (activeStep === 0 &&
-                          (!calle.length || !telefono.length)) ||
+                        (activeStep === 0 && !telefono.length) ||
                         (activeStep === 1 && !metodoPago.length)
                       }
                       variant="contained"

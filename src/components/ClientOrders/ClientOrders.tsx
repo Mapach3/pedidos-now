@@ -72,7 +72,7 @@ const ClientOrders: React.FC = () => {
               <TableCell align="center">Nombre Restaurante</TableCell>
               <TableCell align="center">Telefono</TableCell>
               <TableCell align="center">Localidad</TableCell>
-              <TableCell align="center">Direccion</TableCell>
+              <TableCell align="center">Direccion de Entrega</TableCell>
               <TableCell align="center">Estado</TableCell>
               <TableCell align="center">Metodo de Pago</TableCell>
               <TableCell align="center">Total</TableCell>
@@ -88,7 +88,7 @@ const ClientOrders: React.FC = () => {
                 </TableCell>
                 <TableCell align="center">{row.telefono}</TableCell>
                 <TableCell align="center">{row.localidad}</TableCell>
-                <TableCell align="center">{row.direccion}</TableCell>
+                <TableCell align="center">{row.direccion_entrega}</TableCell>
                 <TableCell align="center">{row.estado}</TableCell>
                 <TableCell align="center">{row.metodoPago}</TableCell>
                 <TableCell align="center">${row.total}</TableCell>

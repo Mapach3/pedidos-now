@@ -10,10 +10,16 @@ const useStyles = makeStyles((theme) => ({
 interface CardListProps {
   lista: any[];
   verMenu?: any;
-  nombreSucursal?:string;
+  nombreSucursal?: string;
+  direccionSucursal?: string;
 }
 
-const CardList: React.FC<CardListProps> = ({ lista, verMenu,nombreSucursal }) => {
+const CardList: React.FC<CardListProps> = ({
+  lista,
+  verMenu,
+  nombreSucursal,
+  direccionSucursal,
+}) => {
   const classes = useStyles();
 
   return (
@@ -28,6 +34,7 @@ const CardList: React.FC<CardListProps> = ({ lista, verMenu,nombreSucursal }) =>
             descripcion={rest.descripcion}
             precio={rest.precio}
             nombreSucursal={nombreSucursal}
+            direccionSucursal={direccionSucursal}
           />
         ))
       ) : (

@@ -3,9 +3,11 @@ import { GlobalState } from "../types";
 let initialState: GlobalState = {
   infoPedido: [],
   nombreRestaurante: "",
+  direccionRestaurante: "",
 };
 
 function reducer(store = initialState, action: any) {
+  debugger;
   switch (action.type) {
     case "agregarCarrito":
       if (!action.payload) {
@@ -17,6 +19,12 @@ function reducer(store = initialState, action: any) {
         return null;
       }
       return { ...store, nombreRestaurante: action.payload };
+
+    case "agregarDireccionSucursal":
+      if (!action.payload) {
+        return null;
+      }
+      return { ...store, direccionRestaurante: action.payload };
 
     case "eliminarItemDeCarrito":
       if (!action.payload) {
@@ -33,6 +41,7 @@ function reducer(store = initialState, action: any) {
         ...store,
         infoPedido: [],
         nombreRestaurante: "",
+        direccionRestaurante: "",
       };
     default:
       return store;

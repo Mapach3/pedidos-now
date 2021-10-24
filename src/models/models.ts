@@ -51,7 +51,8 @@ export interface Order {
   nombre_restaurante: string;
   telefono: string;
   localidad: string;
-  direccion: string;
+  direccion_restaurante: string;
+  direccion_entrega: string;
   estado: string;
   metodoPago: string;
   rechazado_restaurante: boolean;

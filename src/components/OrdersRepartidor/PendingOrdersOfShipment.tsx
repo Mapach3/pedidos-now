@@ -86,9 +86,10 @@ const PendingOrdersOfShipment: React.FC = () => {
           <TableHead>
             <TableRow>
               <TableCell align="center">Nombre Restaurante</TableCell>
+              <TableCell align="center">Direccion Restaurante</TableCell>
               <TableCell align="center">Telefono</TableCell>
               <TableCell align="center">Localidad</TableCell>
-              <TableCell align="center">Direccion</TableCell>
+              <TableCell align="center">Direccion Entrega</TableCell>
               <TableCell align="center">Estado</TableCell>
               <TableCell align="center">Metodo de Pago</TableCell>
               <TableCell align="center">Total</TableCell>
@@ -105,9 +106,12 @@ const PendingOrdersOfShipment: React.FC = () => {
                 <TableCell component="th" scope="row">
                   {row.nombre_restaurante}
                 </TableCell>
+                <TableCell align="center">
+                  {row.direccion_restaurante}
+                </TableCell>
                 <TableCell align="center">{row.telefono}</TableCell>
                 <TableCell align="center">{row.localidad}</TableCell>
-                <TableCell align="center">{row.direccion}</TableCell>
+                <TableCell align="center">{row.direccion_entrega}</TableCell>
                 <TableCell align="center">{row.estado}</TableCell>
                 <TableCell align="center">{row.metodoPago}</TableCell>
                 <TableCell align="center">${row.total}</TableCell>

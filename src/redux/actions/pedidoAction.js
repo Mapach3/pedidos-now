@@ -17,6 +17,10 @@ export const agregarNombre = (nombre) => dispach => {
         payload:nombre
     })
  }
+
+ export const agregarDireccion = (direccion) => dispach => {
+     dispach({type: 'agregarDireccionSucursal', payload: direccion})
+ }
  
 export const clearPedido = () => dispach => {
     dispach({

@@ -47,6 +47,7 @@ interface props {
   verMenu?: any;
   precio: number;
   nombreSucursal?: string;
+  direccionSucursal?: string;
 }
 
 export default function ItemCard({
@@ -56,6 +57,7 @@ export default function ItemCard({
   verMenu,
   precio,
   nombreSucursal,
+  direccionSucursal,
 }: props) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
@@ -72,6 +74,7 @@ export default function ItemCard({
         precio={precio}
         handleClose={() => setOpen(false)}
         nombreSucursal={nombreSucursal}
+        direccionSucursal={direccionSucursal}
         open={open}
       />
       <Card

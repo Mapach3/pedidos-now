@@ -8,4 +8,5 @@ export interface InfoPedidoItem {
 export interface GlobalState {
   infoPedido: InfoPedidoItem[];
   nombreRestaurante: string;
+  direccionRestaurante: string;
 }
