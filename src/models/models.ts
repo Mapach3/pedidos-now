@@ -5,11 +5,12 @@ export interface Restaurante {
   url: string;
   titulo: string;
   localidad: string;
+  direccion: string;
   menu: Producto[];
   precioEnvio: string;
   dueño: string;
   isDelete: boolean;
-  mapPoint?: MapPoint;
+  mapPoint: MapPoint;
 }
 
 export interface Direccion {
