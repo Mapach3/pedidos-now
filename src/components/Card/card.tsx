@@ -46,7 +46,7 @@ interface props {
   descripcion: string;
   verMenu?: any;
   precio: number;
-  nombreSucursal?:string;
+  nombreSucursal?: string;
 }
 
 export default function ItemCard({
@@ -55,45 +55,52 @@ export default function ItemCard({
   descripcion,
   verMenu,
   precio,
-  nombreSucursal
+  nombreSucursal,
 }: props) {
   const classes = useStyles();
-  const [open, setOpen] = useState(false); 
+  const [open, setOpen] = useState(false);
 
-
-  const openModalSeleccion =  () => {
+  const openModalSeleccion = () => {
     setOpen(true);
-  }
+  };
 
   return (
     <div>
-      <ModalCarrito key={url} producto={titulo} precio={precio} handleClose={()=>setOpen(false)} nombreSucursal={nombreSucursal}  open={open}/>
-    <Card
-      onClick={
-        verMenu
-          ? (e) => {
-              verMenu(e, titulo);
-            }
-          : openModalSeleccion
-      }
-      className={classes.root}
-      variant="outlined"
-    >
-      <Grid container direction="row" alignItems="center">
-        <Grid container item xs={4} justify="flex-start">
-          <img className={classes.media} src={url} alt="No hay foto" />
-        </Grid>
+      <ModalCarrito
+        key={url}
+        producto={titulo}
+        precio={precio}
+        handleClose={() => setOpen(false)}
+        nombreSucursal={nombreSucursal}
+        open={open}
+      />
+      <Card
+        onClick={
+          verMenu
+            ? (e) => {
+                verMenu(e, titulo);
+              }
+            : localStorage.getItem("PedidosNow.JWT")
+            ? openModalSeleccion
+            : () => {}
+        }
+        className={classes.root}
+        variant="outlined"
+      >
+        <Grid container direction="row" alignItems="center">
+          <Grid container item xs={4} justify="flex-start">
+            <img className={classes.media} src={url} alt="No hay foto" />
+          </Grid>
 
-        <Grid container item xs={6} justify="center">
-          <CardContent className={classes.contend}>
-            <Typography style={{ fontWeight: "bold" }}>{titulo}</Typography>
-            <Typography>{descripcion}</Typography>
-            {precio && <Typography>Precio: ${precio}</Typography>}
-          </CardContent>
+          <Grid container item xs={6} justify="center">
+            <CardContent className={classes.contend}>
+              <Typography style={{ fontWeight: "bold" }}>{titulo}</Typography>
+              <Typography>{descripcion}</Typography>
+              {precio && <Typography>Precio: ${precio}</Typography>}
+            </CardContent>
+          </Grid>
         </Grid>
-      </Grid>
-    </Card>
+      </Card>
     </div>
-
   );
 }

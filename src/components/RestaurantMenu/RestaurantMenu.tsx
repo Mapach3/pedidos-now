@@ -19,10 +19,12 @@ const RestaurantMenu: React.FC = () => {
   const searchByName = async (name: string) => {
     setIsLoadingMenu(true);
     const allMenu = await getMenu();
-    const filteredItems = allMenu.filter(menuItem => menuItem.titulo.toLowerCase().includes(name.toLowerCase()));
+    const filteredItems = allMenu.filter((menuItem) =>
+      menuItem.titulo.toLowerCase().includes(name.toLowerCase())
+    );
     setProductos(filteredItems);
     setIsLoadingMenu(false);
-  }
+  };
 
   const getMenu = async () => {
     const response = await FetchService.fetchRestaurantByTitulo(
@@ -30,7 +32,7 @@ const RestaurantMenu: React.FC = () => {
     );
     console.log({ response });
     return response.menu;
-  }
+  };
 
   useEffect(() => {
     dispatch(clearPedido());
@@ -52,7 +54,9 @@ const RestaurantMenu: React.FC = () => {
           id="outlined-basic"
           label="Buscar productos..."
           variant="outlined"
-          onChange={(event) => {searchByName(event.target.value)}}
+          onChange={(event) => {
+            searchByName(event.target.value);
+          }}
         />
         {isLoadingMenu ? (
           <CircularProgress />
@@ -60,10 +64,16 @@ const RestaurantMenu: React.FC = () => {
           <CardList lista={productos} nombreSucursal={params.titulo} />
         )}
       </Grid>
+
       <Grid item xs={3}>
-        <Pedido
-          pedido={{ items: itemsPedido.infoPedido, restaurante: params.titulo }}
-        />
+        {!!localStorage.getItem("PedidosNow.JWT") && (
+          <Pedido
+            pedido={{
+              items: itemsPedido.infoPedido,
+              restaurante: params.titulo,
+            }}
+          />
+        )}
       </Grid>
     </Grid>
   );
