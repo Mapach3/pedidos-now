@@ -18,13 +18,14 @@ const Restaurants: React.FC = () => {
     history.push(`/restaurantMenu/${titulo}`);
   };
 
-  const searchByName = async (name: string) => {
+  const searchByNameOrCategory = async (name: string) => {
     setIsLoadingRestaurantes(true);
     const allRestaurants = await getAllRestaurants();
     let userLatLng = JSON.parse(localStorage.getItem("PedidosNow.LatLng")!);
     const filteredRestaurants = allRestaurants
       .filter((restaurant) =>
-        restaurant.titulo.toLowerCase().includes(name.toLowerCase())
+        restaurant.titulo.toLowerCase().includes(name.toLowerCase()) || 
+        restaurant.categoria?.toLowerCase().includes(name.toLowerCase())
       )
       .filter(
         (rest) =>
@@ -81,7 +82,7 @@ const Restaurants: React.FC = () => {
           label="Buscar..."
           variant="outlined"
           onChange={(event) => {
-            searchByName(event.target.value);
+            searchByNameOrCategory(event.target.value);
           }}
         />
         {isLoadingRestaurantes ? (

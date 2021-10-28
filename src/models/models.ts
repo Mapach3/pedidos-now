@@ -11,6 +11,7 @@ export interface Restaurante {
   dueño: string;
   isDelete: boolean;
   mapPoint: MapPoint;
+  categoria:string;
 }
 
 export interface Direccion {
