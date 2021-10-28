@@ -31,7 +31,7 @@ const RestaurantCreate: React.FC = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [resultado, setResultado] = useState("");
-
+  const [categoria, setCategoria] = useState("");
   // Data de formulario de entrada para restaurante
   const [titulo, setTitulo] = useState("");
   const [descripcion, setDescripcion] = useState("");
@@ -39,9 +39,9 @@ const RestaurantCreate: React.FC = () => {
   const [direccion, setDireccion] = useState("");
   const [precioEnvio, setPrecioEnvio] = useState("");
   const [productos, setProductos] = useState([]);
-
+  const [categorias, setCategorias] = useState<String[]>(["Comida rapida","Gourmet","Familiar","Para llevar","Buffet"]);
   const [latLng, setLatLng] = useState<LatLon>({ lat: 0, lng: 0 });
-
+  //setCategorias(["Comida rapida","Gourmet"])
   const onFileChange = (e: any) => {
     const reader = new FileReader();
     let file = e.target.files[0];
@@ -55,7 +55,7 @@ const RestaurantCreate: React.FC = () => {
     debugger;
     setIsUploading(true);
     try {
-      if (titulo && descripcion && precioEnvio && imagen && direccion) {
+      if (titulo && descripcion && precioEnvio && imagen && direccion && categoria) {
         const restaurant = await RestaurantsService.getRestaurantByName(titulo);
         if (restaurant) {
           setResultado("ERROR: Restaurante duplicado.");
@@ -83,6 +83,7 @@ const RestaurantCreate: React.FC = () => {
           direccion,
           dueño: localStorage.getItem("PedidosNow.UserId") || "",
           isDelete: false,
+          categoria : categoria.toLowerCase()
         };
 
         // Firestore
@@ -173,6 +174,27 @@ const RestaurantCreate: React.FC = () => {
             variant="outlined"
             onChange={(e) => setTitulo(e.target.value)}
           />
+        </Grid>
+        <Grid item className={classes.grid}>
+          <InputLabel className={classes.label}>Categoria</InputLabel>
+           <Select
+            label="Categoria"
+            className={classes.root}
+            onChange={(event: React.ChangeEvent<any>) =>
+              setCategoria(event.target.value)
+            }
+            required
+            variant="outlined"
+            value={categoria}
+          
+          >
+            {
+            categorias.map((item) => (
+              <MenuItem key={item.toString()} value={item.toString()}>
+                {item}
+              </MenuItem>
+            ))}
+          </Select> 
         </Grid>
 
         <Grid item className={classes.grid}>
