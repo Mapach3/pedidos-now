@@ -18,11 +18,13 @@ const RestaurantMenu: React.FC = () => {
 
   const [fetchedRestaurant, setFetchedRestaurant] = useState<Restaurante>();
 
-  const searchByName = async (name: string) => {
+  const searchByNameOrCategory = async (name: string) => {
     setIsLoadingMenu(true);
     const allMenu = await getMenu();
     const filteredItems = allMenu.filter((menuItem) =>
-      menuItem.titulo.toLowerCase().includes(name.toLowerCase())
+      menuItem.titulo.toLowerCase().includes(name.toLowerCase()) || 
+        menuItem.categoria?.toLowerCase().includes(name.toLowerCase())
+
     );
     setProductos(filteredItems);
     setIsLoadingMenu(false);
@@ -58,7 +60,7 @@ const RestaurantMenu: React.FC = () => {
           label="Buscar productos..."
           variant="outlined"
           onChange={(event) => {
-            searchByName(event.target.value);
+            searchByNameOrCategory(event.target.value);
           }}
         />
         {isLoadingMenu ? (

@@ -42,6 +42,7 @@ export interface Producto {
   url: string;
   titulo: string;
   precio: string;
+  categoria:string;
 }
 
 export interface Order {
