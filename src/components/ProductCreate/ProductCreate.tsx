@@ -32,8 +32,10 @@ const ProductCreate: React.FC = () => {
   const [descripcion, setDescripcion] = useState("");
   const [imagen, setImagen] = useState(null);
   const [precio, setPrecio] = useState("");
+  const [categoria, setCategoria] = useState("");
   const [restaurantes, setRestaurantes] = useState<Restaurante[]>([]);
   const [restauranteDelProducto, setRestauranteDelProducto] = useState("");
+  const [categorias, setCategorias] = useState<String[]>(["minutas","pastas","postres","acompañamientos","bebidas"]);
 
   const onFileChange = (e: any) => {
     const reader = new FileReader();
@@ -65,7 +67,7 @@ const ProductCreate: React.FC = () => {
   const createProduct = async () => {
     setIsUploading(true);
     try {
-      if (titulo && descripcion && precio && imagen && restauranteDelProducto) {
+      if (titulo && descripcion && precio && imagen && restauranteDelProducto && categoria) {
         let restaurant: Restaurante 
         restaurant = await RestaurantsService.getRestaurantByName(restauranteDelProducto);
         
@@ -81,6 +83,7 @@ const ProductCreate: React.FC = () => {
             descripcion: descripcion,
             precio: precio,
             titulo: titulo,
+            categoria: categoria,
             url: url
           }
           menu.push(producto)
@@ -147,7 +150,27 @@ const ProductCreate: React.FC = () => {
             }}
           />
         </Grid>
+      <Grid item className={classes.grid}>
+          <InputLabel className={classes.label}>Categoria</InputLabel>
+           <Select
+            label="Categoria"
+            className={classes.root}
+            onChange={(event: React.ChangeEvent<any>) =>
+              setCategoria(event.target.value)
+            }
+            required
+            variant="outlined"
+            value={categoria}
 
+          >
+            {
+            categorias.map((item) => (
+              <MenuItem key={item.toString()} value={item.toString()}>
+                {item}
+              </MenuItem>
+            ))}
+          </Select> 
+        </Grid>
         <Grid item className={classes.grid}>
           <InputLabel className={classes.label}>restauranteDelProducto</InputLabel>
            <Select
