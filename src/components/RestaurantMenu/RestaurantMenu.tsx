@@ -10,7 +10,6 @@ import {
 } from "@material-ui/core";
 import React, { useState } from "react";
 import { useEffect } from "react";
-import Button from "@material-ui/core/Button";
 import { Producto, Restaurante } from "../../models/models";
 import { useParams } from "react-router";
 import FetchService from "../../functions/fetch/FetchService";
@@ -49,6 +48,7 @@ const RestaurantMenu: React.FC = () => {
   };
 
   const filtrarPrecio = async () => {
+
     // console.log(precioMinimo, precioMaximo) 
     setIsLoadingMenu(true);
     const allMenu = await getMenu();
