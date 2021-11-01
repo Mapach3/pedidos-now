@@ -52,7 +52,7 @@ const RestaurantCreate: React.FC = () => {
   };
 
   const createRestaurant = async () => {
-    debugger;
+    // debugger;
     setIsUploading(true);
     try {
       if (titulo && descripcion && precioEnvio && imagen && direccion && categoria) {

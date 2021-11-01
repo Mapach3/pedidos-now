@@ -39,7 +39,7 @@ export const ModalCarrito = (props: any) => {
   const itemsPedido = useSelector((state: any) => state.infoPedido);
 
   const agregarCarrito = () => {
-    debugger;
+    // debugger;
     dispath(
       agregarACarrito({
         producto: producto,
