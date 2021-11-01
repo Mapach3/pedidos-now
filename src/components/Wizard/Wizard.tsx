@@ -121,9 +121,7 @@ const Wizard: React.FC = () => {
     try {
       setIsSubmittingPedido(true);
       await OrdersService.postOrderToCollection(order);
-      setDialogMessage(
-        "Pedido confirmado con éxito! te avisaremos cuando salga el repartidor"
-      );
+      setDialogMessage("Pedido confirmado con éxito!");
       setOpenDialog(true);
     } catch (error: any) {
       setDialogMessage(
