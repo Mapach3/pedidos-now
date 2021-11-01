@@ -104,7 +104,7 @@ const Wizard: React.FC = () => {
   const history = useHistory();
 
   const processOrder = async () => {
-    debugger;
+    // debugger;
     const order: Order = {
       items: itemsPedido.infoPedido,
       total: calcularSubtotal(),

@@ -7,7 +7,7 @@ let initialState: GlobalState = {
 };
 
 function reducer(store = initialState, action: any) {
-  debugger;
+  // debugger;
   switch (action.type) {
     case "agregarCarrito":
       if (!action.payload) {
